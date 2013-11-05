@@ -22,8 +22,15 @@ public class API {
 	    //Globe.base = new Base();
 		Activity a = new Activity();
 		a.start();
-		try {
+/*		try {
 			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+		
+		try {
+			a.join();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -197,7 +197,7 @@ public class Base
   {
     public void handleMessage(Message paramMessage)
     {
-    	Log.e(TAG, "RefreshHandler - handleMessage");
+    	//Log.e(TAG, "RefreshHandler - handleMessage");
     }
   }
 }

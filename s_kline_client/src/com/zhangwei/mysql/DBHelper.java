@@ -15,9 +15,9 @@ public class DBHelper {
          Connection con = null;
          try {
               String driver = "com.mysql.jdbc.Driver"; //数据库驱动
-              String url = "jdbc:MySQL://127.0.0.1:3306/test";//
+              String url = "jdbc:MySQL://127.0.0.1:3306/stockmarket";//
               String user = "root"; //用户名
-              String password = "calion";//密码
+              String password = "123456";//密码
               Class.forName(driver); //加载数据库驱动
               if(null == con)
             	  con = DriverManager.getConnection(url, user, password);
@@ -143,6 +143,11 @@ public class DBHelper {
                     }   
             }   
         }
+    }
+    
+    
+    public static void main(String[] args){
+    	Connection con = getCon();
     }
 
 }

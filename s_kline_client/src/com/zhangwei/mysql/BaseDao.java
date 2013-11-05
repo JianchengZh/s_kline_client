@@ -809,15 +809,18 @@ public class BaseDao {
 	public static void main(String[] args) {
 		try {
 			BaseDao dao = BaseDao.getInstance();
-			String sql0 = "select count(*) from operate";
-			String sql = "select powercode from rolepower rp where rolecode = (select ur.rolecode from user u left join userrole ur on u.code = ur.usercode where u.code = 0001)";
+			String sql0 = "select count(*) from stocklist";
+			String sql = "select * from zhishulist";
 			List<Map<String, Object>> list = dao.query(sql);
-			sql = "select * from operate";
+			sql = "select * from stocklist";
 			int count = Integer.valueOf(dao.scalar(sql0));
 			list = dao.queryPager(sql, 1, 10);
 			System.out.println(count);
 			System.out.println(list.size());
-			System.out.println(list.get(0).get("name"));
+			for( Map<String, Object> item : list){
+				System.out.println(item.get("name") + " " + item.get("stock_id") + " " + item.get("quick"));
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

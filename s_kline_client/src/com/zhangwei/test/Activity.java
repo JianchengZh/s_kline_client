@@ -48,7 +48,7 @@ public class Activity extends Thread  {
         Globe.base = new Base();
         Globe.base.startHandler();
 
-        API.sendKline("SZ002572", 20101015); //000001
+        API.sendKline("SZ002572", 20131015); //000001
         //API.sendKline("SH000001", 20131015); 
         //API.sendKline("SZ399001", 20131015); 
         Looper.loop();

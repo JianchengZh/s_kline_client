@@ -92,8 +92,8 @@ public class DZHClient {
 
 			DZHClient remoteFileClient = new DZHClient("114.80.158.20", 12345);
 
-			Response resp = remoteFileClient.sendRequest("SZ002572", 20131015);
-			
+			Response resp = remoteFileClient.sendRequest("SZ002572", 0);
+			Response resp2 = remoteFileClient.sendRequest("SH600031", 20121015);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

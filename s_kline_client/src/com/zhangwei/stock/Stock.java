@@ -1,9 +1,21 @@
 package com.zhangwei.stock;
 
-import java.util.ArrayList;
-
 public class Stock {
+	
 	public StockInfo info;
 	public Kline line;
+	
+	public  Stock(StockInfo info){
+		this.info = info;
+	}
+	
+	public String getKey(){
+		if(info!=null){
+			return info.getKey();
+		}else{
+			return null;
+		}
+
+	}
 
 }

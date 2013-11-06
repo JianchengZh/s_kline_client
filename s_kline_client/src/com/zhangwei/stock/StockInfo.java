@@ -20,7 +20,9 @@ public class StockInfo {
 			index = false;
 		}
 		
+		this.stock_id = stock_id;
 		this.start = start;
+		this.market_type = market;
 		this.last = last;
 		this.name = name;
 		this.quick = quick;
@@ -32,6 +34,17 @@ public class StockInfo {
 		// TODO Auto-generated method stub
 		if(stock_id!=null && market_type>0){
 			return stock_id + "." + market_type;
+		}else{
+			return null;
+		}
+	}
+	
+	public String getDZHStockID() {
+		// TODO Auto-generated method stub
+		if(market_type==1||market_type==3){
+			return "SH" + stock_id;
+		}else if(market_type==2||market_type==4){
+			return "SZ" + stock_id;
 		}else{
 			return null;
 		}

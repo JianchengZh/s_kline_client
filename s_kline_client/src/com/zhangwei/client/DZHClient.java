@@ -1,5 +1,8 @@
 package com.zhangwei.client;
 
+import java.io.InputStream;
+import java.util.Properties;
+
 import android.util.Log;
 
 import com.android.dazhihui.Globe;
@@ -11,12 +14,38 @@ import com.zhangwei.dzh.API;
 
 public class DZHClient {
 
-	
-	public DZHClient(String aHostIp, int aHostPort) {	
-		Globe.serHangIP2= aHostIp;// "114.80.158.20";
-		Globe.serHangPort= aHostPort; //12345;
+	private static DZHClient ins;
+	private DZHClient() {	
+		try {
+			InputStream in = DZHClient.class.getClassLoader().getResourceAsStream("db.properties");
+			Properties prop = System.getProperties();
+
+			prop.load(in);
+			String ip = (String) prop.get("dzh.ip");
+			int port = Integer.parseInt(prop.get("dzh.port").toString());
+			Globe.serHangIP2= ip;// "114.80.158.20";
+			Globe.serHangPort= port; //12345;
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 	
+	public static DZHClient getInstance(){
+		if(ins==null){
+			ins = new DZHClient();
+		}
+		
+		return ins;
+	}
+	
+	/**
+	 *  每次取150个有效数据
+	 *  date 为0 算今天  
+	 *  date不为0，不包括这一天
+	 * */
 	public Response sendRequest(String stock, int date) {
 		final int totalTry = 4;
 		SocketClient sc = new SocketClient();
@@ -32,8 +61,7 @@ public class DZHClient {
 			int tryNum = 0;
 			do{
 				byte[] buf = sc.readResponse();
-				len = buf.length;
-				if(len>0){
+				if(buf!=null && buf.length>0){
 					resp.analysisData(buf);
 					break;
 				}else{
@@ -52,11 +80,11 @@ public class DZHClient {
 			
 			if(resp!=null && resp.responseCode==0 ){
 				System.out.println("responseCode:" + resp.responseCode);
-				byte[] kline_input = resp.getData(2944);
-				API.PrintKline(kline_input);
+				//byte[] kline_input = resp.getData(2944);
+				//API.PrintKline(kline_input);
 				
-				byte[] exrights_input = resp.getData(2958);
-				API.PrintExrights(exrights_input);
+				//byte[] exrights_input = resp.getData(2958);
+				//API.PrintExrights(exrights_input);
 			}
 			
 		} catch (Exception e) {
@@ -88,18 +116,9 @@ public class DZHClient {
 	
 	
 	public static void main(String[] args) {
-		try {
-
-			DZHClient remoteFileClient = new DZHClient("114.80.158.20", 12345);
-
-			Response resp = remoteFileClient.sendRequest("SZ002572", 0);
-			Response resp2 = remoteFileClient.sendRequest("SH600031", 20121015);
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+		DZHClient remoteFileClient = DZHClient.getInstance();
+		Response resp = remoteFileClient.sendRequest("SZ002572", 0);
+		Response resp2 = remoteFileClient.sendRequest("SH600031", 20121015);
 
 		
 	}

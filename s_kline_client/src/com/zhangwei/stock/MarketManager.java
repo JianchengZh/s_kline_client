@@ -99,6 +99,9 @@ public class MarketManager {
 		Stock stock = cache.get(info.getKey());
 		if(stock==null){
 			stock = new Stock(info);
+			cache.put(info.getKey(), stock);
+		}else if(stock.outOfDate()){
+			
 		}
 		
 		return stock;

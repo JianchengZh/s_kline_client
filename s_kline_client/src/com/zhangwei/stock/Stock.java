@@ -18,4 +18,12 @@ public class Stock {
 
 	}
 
+	public boolean outOfDate() {
+		// TODO Auto-generated method stub
+		if(line!=null){
+			return line.outOfDate();
+		}
+		return true;
+	}
+
 }

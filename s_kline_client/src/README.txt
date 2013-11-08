@@ -46,7 +46,7 @@ REPLACE INTO `data_kline_XXX` VALUES (20121012, 958, 936, 941, 314393, 30009),(.
  
 CREATE TABLE IF NOT EXISTS data_exrights_<stock_id>_<market_type>(
 date INT  PRIMARY KEY,
-multi INT,
-add INT
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;;
+multi_num INT,
+add_num INT
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
  

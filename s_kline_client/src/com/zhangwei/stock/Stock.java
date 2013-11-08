@@ -1,12 +1,16 @@
 package com.zhangwei.stock;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import android.util.Log;
 
 import com.android.dazhihui.http.Response;
 import com.android.dazhihui.http.StructResponse;
 import com.zhangwei.client.DZHClient;
+import com.zhangwei.mysql.BaseDao;
+import com.zhangwei.mysql.Converter;
 
 public class Stock {
 	
@@ -16,6 +20,7 @@ public class Stock {
 	
 	public  Stock(StockInfo info){
 		this.info = info;
+		line = new Kline(info);
 	}
 	
 	public String getKey(){
@@ -42,7 +47,10 @@ public class Stock {
 		}else if(line.outOfDate()){
 			fetchFromDZH(line.last_scan_day, 0);
 		}
+		
+		reloadKline();
 	}
+	
 	
 	/**
 	 *  @param begin 开始时间点，包括；若为0则一直回溯
@@ -77,11 +85,9 @@ public class Stock {
 			}
 			
 			if(num>0){
-				firstDate = kl_tmp.get(0).Date;
+				firstDate = kl_tmp.get(0).date;
 				last = firstDate;
 			}
-
-
 			
 		}while(num>=150 && firstDate>begin);
 
@@ -92,6 +98,49 @@ public class Stock {
 		for(ExRightUnit item : rl){
 			Log.v(TAG, item.toString());
 		}
+		
+		persit2sql(info, kl, rl);
+		
+
+	}
+	
+	private void reloadKline(){
+		line = new Kline(info);
+	}
+	
+	
+	private boolean persit2sql(StockInfo info, ArrayList<KLineUnit> kl, ArrayList<ExRightUnit> rl){
+		try {
+			//data_kline_<stock_id>_<market_type>
+			//data_exrights_<stock_id>_<market_type>
+
+			BaseDao dao = BaseDao.getInstance();
+			String kline_table = "data_kline_" + info.stock_id + "_" + info.market_type;
+			String exright_table = "data_exrights_" + info.stock_id + "_" + info.market_type;
+			
+			String sql_create_table_kline = "CREATE TABLE IF NOT EXISTS " +  kline_table + "\n(date INT PRIMARY KEY, open INT, high INT, low INT, close INT, vol INT, cje INT )ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+			String sql_create_table_exright = "CREATE TABLE IF NOT EXISTS " + exright_table + "\n(date INT PRIMARY KEY, multi_num INT, add_num INT)ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+
+			if(dao.exec(sql_create_table_kline) && dao.exec(sql_create_table_exright)){
+				
+			}else{
+				
+				return false;
+			}
+			
+			String sql_replace_kline = "REPLACE INTO " + kline_table + "(date, open, high, low, close, vol, cje) values(?,?,?,?,?,?,?)";
+			String sql_replace_exright = "REPLACE INTO " + exright_table + "(date, multi_num, add_num) values(?,?,?)";
+			
+			dao.batchUpdate(sql_replace_kline, Converter.ListConvertKLine2Object(kl));
+			dao.batchUpdate(sql_replace_exright, Converter.ListConvertExright2Object(rl));
+			
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+		
+		return false;
 	}
 	
 	private ArrayList<KLineUnit> convertResp2Kline(Response resp){
@@ -135,10 +184,10 @@ public class Stock {
 			
 			for(int i=0; i<len; i++){
 				int date = sr.readInt();
-				int multi = sr.readInt();
-				int add = sr.readInt();
+				int multi_num = sr.readInt();
+				int add_num = sr.readInt();
 
-				rl.add(new ExRightUnit(date, multi, add));
+				rl.add(new ExRightUnit(date, multi_num, add_num));
 				/*Log.e(TAG, "Date:" + date + " multi:" + multi + " add:" + add );*/
 			}
 		}else{

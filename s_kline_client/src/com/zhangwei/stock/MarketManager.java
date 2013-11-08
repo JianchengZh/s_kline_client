@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.github.jamm.MemoryMeter;
+
 import android.util.Log;
 
 import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
 import com.googlecode.concurrentlinkedhashmap.EntryWeigher;
 import com.googlecode.concurrentlinkedhashmap.EvictionListener;
-import com.zhangwei.cache.MemoryMeter;
+/*import com.zhangwei.cache.MemoryMeter;*/
 import com.zhangwei.mysql.BaseDao;
 import com.zhangwei.util.Format;
 
@@ -96,17 +98,30 @@ public class MarketManager {
 	}
 	
 	public synchronized Stock getStock(StockInfo info){
+		//先内存
 		Stock stock = cache.get(info.getKey());
+		
+		//再sql
 		if(stock==null){
 			stock = new Stock(info);
 			cache.put(info.getKey(), stock);
-		}else if(stock.outOfDate()){
+		}
+		
+		//最后网络
+		if(stock.outOfDate()){
 			cache.remove(info.getKey());
 			stock.update();
 			cache.put(info.getKey(), stock);
 		}
 		
 		return stock;
+	}
+	
+	public static void main(String[] args){
+		MarketManager mm = MarketManager.getInstance();
+		Stock s = mm.getStock(new StockInfo("600031", 1, "SYZG", -1, -1, "三一重工"));
+		int i=0;
+		i++;
 	}
 
 }

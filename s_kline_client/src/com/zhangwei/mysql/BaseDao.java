@@ -112,6 +112,30 @@ public class BaseDao {
 			notify();
 		}
 	}
+	
+	
+	/**
+	 * 执行，无需结果的sql语句
+	 * 
+	 * @param sql SQL语句 :"CREATE TABLE IF NOT EXISTS tableName;"
+	 */
+	public boolean exec(String sql)/* throws SQLException */{
+		Connection conn = null;
+		PreparedStatement ps = null;
+
+		try {
+			conn = getConn();
+			ps = conn.prepareStatement(sql);
+			ps.execute(sql);
+			return true;
+		} catch (SQLException e) {
+			/*throw e;*/
+			e.printStackTrace();
+		} finally {
+			closeAll(null, ps);
+		}
+		return false;
+	}
 
 	/**
 	 * 无事务更新(不带参数)

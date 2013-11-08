@@ -119,9 +119,8 @@ public class MarketManager {
 	
 	public static void main(String[] args){
 		MarketManager mm = MarketManager.getInstance();
-		Stock s = mm.getStock(new StockInfo("600031", 1, "SYZG", -1, -1, "三一重工"));
-		int i=0;
-		i++;
+		//Stock s = mm.getStock(new StockInfo("600031", 1, "SYZG", -1, -1, "三一重工"));
+		Stock s2 = mm.getStock(new StockInfo("002572", 2, "SFY", -1, -1, "索菲亚"));
 	}
 
 }

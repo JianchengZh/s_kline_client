@@ -79,8 +79,8 @@ public class MarketManager {
 					String name = (String) item.get("name");
 					int market = Format.parserInt((String) item.get("market_type"), -1);
 					String quick = (String) item.get("quick");
-					int start = Format.parserInt((String) item.get("start"), -1);
-					int last = Format.parserInt((String) item.get("last"), -1);
+					int start = Format.parserInt(item.get("start").toString(), -1);/*(Integer)item.get("start");*/
+					int last = Format.parserInt(item.get("last").toString(), -1);/*(Integer)item.get("last");*/
 							
 					StockInfo si = new StockInfo(stock_id, market, quick, start, last, name);
 					rlt.add(si);
@@ -97,7 +97,8 @@ public class MarketManager {
 		return rlt;
 	}
 	
-	public synchronized Stock getStock(StockInfo info){
+	public synchronized Stock getStock(StockInfo info, boolean force){
+		Log.v(TAG, "MarketManager - getStock - stock_id:" + info.stock_id + ", force:" + force);
 		//先内存
 		Stock stock = cache.get(info.getKey());
 		
@@ -110,7 +111,9 @@ public class MarketManager {
 		//最后网络
 		if(stock.outOfDate()){
 			cache.remove(info.getKey());
-			stock.update();
+			stock.updateSQL(force); //sync NET and persit to SQL
+			
+			stock = new Stock(info); //reload from SQL
 			cache.put(info.getKey(), stock);
 		}
 		
@@ -119,8 +122,15 @@ public class MarketManager {
 	
 	public static void main(String[] args){
 		MarketManager mm = MarketManager.getInstance();
+		ArrayList<StockInfo> stocks = mm.FetchStockInfo(false);
+		for(StockInfo item : stocks){
+			if(item.stock_id.compareTo("000757")<0){
+				continue;
+			}
+			mm.getStock(item, true);
+		}
 		//Stock s = mm.getStock(new StockInfo("600031", 1, "SYZG", -1, -1, "三一重工"));
-		Stock s2 = mm.getStock(new StockInfo("002572", 2, "SFY", -1, -1, "索菲亚"));
+		//Stock s2 = mm.getStock(new StockInfo("002572", 2, "SFY", -1, -1, "索菲亚"));
 	}
 
 }

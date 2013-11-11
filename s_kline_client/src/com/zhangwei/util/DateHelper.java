@@ -5,6 +5,15 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class DateHelper {
+	public static int Hour(){
+		Date d = new Date();
+		SimpleDateFormat df=new SimpleDateFormat("HH");
+		String d_str = df.format(d);
+		
+		return Integer.valueOf(d_str);
+
+	}
+	
 	public static int Today(){
 		Date d = new Date();
 		SimpleDateFormat df=new SimpleDateFormat("yyyyMMdd");
@@ -27,6 +36,14 @@ public class DateHelper {
 		
 		return Integer.valueOf(d_str);
 
+	}
+	
+	public static boolean checkVaildDate(int day){
+		if(day>19000000){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
 	public static void main(String[] args){

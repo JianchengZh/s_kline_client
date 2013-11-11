@@ -119,7 +119,7 @@ public class BaseDao {
 	 * 
 	 * @param sql SQL语句 :"CREATE TABLE IF NOT EXISTS tableName;"
 	 */
-	public boolean exec(String sql)/* throws SQLException */{
+	public boolean exec(String sql) throws SQLException {
 		Connection conn = null;
 		PreparedStatement ps = null;
 
@@ -129,12 +129,12 @@ public class BaseDao {
 			ps.execute(sql);
 			return true;
 		} catch (SQLException e) {
-			/*throw e;*/
-			e.printStackTrace();
+			throw e;
+			/*e.printStackTrace();*/
 		} finally {
 			closeAll(null, ps);
 		}
-		return false;
+
 	}
 
 	/**
@@ -144,7 +144,7 @@ public class BaseDao {
 	 * @return 受影响行数
 	 * @throws SQLException
 	 */
-	public int update(String sql) throws Exception {
+	public int update(String sql) throws SQLException {
 		int result = 0;
 		Connection conn = null;
 		PreparedStatement ps = null;
@@ -294,27 +294,36 @@ public class BaseDao {
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		try {
-			conn = getConn();
-			ps = conn.prepareStatement(sql);
-			rs = ps.executeQuery();
-			ResultSetMetaData rsmd = rs.getMetaData();
-			int colCount = rsmd.getColumnCount();
-			while (rs.next()) {
-				Map<String, Object> map = new HashMap<String, Object>();
-				for (int i = 0; i < colCount; i++) {
-					String key = rsmd.getColumnName(i + 1).toLowerCase();
-					Object val = rs.getObject(i + 1) != null ? rs
-							.getObject(i + 1) : "";
-					map.put(key, val);
+		int retry = 3;
+		while(retry>0){
+			try {
+				conn = getConn();
+				ps = conn.prepareStatement(sql);
+				rs = ps.executeQuery();
+				ResultSetMetaData rsmd = rs.getMetaData();
+				int colCount = rsmd.getColumnCount();
+				while (rs.next()) {
+					Map<String, Object> map = new HashMap<String, Object>();
+					for (int i = 0; i < colCount; i++) {
+						String key = rsmd.getColumnName(i + 1).toLowerCase();
+						Object val = rs.getObject(i + 1) != null ? rs
+								.getObject(i + 1) : "";
+						map.put(key, val);
+					}
+					list.add(map);
 				}
-				list.add(map);
+				retry = 0;
+			} catch (SQLException e) {
+				retry--;
+				if(retry<=0){
+					throw e;
+				}
+				
+			} finally {
+				closeAll(rs, ps);
 			}
-		} catch (SQLException e) {
-			throw e;
-		} finally {
-			closeAll(rs, ps);
 		}
+
 		return list;
 	}
 

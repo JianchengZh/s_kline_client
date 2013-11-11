@@ -1,5 +1,6 @@
 package com.zhangwei.stock;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import com.android.dazhihui.http.StructResponse;
 import com.zhangwei.client.DZHClient;
 import com.zhangwei.mysql.BaseDao;
 import com.zhangwei.mysql.Converter;
+import com.zhangwei.util.DateHelper;
 
 public class Stock {
 	
@@ -40,15 +42,14 @@ public class Stock {
 		return true;
 	}
 
-	public void update() {
+	public void updateSQL(boolean force) {
 		// TODO Auto-generated method stub
-		if(line==null){
+		if(line==null || force){
 			fetchFromDZH(0, 0);
 		}else if(line.outOfDate()){
 			fetchFromDZH(line.last_scan_day, 0);
 		}
 		
-		reloadKline();
 	}
 	
 	
@@ -57,6 +58,7 @@ public class Stock {
 	 *  @param end 结束时间点，不包括；若为0则从今天（包括）回溯
 	 * */
 	public void fetchFromDZH(int begin, int end){
+		Log.v(TAG, "FetchFromDZH - begin:" +  begin + ", end:" + end);
 		ArrayList<KLineUnit> kl = new ArrayList<KLineUnit>();
 		ArrayList<ExRightUnit> rl = new ArrayList<ExRightUnit>();
 		
@@ -87,61 +89,90 @@ public class Stock {
 			if(num>0){
 				firstDate = kl_tmp.get(0).date;
 				last = firstDate;
+			}else{
+				break;
 			}
 			
 		}while(num>=150 && firstDate>begin);
 
-		for(KLineUnit item : kl){
-			Log.v(TAG, item.toString());
+		if(kl!=null && kl.size()>0){
+			Log.v(TAG, "KL fetched: " + kl.size() + ", start:" + kl.get(0).date + ", last:" + kl.get(kl.size()-1).date);
 		}
+
 		
-		for(ExRightUnit item : rl){
-			Log.v(TAG, item.toString());
+		if(rl!=null && rl.size()>0){
+			Log.v(TAG, "RL fetched: " + rl.size() + ", start:" + rl.get(0).date + ", last:" + rl.get(rl.size()-1).date);
 		}
-		
-		persit2sql(info, kl, rl);
-		
 
-	}
-	
-	private void reloadKline(){
-		line = new Kline(info);
-	}
-	
-	
-	private boolean persit2sql(StockInfo info, ArrayList<KLineUnit> kl, ArrayList<ExRightUnit> rl){
-		try {
-			//data_kline_<stock_id>_<market_type>
-			//data_exrights_<stock_id>_<market_type>
-
-			BaseDao dao = BaseDao.getInstance();
-			String kline_table = "data_kline_" + info.stock_id + "_" + info.market_type;
-			String exright_table = "data_exrights_" + info.stock_id + "_" + info.market_type;
-			
-			String sql_create_table_kline = "CREATE TABLE IF NOT EXISTS " +  kline_table + "\n(date INT PRIMARY KEY, open INT, high INT, low INT, close INT, vol INT, cje INT )ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-			String sql_create_table_exright = "CREATE TABLE IF NOT EXISTS " + exright_table + "\n(date INT PRIMARY KEY, multi_num INT, add_num INT)ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-
-			if(dao.exec(sql_create_table_kline) && dao.exec(sql_create_table_exright)){
 				
+		BaseDao dao = BaseDao.getInstance();
+		String transID = dao.beginTrans();
+		try{
+			line.persit2sql_kline(transID, info, kl, rl);
+			line.persit2sql_info(transID, info, kl);
+			dao.commitTrans(transID);
+		}catch(SQLException e){
+			dao.rollbackTrans(transID);
+		}
+
+		Log.v(TAG, "FetchFromDZH - Out");
+	}	
+	
+/*	private void persit2sql_info(String transId, StockInfo info, ArrayList<KLineUnit> kl) throws SQLException {
+		// TODO Auto-generated method stub
+		BaseDao dao = BaseDao.getInstance();
+		
+		int start = kl.get(0).date;
+		int last = kl.get(kl.size()-1).date;
+		
+		if(DateHelper.checkVaildDate(info.start)){
+			if(start<info.start){
+				info.start = start;
 			}else{
-				
-				return false;
+				start = info.start;
 			}
-			
-			String sql_replace_kline = "REPLACE INTO " + kline_table + "(date, open, high, low, close, vol, cje) values(?,?,?,?,?,?,?)";
-			String sql_replace_exright = "REPLACE INTO " + exright_table + "(date, multi_num, add_num) values(?,?,?)";
-			
-			dao.batchUpdate(sql_replace_kline, Converter.ListConvertKLine2Object(kl));
-			dao.batchUpdate(sql_replace_exright, Converter.ListConvertExright2Object(rl));
-			
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-
+		}else{
+			info.start = start;
 		}
+
+		if(DateHelper.checkVaildDate(info.last)){
+			if(last>info.last){
+				info.last = last;
+			}else{
+				last = info.last;
+			}
+		}else{
+			info.last = last;
+		}
+
 		
-		return false;
-	}
+		String sql_update_part = " SET start=" + start + " , last=" + last + " WHERE stock_id='" + info.stock_id + "' AND market_type='" + info.market_type + "';";
+
+		if(info.index){
+			dao.update("UPDATE zhishulist" + sql_update_part);
+		}else{
+			dao.update("UPDATE stocklist" + sql_update_part);
+		}
+	}*/
+
+/*	private void persit2sql_kline(String transId, StockInfo info, ArrayList<KLineUnit> kl, ArrayList<ExRightUnit> rl) throws SQLException{
+		BaseDao dao = BaseDao.getInstance();
+		String kline_table = "data_kline_" + info.stock_id + "_" + info.market_type;
+		String exright_table = "data_exrights_" + info.stock_id + "_" + info.market_type;
+		
+		String sql_create_table_kline = "CREATE TABLE IF NOT EXISTS " +  kline_table + "\n(date INT PRIMARY KEY, open INT, high INT, low INT, close INT, vol INT, cje INT )ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+		String sql_create_table_exright = "CREATE TABLE IF NOT EXISTS " + exright_table + "\n(date INT PRIMARY KEY, multi_num INT, add_num INT)ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+		
+		dao.exec(sql_create_table_kline);
+		dao.exec(sql_create_table_exright);
+		
+		
+		String sql_replace_kline = "REPLACE INTO " + kline_table + "(date, open, high, low, close, vol, cje) values(?,?,?,?,?,?,?)";
+		String sql_replace_exright = "REPLACE INTO " + exright_table + "(date, multi_num, add_num) values(?,?,?)";
+		
+		dao.batchUpdate(sql_replace_kline, Converter.ListConvertKLine2Object(kl));
+		dao.batchUpdate(sql_replace_exright, Converter.ListConvertExright2Object(rl));
+	}*/
 	
 	private ArrayList<KLineUnit> convertResp2Kline(Response resp){
 		ArrayList<KLineUnit> kl = new ArrayList<KLineUnit>();
@@ -166,7 +197,7 @@ public class Stock {
 				kl.add(new KLineUnit(date, open_price, high_price, low_price, close, vol, cje));
 			}
 		}else{
-			Log.e(TAG, "no kline data!");
+			Log.v(TAG, "no kline data! ");
 		}
 
 	
@@ -203,5 +234,4 @@ public class Stock {
 		Stock s = new Stock(info);
 		s.fetchFromDZH(20121106, 20131106);
 	}
-
 }

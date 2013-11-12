@@ -319,7 +319,7 @@ public class Globe
     key = null;
 /*    webView = null;*/
 /*    progressCtrl = null;*/
-    debug = true;
+    debug = false;
     dataTime = 0L;
     dataLength = 0;
     debugWords = "";

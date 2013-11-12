@@ -1,5 +1,6 @@
 package com.zhangwei.stock;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -124,13 +125,36 @@ public class MarketManager {
 		MarketManager mm = MarketManager.getInstance();
 		ArrayList<StockInfo> stocks = mm.FetchStockInfo(false);
 		for(StockInfo item : stocks){
-			if(item.stock_id.compareTo("000757")<0){
+/*			if(item.stock_id.compareTo("000757")<0){
 				continue;
-			}
+			}*/
 			mm.getStock(item, true);
+			//mm.createTable(item);
 		}
 		//Stock s = mm.getStock(new StockInfo("600031", 1, "SYZG", -1, -1, "三一重工"));
 		//Stock s2 = mm.getStock(new StockInfo("002572", 2, "SFY", -1, -1, "索菲亚"));
+	}
+	
+	public void createTable(StockInfo info){
+		Log.v(TAG, "createTable - In, stock_id:" + info.stock_id);
+		BaseDao dao = BaseDao.getInstance();
+		String kline_table = "data_kline_" + info.stock_id + "_" + info.market_type;
+		String exright_table = "data_exrights_" + info.stock_id + "_" + info.market_type;
+		
+		String sql_create_table_kline = "CREATE TABLE IF NOT EXISTS " +  kline_table + "\n(date INT PRIMARY KEY, open INT, high INT, low INT, close INT, vol INT, cje INT )ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+		String sql_create_table_exright = "CREATE TABLE IF NOT EXISTS " + exright_table + "\n(date INT PRIMARY KEY, multi_num INT, add_num INT)ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+		
+		Log.v(TAG, "sql_create_table_kline");
+		try {
+			dao.exec(sql_create_table_kline);
+			dao.exec(sql_create_table_exright);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Log.v(TAG, "createTable - Out");
+
 	}
 
 }

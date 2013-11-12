@@ -89,8 +89,6 @@ public class Stock {
 			if(num>0){
 				firstDate = kl_tmp.get(0).date;
 				last = firstDate;
-			}else{
-				break;
 			}
 			
 		}while(num>=150 && firstDate>begin);
@@ -106,14 +104,35 @@ public class Stock {
 
 				
 		BaseDao dao = BaseDao.getInstance();
-		String transID = dao.beginTrans();
-		try{
-			line.persit2sql_kline(transID, info, kl, rl);
-			line.persit2sql_info(transID, info, kl);
-			dao.commitTrans(transID);
-		}catch(SQLException e){
-			dao.rollbackTrans(transID);
+		int index = 0;
+
+
+		Log.v(TAG, "FetchFromDZH - beginTrans");
+		
+		if(kl!=null && kl.size()>0){
+			String transID = dao.beginTrans();
+			int endIndex = kl.size()-1;
+			try{
+				do{
+					List<KLineUnit> k_t = null;
+					if(index+100<=endIndex){
+						k_t = kl.subList(index, index+100);
+					}else{
+						k_t = kl.subList(index, endIndex);
+					}
+					line.persit2sql_kline(transID, info, k_t, rl);
+					index+=100;
+				}while(index<=endIndex);
+				
+				line.persit2sql_info(transID, info, kl);
+				
+				dao.commitTrans(transID);
+			}catch(SQLException e){
+				dao.rollbackTrans(transID);
+			}
 		}
+		
+
 
 		Log.v(TAG, "FetchFromDZH - Out");
 	}	

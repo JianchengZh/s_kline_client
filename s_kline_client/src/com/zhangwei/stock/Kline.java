@@ -35,7 +35,7 @@ public class Kline {
 
 			BaseDao dao = BaseDao.getInstance();
 			
-			String kline_table = "data_kline_" + stockInfo.stock_id + "_" + stockInfo.market_type;
+/*			String kline_table = "data_kline_" + stockInfo.stock_id + "_" + stockInfo.market_type;
 			String exright_table = "data_exrights_" + stockInfo.stock_id + "_" + stockInfo.market_type;
 
 			String sql_create_table_kline = "CREATE TABLE IF NOT EXISTS " +  kline_table + "\n(date INT PRIMARY KEY, open INT, high INT, low INT, close INT, vol INT, cje INT )ENGINE=InnoDB DEFAULT CHARSET=utf8;";
@@ -43,7 +43,7 @@ public class Kline {
 			
 			if(dao.exec(sql_create_table_kline) && dao.exec(sql_create_table_exright)){
 				
-			}
+			}*/
 
 			String sql_kline = "select * from data_kline_" + stockInfo.stock_id + "_" + stockInfo.market_type;
 			String sql_exrights = "select * from data_exrights_" + stockInfo.stock_id + "_" + stockInfo.market_type;

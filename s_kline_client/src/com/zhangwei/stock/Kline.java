@@ -143,4 +143,17 @@ public class Kline {
 		}
 
 	}
+	
+	/*
+	 *
+	 * arrayOfInt[j][1] = ((arrayOfInt[j][1] * this.exRightsMulti[i4] + 100 * this.exRightsAdd[i4]) / 10000);
+	 * arrayOfInt[j][2] = ((arrayOfInt[j][2] * this.exRightsMulti[i4] + 100 * this.exRightsAdd[i4]) / 10000);
+	 * arrayOfInt[j][3] = ((arrayOfInt[j][3] * this.exRightsMulti[i4] + 100 * this.exRightsAdd[i4]) / 10000);
+	 * arrayOfInt[j][4] = ((arrayOfInt[j][4] * this.exRightsMulti[i4] + 100 * this.exRightsAdd[i4]) / 10000); 
+	 * */
+	public ArrayList<KLineUnit> getExRightKline(){
+		return kline_list;
+		
+	}
+	
 }

@@ -7,20 +7,20 @@ import com.zhangwei.stock.StockInfo;
 import com.zhangwei.util.StockHelper;
 
 /**
- * 止损条件
+ * 止盈条件
  * */
-public class StopLossCondition implements Condition {
+public class StopEarnCondition implements Condition {
 	int percent;
 	
-	public StopLossCondition(int percent){
-		if(percent<=0 || percent>50){
-			percent = 8; //default 8%
+	public StopEarnCondition(int percent){
+		if(percent<=0){
+			percent = 10; //default 10%
 		}
 		this.percent = percent;
 	}
 
 	/**
-	 * 注意：止损期过长，中间发生扩股的情况
+	 * 注意：止盈期过长，中间发生扩股的情况
 	 * */
 	@Override
 	public boolean checkCondition(StockInfo info, ArrayList<KLineUnit> kl,
@@ -31,8 +31,8 @@ public class StopLossCondition implements Condition {
 			throw new StockException("lastPoint is null");
 		}
 		
-		if(!lastPoint.isBuy()){
-			throw new StockException("lastPoint is sell");
+		if(lastPoint.isBuy()){
+			throw new StockException("lastPoint is buy");
 		}
 		
 		if(kl==null){
@@ -48,7 +48,7 @@ public class StopLossCondition implements Condition {
 		if(elem!=null){
 			int curPrice = kl.get(kl.size()-1).close;
 			int exRightFactor = StockHelper.getExrightFactor(kl, lastPoint.date);
-			if(curPrice * exRightFactor / lastPoint.price < 100 - percent){
+			if(curPrice * exRightFactor / lastPoint.price > 100 + percent){
 				return true;
 			}else{
 				return false;

@@ -6,33 +6,23 @@ import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.StockInfo;
 import com.zhangwei.util.StockHelper;
 
-/**
- * 止损条件
- * */
-public class StopLossCondition implements Condition {
-	int percent;
+public class LastNdayCondition implements Condition {
+	int nDay;
 	
-	public StopLossCondition(int percent){
-		if(percent<=0 || percent>50){
-			percent = 8; //default 8%
-		}
-		this.percent = percent;
+	/**
+	 * nDay from 1 to unlimit
+	 * 1, 当天买第二天抛
+	 * */
+	public LastNdayCondition(int nDay){
+		this.nDay = nDay;
 	}
 
-	/**
-	 * 注意：止损期过长，中间发生扩股的情况
-	 * */
 	@Override
 	public boolean checkCondition(StockInfo info, ArrayList<KLineUnit> kl,
-			Point lastPoint) throws StockException{
+			Point lastPoint) throws StockException {
 		// TODO Auto-generated method stub
-		
 		if(lastPoint==null){
 			throw new StockException("lastPoint is null");
-		}
-		
-		if(!lastPoint.isBuy()){
-			throw new StockException("lastPoint is sell");
 		}
 		
 		if(kl==null){
@@ -46,9 +36,8 @@ public class StopLossCondition implements Condition {
 		KLineUnit elem = StockHelper.binSearch(kl, lastPoint.date, 1);
 
 		if(elem!=null){
-			int curPrice = kl.get(kl.size()-1).close;
-			int exRightFactor = StockHelper.getExrightFactor(kl, lastPoint.date);
-			if(curPrice * exRightFactor / lastPoint.price < 100 - percent){
+			int index = kl.indexOf(elem);
+			if(kl.size()-index>nDay){
 				return true;
 			}else{
 				return false;
@@ -56,7 +45,6 @@ public class StopLossCondition implements Condition {
 		}else{
 			throw new StockException("lastPoint.date not in kl list");
 		}
-
 	}
 
 }

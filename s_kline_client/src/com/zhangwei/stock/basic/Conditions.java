@@ -22,14 +22,24 @@ public class Conditions {
 	public boolean check(StockInfo info, ArrayList<KLineUnit> kl, Point lastPoint){
 		
 		for(Condition c : necessaryConditions){
-			if(c.checkCondition(info, kl, lastPoint)){
-				return true;
+			try {
+				if(c.checkCondition(info, kl, lastPoint)){
+					return true;
+				}
+			} catch (StockException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		
 		for(Condition c : sufficientConditions){
-			if(!c.checkCondition(info, kl, lastPoint)){
-				return false;
+			try {
+				if(!c.checkCondition(info, kl, lastPoint)){
+					return false;
+				}
+			} catch (StockException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		

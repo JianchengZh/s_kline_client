@@ -9,9 +9,34 @@ import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.MarketManager;
 import com.zhangwei.stock.Stock;
 import com.zhangwei.stock.StockInfo;
+import com.zhangwei.stock.basic.KLineTypeResult;
+import com.zhangwei.stock.basic.StockException;
 
 public class StockHelper {
 	private static final String TAG = "StockHelper";
+	
+	public static KLineTypeResult getKlineType(List<KLineUnit> kl) throws StockException{
+		if(kl==null || kl.size()<2){
+			throw new StockException("kl is null or size<2");
+		}
+		
+		KLineUnit low = null;
+		KLineUnit high = null;
+		
+		for(KLineUnit elem : kl){
+			if(low==null || low.close>elem.close){
+				low = elem;
+			}
+			
+			if(high==null || high.close<high.close){
+				high = elem;
+			}
+		}
+		
+		KLineTypeResult ret = new KLineTypeResult(kl.get(0), low, high, kl.get(kl.size()-1));
+		
+		return ret;
+	} 
 
 	public static ArrayList<KLineUnit> findExRightPoints(ArrayList<KLineUnit> kl){
 		ArrayList<KLineUnit> ret = new ArrayList<>();

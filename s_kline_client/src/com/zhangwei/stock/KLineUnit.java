@@ -13,6 +13,7 @@ public class KLineUnit {
 		this.cje = cje;
 	}
 	
+	@Override
 	public String toString(){
 		return "date:" + date + ", close:" + close + ", vol:" + vol;
 	}

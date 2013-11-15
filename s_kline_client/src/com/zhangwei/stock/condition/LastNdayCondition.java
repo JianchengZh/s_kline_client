@@ -1,9 +1,12 @@
-package com.zhangwei.stock.basic;
+package com.zhangwei.stock.condition;
 
 import java.util.ArrayList;
 
 import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.StockInfo;
+import com.zhangwei.stock.basic.Condition;
+import com.zhangwei.stock.basic.Point;
+import com.zhangwei.stock.basic.StockException;
 import com.zhangwei.util.StockHelper;
 
 public class LastNdayCondition implements Condition {

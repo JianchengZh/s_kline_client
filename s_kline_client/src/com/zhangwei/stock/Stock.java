@@ -275,6 +275,7 @@ public class Stock {
 	 * */
 	public List<KLineUnit> getNDayKline(int numDay, int endDate){
 		List<KLineUnit> kl = line.getExRightKline();
+		List<KLineUnit> ret = null;
 		if(!StockHelper.checkKlineVaild(kl)){
 			return null;
 		}
@@ -288,7 +289,8 @@ public class Stock {
 		}
 		
 		if(endDate<0){
-			return kl.subList(0, numDay);
+			ret = kl.subList(0, numDay);
+			return ret;
 		}else if(endDate==0){
 			return kl.subList(kl.size()-numDay, kl.size());
 		}else{

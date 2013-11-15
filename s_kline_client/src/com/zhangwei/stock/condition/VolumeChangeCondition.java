@@ -30,17 +30,17 @@ public class VolumeChangeCondition implements Condition {
 		
 		int lastIndex = kl.size() - 1;
 		
-		if(lastIndex<nDay){
+		if(lastIndex<nDay+1){
 			throw new StockException("kl's size is too small!");
 		}
 		
-		int averageVolOfAll = StockHelper.calcAverage(kl, 3);
+		int averageVolOfRest = StockHelper.calcAverage(kl.subList(0, lastIndex-nDay), 3);
 		int averageVolOflastNDay = StockHelper.calcAverage(kl.subList(lastIndex-nDay, lastIndex+1), 3);
 		
 		if(direction){
-			return (averageVolOflastNDay/averageVolOfAll) > percent;
+			return (averageVolOflastNDay * 100 /averageVolOfRest) > percent;
 		}else{
-			return (averageVolOflastNDay/averageVolOfAll) < percent;
+			return (averageVolOflastNDay * 100 /averageVolOfRest) < percent;
 		}
 		
 	}

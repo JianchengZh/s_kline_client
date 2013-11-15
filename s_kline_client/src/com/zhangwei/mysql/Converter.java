@@ -9,7 +9,7 @@ import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.util.Format;
 
 public class Converter {
-	public static ArrayList<KLineUnit> ListConvert2KLineUnit(List<Map<String, Object>> input){
+	public static List<KLineUnit> ListConvert2KLineUnit(List<Map<String, Object>> input){
 		ArrayList<KLineUnit> ret = new ArrayList<KLineUnit>();
 		if(input!=null && input.size()>0){
 			for(Map<String, Object> item : input){
@@ -27,7 +27,7 @@ public class Converter {
 		return ret;
 	}
 	
-	public static ArrayList<ExRightUnit> ListConvert2ExRightUnit(List<Map<String, Object>> input){
+	public static List<ExRightUnit> ListConvert2ExRightUnit(List<Map<String, Object>> input){
 		ArrayList<ExRightUnit> ret = new ArrayList<ExRightUnit>();
 		if(input!=null && input.size()>0){
 			for(Map<String, Object> item : input){
@@ -42,7 +42,7 @@ public class Converter {
 		return ret;
 	}
 	
-	public static ArrayList<KLineUnit> ListMergeKLineUnit(ArrayList<KLineUnit> left, ArrayList<KLineUnit> right){
+	public static List<KLineUnit> ListMergeKLineUnit(ArrayList<KLineUnit> left, ArrayList<KLineUnit> right){
 		ArrayList<KLineUnit> ret = new ArrayList<KLineUnit>();
 		if(left!=null && left.size()>0){
 			if(right!=null && right.size()>0){

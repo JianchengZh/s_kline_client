@@ -13,6 +13,7 @@ import com.zhangwei.client.DZHClient;
 import com.zhangwei.mysql.BaseDao;
 import com.zhangwei.mysql.Converter;
 import com.zhangwei.util.DateHelper;
+import com.zhangwei.util.StockHelper;
 
 public class Stock {
 	
@@ -246,6 +247,63 @@ public class Stock {
 
 	
 		return rl;
+	}
+	
+	/**
+	 * 得到复权后的K线
+	 * 
+	 * @param numDay 多少个交易日
+	 * @param startDate 从哪个日期开始（包括,若没有使用右边最近的），-1从上市开始取， 0取最新的， 20130312普通格式
+	 * 
+	 * */
+	public List<KLineUnit> getNDayExRightKline(int numDay, int startDate){
+		List<KLineUnit> kl = getNDayKline(numDay, startDate);
+		if(kl!=null){
+			return StockHelper.getExrightKLine(kl);
+		}else{
+			return null;
+		}
+	}
+	
+	/**
+	 * 得到原始的K线
+	 * 
+	 * @param numDay 多少个交易日
+	 * @param startDate 从哪个日期开始（包括,若没有使用右边最近的），-1从上市开始取， 0取最新的， 20130312普通格式
+	 * 
+	 * */
+	public List<KLineUnit> getNDayKline(int numDay, int startDate){
+		List<KLineUnit> kl = line.getExRightKline();
+		if(!StockHelper.checkKlineVaild(kl)){
+			return null;
+		}
+		
+		if(numDay>kl.size()){
+			numDay = kl.size();
+		}
+		
+		if(numDay<1){
+			numDay = 1;
+		}
+		
+		if(startDate<0){
+			return kl.subList(0, numDay);
+		}else if(startDate==0){
+			return kl.subList(kl.size()-numDay, kl.size());
+		}else{
+			KLineUnit elem = StockHelper.binSearch(kl, startDate, 1);
+			if(elem!=null){
+				int index = kl.indexOf(elem);
+				int indexTo = index + numDay;
+				if(indexTo>kl.size()){
+					indexTo = kl.size();
+				}
+				return kl.subList(index, indexTo);
+			}else{
+				return null;
+			}
+
+		}
 	}
 	
 	public static void main(String[] args){

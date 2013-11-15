@@ -15,7 +15,7 @@ import com.zhangwei.stock.basic.StockException;
 public class StockHelper {
 	private static final String TAG = "StockHelper";
 	
-	public static List<KLineUnit> getInterval(List<KLineUnit> kl, KLineUnit elem1, KLineUnit elem2){
+	public   static List<KLineUnit> getInterval(List<KLineUnit> kl, KLineUnit elem1, KLineUnit elem2){
 		int index1 = kl.indexOf(elem1);
 		int index2 = kl.indexOf(elem2);
 		if(index1<0 || index2<0){
@@ -29,7 +29,7 @@ public class StockHelper {
 		}
 	}
 	
-	public static KLineTypeResult getKlineType(List<KLineUnit> kl) throws StockException{
+	public   static KLineTypeResult getKlineType(List<KLineUnit> kl) throws StockException{
 		if(kl==null || kl.size()<2){
 			throw new StockException("kl is null or size<2");
 		}
@@ -52,7 +52,7 @@ public class StockHelper {
 		return ret;
 	} 
 
-	public static ArrayList<KLineUnit> findExRightPoints(ArrayList<KLineUnit> kl){
+	public   static ArrayList<KLineUnit> findExRightPoints(ArrayList<KLineUnit> kl){
 		ArrayList<KLineUnit> ret = new ArrayList<>();
 		if(kl!=null && kl.size()>1){
 			KLineUnit last = kl.get(0);
@@ -68,11 +68,37 @@ public class StockHelper {
 		return ret;
 	}
 	
+	public   static List<KLineUnit> getExrightKLine(List<KLineUnit> kl){
+		int factorRet = 100;
+		if(!checkKlineVaild(kl)){
+			return null;
+		}
+		
+		List<KLineUnit> retKl = new ArrayList<KLineUnit>();
+		KLineUnit last = null;
+		for(KLineUnit cur : kl){
+			if(last!=null && !last.equals(cur)){
+				factorRet = factorRet * calcExrightFactor(last, cur) / 100;
+			}
+			
+			last = cur;
+			if(factorRet>100){
+				retKl.add(new KLineUnit(cur, factorRet));
+			}else{
+				retKl.add(cur);
+			}
+
+		}
+		
+		return retKl;
+	}
+	
+	
 	/**
 	 * 从指定date开始，到kl最后一天，计算这之间的复权因子
 	 * 若date找不到，且date在kl范围中，则使用离date最近的左端点
 	 * */
-	public static int getExrightFactorPercent(List<KLineUnit> kl, int lastDate){
+	public   static int getExrightFactorPercent(List<KLineUnit> kl, int lastDate){
 		KLineUnit ret = binSearch(kl, lastDate, -1);
 		if(ret!=null){
 			int index = kl.indexOf(ret);
@@ -83,7 +109,7 @@ public class StockHelper {
 		
 	}
 	
-	public static int getExrightFactorPercent(List<KLineUnit> kl){
+	public   static int getExrightFactorPercent(List<KLineUnit> kl){
 		int factorRet = 100;
 		if(kl!=null && kl.size()>1){
 			KLineUnit last = null;
@@ -99,7 +125,7 @@ public class StockHelper {
 		return factorRet;
 	}
 	
-	public static int calcExrightFactor(KLineUnit left, KLineUnit right){
+	public   static int calcExrightFactor(KLineUnit left, KLineUnit right){
 		if(left.date<right.date){
 			int fudu = 1000 * left.close / right.open /10;
 			if(fudu>115){
@@ -120,7 +146,7 @@ public class StockHelper {
 	/**
 	 * @param allowBorder <0 在找不到的情况下，允许使用左边最近的元素代替； >0 右边； ==0 不允许，直接返回-1
 	 * */
-	public static KLineUnit binSearch(List<KLineUnit> kl, int giveDate, int allowBorder){
+	public   static KLineUnit binSearch(List<KLineUnit> kl, int giveDate, int allowBorder){
 		if(kl!=null && kl.size()>0){
 			KLineUnit left = kl.get(0);
 			KLineUnit right = kl.get(kl.size()-1);
@@ -182,7 +208,7 @@ public class StockHelper {
 	 *  elem1 elem2顺序可以任意
 	 *  Percent , Range >0
 	 * */
-	public static boolean checkRange(KLineUnit elem1, KLineUnit elem2, int Percent, int Range, boolean up) {
+	public   static boolean checkRange(KLineUnit elem1, KLineUnit elem2, int Percent, int Range, boolean up) {
 		// TODO Auto-generated method stub
 		int fudu = 0;
 		if(elem1.date<elem2.date){
@@ -208,7 +234,7 @@ public class StockHelper {
 
 	}
 	
-	public static boolean checkKlineVaild(List<KLineUnit> kl){
+	public   static boolean checkKlineVaild(List<KLineUnit> kl){
 		if(kl==null || kl.size()<2){
 			return false;
 		}
@@ -219,7 +245,7 @@ public class StockHelper {
 	/**
 	 * @param type 1:close 2: open, 3:vol, 4:cje
 	 * */
-	public static int calcAverage(List<KLineUnit> kl, int type){
+	public   static int calcAverage(List<KLineUnit> kl, int type){
 		if(kl!=null && kl.size()>0){
 			int sum = 0;
 			for(KLineUnit elem : kl){

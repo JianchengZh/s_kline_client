@@ -13,8 +13,8 @@ import com.zhangwei.util.DateHelper;
 
 public class Kline {
 	private static final String TAG = "Kline";
-	public ArrayList<KLineUnit> kline_list;
-	public ArrayList<ExRightUnit> ex_rights;
+	public List<KLineUnit> kline_list;
+	public List<ExRightUnit> ex_rights;
 	
 	//最后联网查询的时间，而不是最后一个Kline的点，如果是下午3点前扫描的，算昨天。
 	//如果联网失败，不更新
@@ -151,7 +151,7 @@ public class Kline {
 	 * arrayOfInt[j][3] = ((arrayOfInt[j][3] * this.exRightsMulti[i4] + 100 * this.exRightsAdd[i4]) / 10000);
 	 * arrayOfInt[j][4] = ((arrayOfInt[j][4] * this.exRightsMulti[i4] + 100 * this.exRightsAdd[i4]) / 10000); 
 	 * */
-	public ArrayList<KLineUnit> getExRightKline(){
+	public List<KLineUnit> getExRightKline(){
 		return kline_list;
 		
 	}

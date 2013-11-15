@@ -13,6 +13,17 @@ public class KLineUnit {
 		this.cje = cje;
 	}
 	
+	public KLineUnit(KLineUnit cur, int factorRet) {
+		// TODO Auto-generated constructor stub
+		this.date = cur.date;
+		this.open = cur.open * factorRet / 100;
+		this.high = cur.high * factorRet / 100;
+		this.low = cur.low * factorRet / 100;
+		this.close = cur.close * factorRet / 100;
+		this.vol = cur.vol * 100 / factorRet;
+		this.cje = cur.cje;
+	}
+
 	@Override
 	public String toString(){
 		return "date:" + date + ", close:" + close + ", vol:" + vol;

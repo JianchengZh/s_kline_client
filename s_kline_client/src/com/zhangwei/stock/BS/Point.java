@@ -16,15 +16,24 @@ public class Point {
 	public int date;
 	
 	/**
+	 * 时间
+	 * */
+	public int time; //231034 -> 23:10:34
+	
+	public int vol; //100 100股
+	
+	/**
 	 *  stock info 
 	 * */
 	public StockInfo info;
 	
-	public Point(StockInfo info, int date, int price, boolean buyFlag){
+	public Point(StockInfo info, int date, int time, int price, int vol, boolean buyFlag){
 		this.info = info;
 		this.date = date;
 		this.price = price;
 		this.buyFlag = buyFlag;
+		this.time = time;
+		this.vol = vol;
 	}
 	
 	public int getPrice(){

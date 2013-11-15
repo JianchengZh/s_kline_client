@@ -15,6 +15,20 @@ import com.zhangwei.stock.basic.StockException;
 public class StockHelper {
 	private static final String TAG = "StockHelper";
 	
+	public static List<KLineUnit> getInterval(List<KLineUnit> kl, KLineUnit elem1, KLineUnit elem2){
+		int index1 = kl.indexOf(elem1);
+		int index2 = kl.indexOf(elem2);
+		if(index1<0 || index2<0){
+			return null;
+		}
+		
+		if(index1<index2){
+			return kl.subList(index1, index2+1);
+		}else{
+			return kl.subList(index2, index1+1);
+		}
+	}
+	
 	public static KLineTypeResult getKlineType(List<KLineUnit> kl) throws StockException{
 		if(kl==null || kl.size()<2){
 			throw new StockException("kl is null or size<2");
@@ -162,6 +176,44 @@ public class StockHelper {
 		
 		int exrightFactor3 = getExrightFactor(s.line.kline_list, 20130618);
 		Log.v(TAG, "exrightFactor3: " + exrightFactor3);
+	}
+
+	/**
+	 *  elem1 elem2顺序可以任意
+	 *  Percent , Range >0
+	 * */
+	public static boolean checkRange(KLineUnit elem1, KLineUnit elem2, int Percent, int Range, boolean up) {
+		// TODO Auto-generated method stub
+		int fudu = 0;
+		if(elem1.date<elem2.date){
+			fudu = (elem2.close * 100 / elem1.close) -1;
+		}else{
+			fudu = (elem1.close * 100 / elem2.close) -1;
+		}
+		
+		if(up){
+			if(Range>0){
+				return (fudu>=Percent) && (fudu<=Percent+Range);
+			}else{
+				return (fudu>=Percent);
+			}
+		}else{
+			fudu = -fudu;
+			if(Range>0){
+				return (fudu>=Percent) && (fudu<=Percent+Range);
+			}else{
+				return (fudu>=Percent);
+			}
+		}
+
+	}
+	
+	public static boolean checkKlineVaild(List<KLineUnit> kl){
+		if(kl==null || kl.size()<2){
+			return false;
+		}
+		
+		return true;
 	}
 
 }

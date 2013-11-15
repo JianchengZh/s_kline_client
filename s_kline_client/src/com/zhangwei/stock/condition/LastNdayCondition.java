@@ -1,6 +1,7 @@
 package com.zhangwei.stock.condition;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.StockInfo;
@@ -21,7 +22,7 @@ public class LastNdayCondition implements Condition {
 	}
 
 	@Override
-	public boolean checkCondition(StockInfo info, ArrayList<KLineUnit> kl,
+	public boolean checkCondition(StockInfo info, List<KLineUnit> kl,
 			Point lastPoint) throws StockException {
 		// TODO Auto-generated method stub
 		if(lastPoint==null){

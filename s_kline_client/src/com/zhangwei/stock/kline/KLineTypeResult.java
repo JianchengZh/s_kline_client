@@ -1,4 +1,4 @@
-package com.zhangwei.stock.basic;
+package com.zhangwei.stock.kline;
 
 import java.util.List;
 

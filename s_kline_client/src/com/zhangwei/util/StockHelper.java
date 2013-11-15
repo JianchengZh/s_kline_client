@@ -9,8 +9,8 @@ import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.StockManager;
 import com.zhangwei.stock.Stock;
 import com.zhangwei.stock.StockInfo;
-import com.zhangwei.stock.basic.KLineTypeResult;
 import com.zhangwei.stock.basic.StockException;
+import com.zhangwei.stock.kline.KLineTypeResult;
 
 public class StockHelper {
 	private static final String TAG = "StockHelper";

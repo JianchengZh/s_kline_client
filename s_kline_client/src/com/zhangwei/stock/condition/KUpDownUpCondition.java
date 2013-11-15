@@ -4,14 +4,13 @@ import java.util.List;
 
 import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.StockInfo;
-import com.zhangwei.stock.basic.Condition;
-import com.zhangwei.stock.basic.KLineType;
-import com.zhangwei.stock.basic.KLineTypeResult;
-import com.zhangwei.stock.basic.Point;
+import com.zhangwei.stock.BS.Point;
 import com.zhangwei.stock.basic.StockException;
+import com.zhangwei.stock.kline.KLineType;
+import com.zhangwei.stock.kline.KLineTypeResult;
 import com.zhangwei.util.StockHelper;
 
-public class KUpDownUpCondition implements Condition {
+public class KUpDownUpCondition implements ICondition {
 	int mainUpPercent;
 	int mainUpRange;
 	int mainDownPercent;

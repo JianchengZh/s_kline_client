@@ -4,12 +4,11 @@ import java.util.List;
 
 import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.StockInfo;
-import com.zhangwei.stock.basic.Condition;
-import com.zhangwei.stock.basic.Point;
+import com.zhangwei.stock.BS.Point;
 import com.zhangwei.stock.basic.StockException;
 import com.zhangwei.util.StockHelper;
 
-public class VolumeChangeCondition implements Condition {
+public class VolumeChangeCondition implements ICondition {
 	private boolean direction;//true change bigger or false change smaller
 	private int nDay;
 	private int percent;

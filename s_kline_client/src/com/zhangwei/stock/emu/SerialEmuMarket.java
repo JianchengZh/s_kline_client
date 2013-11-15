@@ -9,8 +9,8 @@ import com.zhangwei.stock.StockManager;
 import com.zhangwei.stock.Stock;
 import com.zhangwei.stock.StockInfo;
 
-public class EmuMarket {
-	private static final String TAG = "EmuMarket";
+public class SerialEmuMarket {
+	private static final String TAG = "SerialEmuMarket";
 
 	public static void main(String[] args){
 		StockManager mm = StockManager.getInstance();

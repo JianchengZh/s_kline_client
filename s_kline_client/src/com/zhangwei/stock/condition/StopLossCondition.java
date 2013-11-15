@@ -5,15 +5,14 @@ import java.util.List;
 
 import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.StockInfo;
-import com.zhangwei.stock.basic.Condition;
-import com.zhangwei.stock.basic.Point;
+import com.zhangwei.stock.BS.Point;
 import com.zhangwei.stock.basic.StockException;
 import com.zhangwei.util.StockHelper;
 
 /**
  * 止损条件
  * */
-public class StopLossCondition implements Condition {
+public class StopLossCondition implements ICondition {
 	int percent;
 	
 	public StopLossCondition(int percent){

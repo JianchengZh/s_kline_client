@@ -4,15 +4,14 @@ import java.util.List;
 
 import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.StockInfo;
-import com.zhangwei.stock.basic.Condition;
-import com.zhangwei.stock.basic.Point;
+import com.zhangwei.stock.BS.Point;
 import com.zhangwei.stock.basic.StockException;
 import com.zhangwei.util.StockHelper;
 
 /**
  * n天累计下跌Percent
  * */
-public class ContinuousDeclineCondition implements Condition {
+public class ContinuousDeclineCondition implements ICondition {
 	private int nDay;
 	private int Percent;
 

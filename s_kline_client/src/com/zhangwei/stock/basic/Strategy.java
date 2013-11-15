@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.StockInfo;
+import com.zhangwei.stock.BS.Point;
+import com.zhangwei.stock.condition.ICondition;
 
 /**
  * 先判断必要条件，若有一个为true，则直接返回true
@@ -11,17 +13,17 @@ import com.zhangwei.stock.StockInfo;
  * */
 public class Strategy {
 	
-	ArrayList<Condition> necessaryConditions;  //必要条件集合 
-	ArrayList<Condition> sufficientConditions; //充分条件集合
+	ArrayList<ICondition> necessaryConditions;  //必要条件集合 
+	ArrayList<ICondition> sufficientConditions; //充分条件集合
 
 	public Strategy(){
-		necessaryConditions = new ArrayList<Condition>();
-		sufficientConditions = new ArrayList<Condition>();
+		necessaryConditions = new ArrayList<ICondition>();
+		sufficientConditions = new ArrayList<ICondition>();
 	}
 	
 	public boolean check(StockInfo info, ArrayList<KLineUnit> kl, Point lastPoint){
 		
-		for(Condition c : necessaryConditions){
+		for(ICondition c : necessaryConditions){
 			try {
 				if(c.checkCondition(info, kl, lastPoint)){
 					return true;
@@ -32,7 +34,7 @@ public class Strategy {
 			}
 		}
 		
-		for(Condition c : sufficientConditions){
+		for(ICondition c : sufficientConditions){
 			try {
 				if(!c.checkCondition(info, kl, lastPoint)){
 					return false;
@@ -54,12 +56,12 @@ public class Strategy {
 		return true;
 	}
 	
-	public void addNecessaryCondition(Condition c){
+	public void addNecessaryCondition(ICondition c){
 		necessaryConditions.remove(c);
 		necessaryConditions.add(c);
 	}
 	
-	public void addSufficientCondition(Condition c){
+	public void addSufficientCondition(ICondition c){
 		sufficientConditions.remove(c);
 		sufficientConditions.add(c);
 	}

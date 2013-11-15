@@ -14,6 +14,8 @@ import com.googlecode.concurrentlinkedhashmap.EntryWeigher;
 import com.googlecode.concurrentlinkedhashmap.EvictionListener;
 /*import com.zhangwei.cache.MemoryMeter;*/
 import com.zhangwei.mysql.BaseDao;
+import com.zhangwei.stock.emu.ParallelManager;
+import com.zhangwei.stock.task.StockUpdateTask;
 import com.zhangwei.util.Format;
 
 public class StockManager {
@@ -125,7 +127,8 @@ public class StockManager {
 		StockManager sm = StockManager.getInstance();
 		ArrayList<StockInfo> stocks = sm.FetchStockInfo(false);
 		for(StockInfo item : stocks){
-			sm.getStock(item, true);
+			//sm.getStock(item, false);
+			ParallelManager.getInstance().submitTask(new StockUpdateTask(item));
 		}
 		//Stock s = mm.getStock(new StockInfo("600031", 1, "SYZG", -1, -1, "三一重工"));
 		//Stock s2 = mm.getStock(new StockInfo("002572", 2, "SFY", -1, -1, "索菲亚"));

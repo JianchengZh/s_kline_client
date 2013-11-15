@@ -33,7 +33,7 @@ public class KUpDownUpCondition implements Condition {
 			Point lastPoint) throws StockException {
 		// TODO Auto-generated method stub
 		if(!StockHelper.checkKlineVaild(kl)){
-			return false;
+			throw new StockException("kl is inVaild!");
 		}
 		
 		KLineTypeResult ktr = StockHelper.getKlineType(kl);

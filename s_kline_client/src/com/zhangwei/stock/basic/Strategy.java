@@ -9,12 +9,12 @@ import com.zhangwei.stock.StockInfo;
  * 先判断必要条件，若有一个为true，则直接返回true
  * 后判断充分条件, 若全部为true,才返回true
  * */
-public class Conditions {
+public class Strategy {
 	
 	ArrayList<Condition> necessaryConditions;  //必要条件集合 
 	ArrayList<Condition> sufficientConditions; //充分条件集合
 
-	public Conditions(){
+	public Strategy(){
 		necessaryConditions = new ArrayList<Condition>();
 		sufficientConditions = new ArrayList<Condition>();
 	}

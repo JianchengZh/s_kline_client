@@ -186,9 +186,9 @@ public class StockHelper {
 		// TODO Auto-generated method stub
 		int fudu = 0;
 		if(elem1.date<elem2.date){
-			fudu = (elem2.close * 100 / elem1.close) -1;
+			fudu = (elem2.close * 100 / elem1.close) -100;
 		}else{
-			fudu = (elem1.close * 100 / elem2.close) -1;
+			fudu = (elem1.close * 100 / elem2.close) -100;
 		}
 		
 		if(up){

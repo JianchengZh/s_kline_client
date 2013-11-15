@@ -1,9 +1,12 @@
 package com.zhangwei.stock.emu;
 
 import com.zhangwei.stock.BS.BuyPoint;
+import com.zhangwei.stock.BS.IBuy;
+import com.zhangwei.stock.BS.ISell;
 import com.zhangwei.stock.BS.SellPoint;
+import com.zhangwei.stock.BS.TradeSystem;
 
-public class EmuTradeSystem {
+public class EmuTradeSystem implements TradeSystem{
 	EmuTradeRecorder records;
 	private static EmuTradeSystem ins;
 	private EmuTradeSystem(){
@@ -18,19 +21,23 @@ public class EmuTradeSystem {
 		return ins;
 	}
 	
-	public void submitBuyTransaction(EmuBuyTransaction buy){
+	@Override
+	public void submitBuyTransaction(IBuy buy){
 		buy.onSucess();
 	}
 
+	@Override
 	public void completeBuyTransaction(BuyPoint buypoint) {
 		// TODO Auto-generated method stub
 		records.addBuy(buypoint);
 	}
 	
-	public void submitSellTransaction(EmuSellTransaction sell){
+	@Override
+	public void submitSellTransaction(ISell sell){
 		sell.onSucess();
 	}
 
+	@Override
 	public void completeSellTransaction(SellPoint sellpoint) {
 		// TODO Auto-generated method stub
 		records.addSell(sellpoint);

@@ -7,7 +7,7 @@ import java.util.Map;
 import android.util.Log;
 
 import com.zhangwei.mysql.BaseDao;
-import com.zhangwei.stock.MarketManager;
+import com.zhangwei.stock.StockManager;
 
 public class Client {		
 	private static final String TAG = "Client";
@@ -48,8 +48,8 @@ public class Client {
 /*		List<Map<String, Object>> rlt = ci.GetStockList();
 		ci.DumpData(rlt);*/
 		
-		MarketManager.getInstance().FetchStockInfo(false);
-		MarketManager.getInstance().FetchStockInfo(true);
+		StockManager.getInstance().FetchStockInfo(false);
+		StockManager.getInstance().FetchStockInfo(true);
 	}
 	
 	public void DumpData(List<Map<String, Object>> list){

@@ -16,13 +16,13 @@ import com.googlecode.concurrentlinkedhashmap.EvictionListener;
 import com.zhangwei.mysql.BaseDao;
 import com.zhangwei.util.Format;
 
-public class MarketManager {
-	private static final String TAG = "MarketManager";
-	private static MarketManager ins;
+public class StockManager {
+	private static final String TAG = "StockManager";
+	private static StockManager ins;
 	private ConcurrentLinkedHashMap<String, Stock> cache;
 	
 	//
-	private MarketManager(){		
+	private StockManager(){		
 		cache = new ConcurrentLinkedHashMap.Builder<String, Stock>()
 				.maximumWeightedCapacity(100 * 1024 * 1024) // 100 MB, internal storage, not memory
 			    .weigher(memoryUsageWeigher)
@@ -51,9 +51,9 @@ public class MarketManager {
 	};
 	//
 	
-	public static MarketManager getInstance(){
+	public static StockManager getInstance(){
 		if(ins==null){
-			ins = new MarketManager();
+			ins = new StockManager();
 		}
 		
 		return ins;
@@ -99,7 +99,7 @@ public class MarketManager {
 	}
 	
 	public synchronized Stock getStock(StockInfo info, boolean force){
-		Log.v(TAG, "MarketManager - getStock - stock_id:" + info.stock_id + ", force:" + force);
+		Log.v(TAG, "getStock - stock_id:" + info.stock_id + ", force:" + force);
 		//先内存
 		Stock stock = cache.get(info.getKey());
 		
@@ -122,14 +122,10 @@ public class MarketManager {
 	}
 	
 	public static void main(String[] args){
-		MarketManager mm = MarketManager.getInstance();
-		ArrayList<StockInfo> stocks = mm.FetchStockInfo(false);
+		StockManager sm = StockManager.getInstance();
+		ArrayList<StockInfo> stocks = sm.FetchStockInfo(false);
 		for(StockInfo item : stocks){
-/*			if(item.stock_id.compareTo("000757")<0){
-				continue;
-			}*/
-			mm.getStock(item, true);
-			//mm.createTable(item);
+			sm.getStock(item, true);
 		}
 		//Stock s = mm.getStock(new StockInfo("600031", 1, "SYZG", -1, -1, "三一重工"));
 		//Stock s2 = mm.getStock(new StockInfo("002572", 2, "SFY", -1, -1, "索菲亚"));

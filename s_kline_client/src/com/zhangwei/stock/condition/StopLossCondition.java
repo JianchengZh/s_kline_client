@@ -30,6 +30,13 @@ public class StopLossCondition implements Condition {
 	public boolean checkCondition(StockInfo info, List<KLineUnit> kl,
 			Point lastPoint) throws StockException{
 		// TODO Auto-generated method stub
+		if(!StockHelper.checkKlineVaild(kl)){
+			throw new StockException("kl is inVaild!");
+		}
+		
+		if(kl.size()<1){
+			throw new StockException("kl's size is too small!");
+		}
 		
 		if(lastPoint==null){
 			throw new StockException("lastPoint is null");
@@ -39,19 +46,11 @@ public class StopLossCondition implements Condition {
 			throw new StockException("lastPoint is sell");
 		}
 		
-		if(kl==null){
-			throw new StockException("kline is null");
-		}
-		
-		if(kl.size()<1){
-			throw new StockException("kline.size is < 1");
-		}
-		
 		KLineUnit elem = StockHelper.binSearch(kl, lastPoint.date, 1);
 
 		if(elem!=null){
 			int curPrice = kl.get(kl.size()-1).close;
-			int exRightFactor = StockHelper.getExrightFactor(kl, lastPoint.date);
+			int exRightFactor = StockHelper.getExrightFactorPercent(kl, lastPoint.date);
 			if(curPrice * exRightFactor / lastPoint.price < 100 - percent){
 				return true;
 			}else{

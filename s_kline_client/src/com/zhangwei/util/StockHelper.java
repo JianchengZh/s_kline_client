@@ -72,18 +72,18 @@ public class StockHelper {
 	 * 从指定date开始，到kl最后一天，计算这之间的复权因子
 	 * 若date找不到，且date在kl范围中，则使用离date最近的左端点
 	 * */
-	public static int getExrightFactor(List<KLineUnit> kl, int lastDate){
+	public static int getExrightFactorPercent(List<KLineUnit> kl, int lastDate){
 		KLineUnit ret = binSearch(kl, lastDate, -1);
 		if(ret!=null){
 			int index = kl.indexOf(ret);
-			return getExrightFactor(kl.subList(index, kl.size()-1));
+			return getExrightFactorPercent(kl.subList(index, kl.size()-1));
 		}else{
-			return getExrightFactor(kl);
+			return getExrightFactorPercent(kl);
 		}
 		
 	}
 	
-	public static int getExrightFactor(List<KLineUnit> kl){
+	public static int getExrightFactorPercent(List<KLineUnit> kl){
 		int factorRet = 100;
 		if(kl!=null && kl.size()>1){
 			KLineUnit last = null;
@@ -168,13 +168,13 @@ public class StockHelper {
 		Stock s = mm.getStock(new StockInfo("600031", 1, "SYZG", -1, -1, "三一重工"), false);
 		//Stock s2 = mm.getStock(new StockInfo("002572", 2, "SFY", -1, -1, "索菲亚"), false);
 		
-		int exrightFactor = getExrightFactor(s.line.kline_list, 20100614);
+		int exrightFactor = getExrightFactorPercent(s.line.kline_list, 20100614);
 		Log.v(TAG, "exrightFactor: " + exrightFactor);
 		
-		int exrightFactor2 = getExrightFactor(s.line.kline_list, 20131115);
+		int exrightFactor2 = getExrightFactorPercent(s.line.kline_list, 20131115);
 		Log.v(TAG, "exrightFactor2: " + exrightFactor2);
 		
-		int exrightFactor3 = getExrightFactor(s.line.kline_list, 20130618);
+		int exrightFactor3 = getExrightFactorPercent(s.line.kline_list, 20130618);
 		Log.v(TAG, "exrightFactor3: " + exrightFactor3);
 	}
 

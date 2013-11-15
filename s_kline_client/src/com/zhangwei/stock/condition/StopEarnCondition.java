@@ -51,7 +51,7 @@ public class StopEarnCondition implements Condition {
 
 		if(elem!=null){
 			int curPrice = kl.get(kl.size()-1).close;
-			int exRightFactor = StockHelper.getExrightFactor(kl, lastPoint.date);
+			int exRightFactor = StockHelper.getExrightFactorPercent(kl, lastPoint.date);
 			if(curPrice * exRightFactor / lastPoint.price > 100 + percent){
 				return true;
 			}else{

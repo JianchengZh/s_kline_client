@@ -111,18 +111,19 @@ public class Stock {
 		Log.v(TAG, "FetchFromDZH - beginTrans");
 		
 		if(kl!=null && kl.size()>0){
+			final int size = 100;
 			String transID = dao.beginTrans();
-			int endIndex = kl.size()-1;
+			int endIndex = kl.size();
 			try{
 				do{
 					List<KLineUnit> k_t = null;
-					if(index+100<=endIndex){
-						k_t = kl.subList(index, index+100);
+					if(index+size<=endIndex){
+						k_t = kl.subList(index, index+size);
 					}else{
 						k_t = kl.subList(index, endIndex);
 					}
 					line.persit2sql_kline(transID, info, k_t, rl);
-					index+=100;
+					index+=size;
 				}while(index<=endIndex);
 				
 				line.persit2sql_info(transID, info, kl);
@@ -256,8 +257,8 @@ public class Stock {
 	 * @param startDate 从哪个日期开始（包括,若没有使用右边最近的），-1从上市开始取， 0取最新的， 20130312普通格式
 	 * 
 	 * */
-	public List<KLineUnit> getNDayExRightKline(int numDay, int startDate){
-		List<KLineUnit> kl = getNDayKline(numDay, startDate);
+	public List<KLineUnit> getNDayExRightKline(int numDay, int endDate){
+		List<KLineUnit> kl = getNDayKline(numDay, endDate);
 		if(kl!=null){
 			return StockHelper.getExrightKLine(kl);
 		}else{
@@ -269,10 +270,10 @@ public class Stock {
 	 * 得到原始的K线
 	 * 
 	 * @param numDay 多少个交易日
-	 * @param startDate 从哪个日期开始（包括,若没有使用右边最近的），-1从上市开始取， 0取最新的， 20130312普通格式
+	 * @param endDate 从哪个日期截至（包括,若没有使用左边最近的），-1从上市开始取， 0取最新的， 20130312普通格式
 	 * 
 	 * */
-	public List<KLineUnit> getNDayKline(int numDay, int startDate){
+	public List<KLineUnit> getNDayKline(int numDay, int endDate){
 		List<KLineUnit> kl = line.getExRightKline();
 		if(!StockHelper.checkKlineVaild(kl)){
 			return null;
@@ -286,19 +287,19 @@ public class Stock {
 			numDay = 1;
 		}
 		
-		if(startDate<0){
+		if(endDate<0){
 			return kl.subList(0, numDay);
-		}else if(startDate==0){
+		}else if(endDate==0){
 			return kl.subList(kl.size()-numDay, kl.size());
 		}else{
-			KLineUnit elem = StockHelper.binSearch(kl, startDate, 1);
+			KLineUnit elem = StockHelper.binSearch(kl, endDate, -1);
 			if(elem!=null){
-				int index = kl.indexOf(elem);
-				int indexTo = index + numDay;
+				int indexTo = kl.indexOf(elem)+1;
+				int indexFrom = indexTo - numDay;
 				if(indexTo>kl.size()){
 					indexTo = kl.size();
 				}
-				return kl.subList(index, indexTo);
+				return kl.subList(indexFrom, indexTo);
 			}else{
 				return null;
 			}

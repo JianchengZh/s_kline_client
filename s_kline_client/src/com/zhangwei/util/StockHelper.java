@@ -90,6 +90,9 @@ public class StockHelper {
 
 		}
 		
+		for(KLineUnit elem : retKl){
+			Log.v(TAG, "date:" + elem.date + ", close:" + elem.close + ", vol:" + elem.vol);
+		}
 		return retKl;
 	}
 	

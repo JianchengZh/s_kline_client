@@ -1,6 +1,5 @@
 package com.zhangwei.stock.condition;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.zhangwei.stock.KLineUnit;
@@ -10,15 +9,15 @@ import com.zhangwei.stock.basic.Point;
 import com.zhangwei.stock.basic.StockException;
 import com.zhangwei.util.StockHelper;
 
-public class LastNdayCondition implements Condition {
-	int nDay;
-	
-	/**
-	 * nDay from 1 to unlimit
-	 * 1, 当天买第二天抛
-	 * */
-	public LastNdayCondition(int nDay){
+public class VolumeChangeCondition implements Condition {
+	private boolean direction;//true change bigger or false change smaller
+	private int nDay;
+	private int percent;
+
+	public VolumeChangeCondition(int nDay, int percent){
 		this.nDay = nDay;
+		this.percent = Math.abs(percent);
+		this.direction = this.percent>100?true:false;
 	}
 
 	@Override
@@ -29,22 +28,21 @@ public class LastNdayCondition implements Condition {
 			throw new StockException("kl is inVaild!");
 		}
 		
-		if(kl.size()-1<nDay){
+		int lastIndex = kl.size() - 1;
+		
+		if(lastIndex<nDay){
 			throw new StockException("kl's size is too small!");
 		}
 		
-		KLineUnit elem = StockHelper.binSearch(kl, lastPoint.date, 1);
-
-		if(elem!=null){
-			int index = kl.indexOf(elem);
-			if(kl.size()-index>nDay){
-				return true;
-			}else{
-				return false;
-			}
+		int averageVolOfAll = StockHelper.calcAverage(kl, 3);
+		int averageVolOflastNDay = StockHelper.calcAverage(kl.subList(lastIndex-nDay, lastIndex+1), 3);
+		
+		if(direction){
+			return (averageVolOflastNDay/averageVolOfAll) > percent;
 		}else{
-			throw new StockException("lastPoint.date not in kl list");
+			return (averageVolOflastNDay/averageVolOfAll) < percent;
 		}
+		
 	}
 
 }

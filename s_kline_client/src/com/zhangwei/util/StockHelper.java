@@ -215,5 +215,30 @@ public class StockHelper {
 		
 		return true;
 	}
+	
+	/**
+	 * @param type 1:close 2: open, 3:vol, 4:cje
+	 * */
+	public static int calcAverage(List<KLineUnit> kl, int type){
+		if(kl!=null && kl.size()>0){
+			int sum = 0;
+			for(KLineUnit elem : kl){
+				if(type==1){
+					sum+=elem.close;
+				}else if(type==2){
+					sum+=elem.open;
+				}else if(type==3){
+					sum+=elem.vol;
+				}else if(type==4){
+					sum+=elem.cje;
+				}
+				
+			}
+			
+			return sum / kl.size();
+		}
+		
+		return 0;
+	}
 
 }

@@ -314,4 +314,25 @@ public class Stock {
 		Stock s = new Stock(info);
 		s.fetchFromDZH(20121106, 20131106);
 	}
+
+	/**
+	 * @param Nday 指定返回的list有几天
+	 * @param reset 初始化pos
+	 * */
+	public List<KLineUnit> generateNDayKline(int NDay, boolean reset) {
+		// TODO Auto-generated method stub
+		if(NDay<5){
+			NDay = 60;
+		}
+		
+		if(reset){
+			if(line!=null){
+				line.reset(NDay);
+			}
+			
+			return null;
+		}else{
+			return line.generateNDayKline(NDay);
+		}
+	}
 }

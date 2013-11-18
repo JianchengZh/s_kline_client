@@ -16,17 +16,22 @@ public class Kline {
 	public List<KLineUnit> kline_list;
 	public List<ExRightUnit> ex_rights;
 	
+	private int pos;
+	
 	//最后联网查询的时间，而不是最后一个Kline的点，如果是下午3点前扫描的，算昨天。
 	//如果联网失败，不更新
 	//如果联网成功，结果为空，更新
 	//如果联网成功，结果不为空，写入mysql失败，不更新
 	//如果联网成功，结果不为空，写入mysql成功，更新
-	int last_scan_day; 
+	public  int last_scan_day;
+	private int nDay; 
 	
 	public Kline(StockInfo stockInfo){
 		kline_list = null;
 		ex_rights = null;
 		last_scan_day = -1;
+		pos = 0;
+		nDay = 0;
 		
 		
 		try {
@@ -154,6 +159,39 @@ public class Kline {
 	public List<KLineUnit> getExRightKline(){
 		return kline_list;
 		
+	}
+
+	public void reset(int nDay) {
+		// TODO Auto-generated method stub
+		pos = 0;
+		this.nDay = nDay;
+	}
+
+	public List<KLineUnit> generateNDayKline(int nDay) {
+		// TODO Auto-generated method stub
+		
+		if(kline_list==null){
+			return null;
+		}
+		
+		if(nDay<5){
+			this.nDay = 60;
+		}else{
+			this.nDay = nDay;
+		}
+		
+		int indexFrom = pos;
+		int indexTo;
+		if(pos + nDay>kline_list.size()){
+			return null;
+		}else{
+			indexTo = pos + nDay;
+			pos++;
+			return kline_list.subList(indexFrom, indexTo);
+		}
+
+		
+
 	}
 	
 }

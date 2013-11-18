@@ -2,7 +2,6 @@ package com.zhangwei.stock.task;
 
 import com.zhangwei.stock.StockInfo;
 import com.zhangwei.stock.StockManager;
-import com.zhangwei.stock.emu.StockTask;
 
 public class StockUpdateTask implements StockTask{
 	private StockInfo si;

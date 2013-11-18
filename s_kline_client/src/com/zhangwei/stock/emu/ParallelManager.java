@@ -2,6 +2,8 @@ package com.zhangwei.stock.emu;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
+import com.zhangwei.stock.task.StockTask;
+
 
 
 public class ParallelManager  {

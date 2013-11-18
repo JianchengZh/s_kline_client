@@ -93,7 +93,7 @@ public class Kline {
 	}
 	
 	public void persit2sql_kline(String transId, StockInfo info, List<KLineUnit> kl, List<ExRightUnit> rl) throws SQLException{
-		Log.v(TAG, "persit2sql_kline - IN");
+		//Log.v(TAG, "persit2sql_kline - IN");
 		BaseDao dao = BaseDao.getInstance();
 		String kline_table = "data_kline_" + info.stock_id + "_" + info.market_type;
 		String exright_table = "data_exrights_" + info.stock_id + "_" + info.market_type;
@@ -101,12 +101,12 @@ public class Kline {
 		String sql_replace_kline = "REPLACE INTO " + kline_table + "(date, open, high, low, close, vol, cje) values(?,?,?,?,?,?,?)";
 		String sql_replace_exright = "REPLACE INTO " + exright_table + "(date, multi_num, add_num) values(?,?,?)";
 		
-		Log.v(TAG, "batchUpdate sql_replace_kline");
+		//Log.v(TAG, "batchUpdate sql_replace_kline");
 		dao.batchUpdate(transId, sql_replace_kline, Converter.ListConvertKLine2Object(kl));
 		
-		Log.v(TAG, "batchUpdate sql_replace_exright");
+		//Log.v(TAG, "batchUpdate sql_replace_exright");
 		dao.batchUpdate(transId, sql_replace_exright, Converter.ListConvertExright2Object(rl));
-		Log.v(TAG, "persit2sql_kline - Out");
+		//Log.v(TAG, "persit2sql_kline - Out");
 	}
 	
 	

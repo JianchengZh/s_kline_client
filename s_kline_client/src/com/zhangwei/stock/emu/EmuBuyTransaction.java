@@ -1,11 +1,17 @@
 package com.zhangwei.stock.emu;
 
+import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.StockInfo;
 import com.zhangwei.stock.BS.BuyPoint;
 import com.zhangwei.stock.BS.IBuy;
 
 public class EmuBuyTransaction implements IBuy {
 	private BuyPoint buypoint;
+	
+	public void buy(StockInfo info, KLineUnit kLineUnit, int vol) {
+		// TODO Auto-generated method stub
+		buy(info, kLineUnit.date, 0, kLineUnit.close, vol);
+	}
 
 	@Override
 	public boolean buy(StockInfo stockinfo, int date, int time, int price,
@@ -34,5 +40,7 @@ public class EmuBuyTransaction implements IBuy {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+
 
 }

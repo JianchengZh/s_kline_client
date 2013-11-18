@@ -48,7 +48,7 @@ public class DZHClient {
 	 *  date不为0，不包括这一天
 	 * */
 	public Response sendRequest(String stock, int date) {
-		Log.v(TAG, "sendRequest - IN, stock:" + stock + ", date:" + date);
+		//Log.v(TAG, "sendRequest - IN, stock:" + stock + ", date:" + date);
 		final int totalTry = 4;
 		SocketClient sc = new SocketClient();
 		Response resp = new Response();
@@ -94,7 +94,7 @@ public class DZHClient {
 			e.printStackTrace();
 		}
 		
-		Log.v(TAG, "sendRequest - OUT");
+		//Log.v(TAG, "sendRequest - OUT");
 		
 		return resp;
 	}

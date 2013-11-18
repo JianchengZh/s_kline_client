@@ -95,7 +95,7 @@ public class StockManager {
 			e.printStackTrace();
 		}
 		
-		Log.v(TAG, "FetchStockInfo - index:" + index + ", result num:" + rlt.size());
+		//Log.v(TAG, "FetchStockInfo - index:" + index + ", result num:" + rlt.size());
 		
 		return rlt;
 	}

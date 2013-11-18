@@ -42,7 +42,7 @@ public class StockHelper {
 				low = elem;
 			}
 			
-			if(high==null || high.close<high.close){
+			if(high==null || high.close<elem.close){
 				high = elem;
 			}
 		}

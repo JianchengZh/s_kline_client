@@ -10,7 +10,7 @@ public class SellPoint extends Point {
 	}
 	
 	public String toString(){
-		return "卖出：" + info.stock_id + " " + info.name + ", 价格(元)：" + price*1.0/100 + ", 数量（手）:" + vol/100;  
+		return "卖出：" + date + " " + info.stock_id + " " + info.name + ", 价格(元)：" + price*1.0/100 + ", 数量（手）:" + vol/100;  
 	}
 
 }

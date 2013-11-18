@@ -34,10 +34,7 @@ public class StopEarnCondition implements ICondition {
 			throw new StockException("lastPoint is null");
 		}
 		
-		if(lastPoint.isBuy()){
-			throw new StockException("lastPoint is buy");
-		}
-		
+
 		if(kl==null){
 			throw new StockException("kline is null");
 		}

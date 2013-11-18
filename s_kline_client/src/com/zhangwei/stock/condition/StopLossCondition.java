@@ -41,10 +41,7 @@ public class StopLossCondition implements ICondition {
 			throw new StockException("lastPoint is null");
 		}
 		
-		if(!lastPoint.isBuy()){
-			throw new StockException("lastPoint is sell");
-		}
-		
+	
 		KLineUnit elem = StockHelper.binSearch(kl, lastPoint.date, 1);
 
 		if(elem!=null){

@@ -82,9 +82,9 @@ public class PriceRule extends JComponent {
 			KLineTypeResult ret = StockHelper.getKlineType(kl);
 			this.startPrice = ret.LOW.low;
 			int h = ret.HIGH.high - ret.LOW.low;
-	        units = size * 100 / h ;
-	        size = units * h /100;
-	        increment = units/2;
+	        units = size * 100 / h ; //每一元对应多少像素
+	        size = units * h /100; 
+	        increment = units;
 		} catch (StockException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -97,6 +97,14 @@ public class PriceRule extends JComponent {
 
     public int getIncrement() {
         return increment;
+    }
+    
+    public int getUnits(){
+    	return units;
+    }
+    
+    public int getStartPrice(){
+    	return startPrice;
     }
 
 /*    public void setPreferredHeight(int ph) {
@@ -155,7 +163,7 @@ public class PriceRule extends JComponent {
         for (int i = start; i < end; i += increment) {
             if (i % units == 0)  {
                 tickLength = 10;
-                text = String.valueOf(startPrice + i/units)/*Integer.toString(i/units)*/;
+                text = String.valueOf((double)i/units + startPrice)/*Integer.toString(i/units)*/;
             } else {
                 tickLength = 7;
                 text = null;

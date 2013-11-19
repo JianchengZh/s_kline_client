@@ -26,31 +26,26 @@ public class StockPanel extends JPanel {
 	 */
 	private static final long serialVersionUID = -1824501043506018932L;
 	
-	public StockPanel(List<KLineUnit> kl){
+	public StockPanel(List<KLineUnit> kl, int w, int h){
 		super(new BorderLayout());
 		
-		KLineComponent klc = new KLineComponent(kl);
+        columnView = new DateRule(w, kl);
+        rowView = new PriceRule(h, kl);
+        
+		int columnUnit = columnView.getUnits();
+		int rowUnit = rowView.getUnits();
+		int startPrice = rowView.getStartPrice();
+		KLineComponent klc = new KLineComponent(kl, w, h, columnUnit, rowUnit, startPrice);
 
-/*		int preferredSizeWidth = 450;
-		int preferredSizeHeight = 110;
-        
-		setPreferredSize(new Dimension(preferredSizeWidth, preferredSizeHeight));*/
-        
+       
         JScrollPane jp = new JScrollPane(klc);
-        
-        columnView = new DateRule(420, kl);
-        rowView = new PriceRule(450, kl);
-        
-/*        columnView.setPreferredWidth(420);
-        rowView.setPreferredHeight(450);*/
-        
-        //jp.setPreferredSize(new Dimension(300, 250));
+      
         jp.setViewportBorder(BorderFactory.createLineBorder(Color.black));
         jp.setColumnHeaderView(columnView);
         jp.setRowHeaderView(rowView);
         
         add(jp, BorderLayout.CENTER);
-        setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
+        //setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
 	}
 	
 	
@@ -61,7 +56,7 @@ public class StockPanel extends JPanel {
         StockManager sm = StockManager.getInstance();
         Stock s = sm.getStock(new StockInfo("002572", 2, "SFY", -1, -1, "索菲亚"), false);
         List<KLineUnit> kl = s.getNDayKline(60, 20131118);
-        StockPanel stockPanel = new StockPanel(kl);
+        StockPanel stockPanel = new StockPanel(kl, 420, 420);
         
 /*        JScrollPane scrollPane = new JScrollPane( stockPanel );
         scrollPane.getViewport().setBackground( Color.white );*/

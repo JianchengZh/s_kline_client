@@ -23,6 +23,10 @@ public class KLineUnit {
 		this.vol = cur.vol * 100 / factorRet;
 		this.cje = cur.cje;
 	}
+	
+	public int isUp(){
+		return close-open;
+	}
 
 	@Override
 	public String toString(){

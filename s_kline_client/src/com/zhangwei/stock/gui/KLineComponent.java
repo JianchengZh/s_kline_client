@@ -25,20 +25,40 @@ public class KLineComponent extends JComponent /*implements Scrollable*/{
      */
     private boolean preferredScrollableViewportSizeChanged = false;
 
+	private int columnUnit;
+
+	private int rowUnit;
+
+	private List<KLineUnit> kl;
+
+	private int w;
+
+	private int h;
+
+	private int startPrice;
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6866575016033251900L;
 	
-	public KLineComponent(List<KLineUnit> kl){
+	public KLineComponent(List<KLineUnit> kl, int w, int h, int columnUnit, int rowUnit, int startPrice){
 		//this.getSize();
 		//this.setSize(600, 400);
-		this.setPreferredSize(new Dimension(300, 200));
+		this.setPreferredSize(new Dimension(w, h));
+		this.kl = kl;
+		this.w = w;
+		this.h = h;
+		
+		this.columnUnit = columnUnit;
+		this.rowUnit = rowUnit;
+		
+		this.startPrice = startPrice;
 	}
 
 	@Override
 	public void paint(Graphics g) {
-		int height = 200;
+/*		int height = 200;
 		int width = 120;
 		g.setColor(Color.red);
 		g.drawRect(10, 10, height, width);
@@ -47,10 +67,32 @@ public class KLineComponent extends JComponent /*implements Scrollable*/{
 		g.setColor(Color.red);
 		g.drawOval(250, 20, height, width);
 		g.setColor(Color.magenta);
-		g.fillOval(249, 19, height, width);
+		g.fillOval(249, 19, height, width);*/
+		for(int index=0; index<kl.size(); index++){
+			int x = index*columnUnit;
+			drawKlineElem(g, x, kl.get(index));
+		}
 	}
 	
-    /**
+    private void drawKlineElem(Graphics g, int x, KLineUnit kLineUnit) {
+		// TODO Auto-generated method stub
+		if(kLineUnit.isUp()>0){
+			g.setColor(Color.red);
+			g.drawRect(x, (kLineUnit.close-startPrice)*rowUnit/100, columnUnit, (kLineUnit.close - kLineUnit.open)*rowUnit/100);
+		}else if(kLineUnit.isUp()<0){
+			g.setColor(Color.blue);
+			g.drawRect(x, (kLineUnit.open-startPrice)*rowUnit/100, columnUnit, (kLineUnit.open - kLineUnit.close)*rowUnit/100);
+		}else{
+			g.setColor(Color.white);
+			g.drawLine(x, (kLineUnit.open-startPrice)*rowUnit/100, x+columnUnit, (kLineUnit.open-startPrice)*rowUnit/100);
+		}
+		
+		if(kLineUnit.high>kLineUnit.low){
+			g.drawLine(x+columnUnit/2, (kLineUnit.high-startPrice)*rowUnit/100, x+columnUnit/2, (kLineUnit.low-startPrice)*rowUnit/100);
+		}
+	}
+
+	/**
      * Computes the dimension required to paint this document
      * @return
      */

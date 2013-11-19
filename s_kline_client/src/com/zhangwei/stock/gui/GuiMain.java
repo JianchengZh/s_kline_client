@@ -46,7 +46,7 @@ public class GuiMain {
 		        Stock s = sm.getStock(new StockInfo("002572", 2, "SFY", -1, -1, "索菲亚"), false);
 		        List<KLineUnit> kl = s.getNDayKline(60, 20131118);
 		        
-				StockPanel sp = new StockPanel(kl);
+				StockPanel sp = new StockPanel(kl, 420,420);
 
 				JPanel jp = new JPanel(new GridBagLayout());
 		        addComponent(jp, sp, 0, 0, 1, 0,

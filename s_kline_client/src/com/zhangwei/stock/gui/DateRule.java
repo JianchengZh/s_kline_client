@@ -86,6 +86,10 @@ public class DateRule extends JComponent {
     public int getIncrement() {
         return increment;
     }
+    
+    public int getUnits(){
+    	return units;
+    }
 
 /*    public void setPreferredHeight(int ph) {
         setPreferredSize(new Dimension(SIZE, ph));

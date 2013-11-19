@@ -12,6 +12,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 
+import android.util.Log;
+
 import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.Stock;
 import com.zhangwei.stock.StockInfo;
@@ -25,6 +27,7 @@ public class StockPanel extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = -1824501043506018932L;
+	private static final String TAG = "StockPanel";
 	
 	public StockPanel(List<KLineUnit> kl, int w, int h){
 		super(new BorderLayout());
@@ -34,8 +37,9 @@ public class StockPanel extends JPanel {
         
 		int columnUnit = columnView.getUnits();
 		int rowUnit = rowView.getUnits();
-		int startPrice = rowView.getStartPrice();
-		KLineComponent klc = new KLineComponent(kl, w, h, columnUnit, rowUnit, startPrice);
+		int lowest = rowView.getLowestPrice();
+		int highest = rowView.getHighestPrice();
+		KLineComponent klc = new KLineComponent(kl, w, h, columnUnit, rowUnit, lowest, highest);
 
        
         JScrollPane jp = new JScrollPane(klc);
@@ -56,6 +60,9 @@ public class StockPanel extends JPanel {
         StockManager sm = StockManager.getInstance();
         Stock s = sm.getStock(new StockInfo("002572", 2, "SFY", -1, -1, "索菲亚"), false);
         List<KLineUnit> kl = s.getNDayKline(60, 20131118);
+        for(KLineUnit elem : kl){
+        	Log.v(TAG, elem.toString());
+        }
         StockPanel stockPanel = new StockPanel(kl, 420, 420);
         
 /*        JScrollPane scrollPane = new JScrollPane( stockPanel );

@@ -56,7 +56,8 @@ public class PriceRule extends JComponent {
     private int units;
     private List<KLineUnit> kl;
 	private int size; //total pixels of the width
-	private int startPrice;
+	private int lowestPrice;
+	private int highestPrice;
 
     public PriceRule(int size, List<KLineUnit> kl) {
     	this.size = size;
@@ -80,7 +81,8 @@ public class PriceRule extends JComponent {
         }*/
     	try {
 			KLineTypeResult ret = StockHelper.getKlineType(kl);
-			this.startPrice = ret.LOW.low;
+			this.lowestPrice = ret.LOW.low;
+			this.highestPrice = ret.HIGH.high;
 			int h = ret.HIGH.high - ret.LOW.low;
 	        units = size * 100 / h ; //每一元对应多少像素
 	        size = units * h /100; 
@@ -103,8 +105,12 @@ public class PriceRule extends JComponent {
     	return units;
     }
     
-    public int getStartPrice(){
-    	return startPrice;
+    public int getLowestPrice(){
+    	return lowestPrice;
+    }
+    
+    public int getHighestPrice(){
+    	return highestPrice;
     }
 
 /*    public void setPreferredHeight(int ph) {
@@ -163,7 +169,7 @@ public class PriceRule extends JComponent {
         for (int i = start; i < end; i += increment) {
             if (i % units == 0)  {
                 tickLength = 10;
-                text = String.valueOf((double)i/units + startPrice)/*Integer.toString(i/units)*/;
+                text = String.valueOf((double)(end-i-1)*100/units + lowestPrice)/*Integer.toString(i/units)*/;
             } else {
                 tickLength = 7;
                 text = null;

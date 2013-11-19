@@ -35,14 +35,16 @@ public class KLineComponent extends JComponent /*implements Scrollable*/{
 
 	private int h;
 
-	private int startPrice;
+	private int lowestPrice;
+
+	private int highestPrice;
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6866575016033251900L;
 	
-	public KLineComponent(List<KLineUnit> kl, int w, int h, int columnUnit, int rowUnit, int startPrice){
+	public KLineComponent(List<KLineUnit> kl, int w, int h, int columnUnit, int rowUnit, int lowestPrice, int highestPrice){
 		//this.getSize();
 		//this.setSize(600, 400);
 		this.setPreferredSize(new Dimension(w, h));
@@ -53,7 +55,8 @@ public class KLineComponent extends JComponent /*implements Scrollable*/{
 		this.columnUnit = columnUnit;
 		this.rowUnit = rowUnit;
 		
-		this.startPrice = startPrice;
+		this.lowestPrice = lowestPrice;
+		this.highestPrice = highestPrice;
 	}
 
 	@Override
@@ -78,17 +81,17 @@ public class KLineComponent extends JComponent /*implements Scrollable*/{
 		// TODO Auto-generated method stub
 		if(kLineUnit.isUp()>0){
 			g.setColor(Color.red);
-			g.drawRect(x, (kLineUnit.close-startPrice)*rowUnit/100, columnUnit, (kLineUnit.close - kLineUnit.open)*rowUnit/100);
+			g.fillRect(x, h - (kLineUnit.close-lowestPrice)*rowUnit/100, columnUnit, (kLineUnit.close - kLineUnit.open)*rowUnit/100);
 		}else if(kLineUnit.isUp()<0){
 			g.setColor(Color.blue);
-			g.drawRect(x, (kLineUnit.open-startPrice)*rowUnit/100, columnUnit, (kLineUnit.open - kLineUnit.close)*rowUnit/100);
+			g.fillRect(x, h - (kLineUnit.open - lowestPrice)*rowUnit/100, columnUnit, (kLineUnit.open - kLineUnit.close)*rowUnit/100);
 		}else{
-			g.setColor(Color.white);
-			g.drawLine(x, (kLineUnit.open-startPrice)*rowUnit/100, x+columnUnit, (kLineUnit.open-startPrice)*rowUnit/100);
+			g.setColor(Color.BLACK);
+			g.drawLine(x, h - (kLineUnit.open - lowestPrice)*rowUnit/100, x+columnUnit, h - (kLineUnit.open - lowestPrice)*rowUnit/100);
 		}
 		
 		if(kLineUnit.high>kLineUnit.low){
-			g.drawLine(x+columnUnit/2, (kLineUnit.high-startPrice)*rowUnit/100, x+columnUnit/2, (kLineUnit.low-startPrice)*rowUnit/100);
+			g.drawLine(x+columnUnit/2, h - (kLineUnit.high - lowestPrice)*rowUnit/100, x+columnUnit/2, h - (kLineUnit.low - lowestPrice)*rowUnit/100);
 		}
 	}
 

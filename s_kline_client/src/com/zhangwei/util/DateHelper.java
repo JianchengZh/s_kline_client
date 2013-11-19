@@ -49,4 +49,9 @@ public class DateHelper {
 	public static void main(String[] args){
 		System.out.println(Yesteray());
 	}
+
+	public static String Day(int date) {
+		// TODO Auto-generated method stub
+		return String.valueOf(date%10000);
+	}
 }

@@ -83,11 +83,14 @@ public class PriceRule extends JComponent {
 			this.startPrice = ret.LOW.low;
 			int h = ret.HIGH.high - ret.LOW.low;
 	        units = size * 100 / h ;
+	        size = units * h /100;
 	        increment = units/2;
 		} catch (StockException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+    	
+    	 setPreferredSize(new Dimension(SIZE, size));
 
     }
 
@@ -96,13 +99,13 @@ public class PriceRule extends JComponent {
         return increment;
     }
 
-    public void setPreferredHeight(int ph) {
+/*    public void setPreferredHeight(int ph) {
         setPreferredSize(new Dimension(SIZE, ph));
     }
 
     public void setPreferredWidth(int pw) {
         setPreferredSize(new Dimension(pw, SIZE));
-    }
+    }*/
 
     protected void paintComponent(Graphics g) {
         Rectangle drawHere = g.getClipBounds();

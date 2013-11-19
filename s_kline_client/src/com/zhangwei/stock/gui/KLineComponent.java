@@ -12,7 +12,7 @@ import javax.swing.SwingConstants;
 
 import com.zhangwei.stock.KLineUnit;
 
-public class KLineComponent extends JComponent implements Scrollable{
+public class KLineComponent extends JComponent /*implements Scrollable*/{
     /**
      * The preferred size that the CodePanel needs to paint all of the code
      */
@@ -33,7 +33,7 @@ public class KLineComponent extends JComponent implements Scrollable{
 	public KLineComponent(List<KLineUnit> kl){
 		//this.getSize();
 		//this.setSize(600, 400);
-		this.setPreferredSize(new Dimension(600, 400));
+		this.setPreferredSize(new Dimension(300, 200));
 	}
 
 	@Override
@@ -81,7 +81,7 @@ public class KLineComponent extends JComponent implements Scrollable{
     }
 	
 
-	@Override
+/*	@Override
 	public Dimension getPreferredScrollableViewportSize() {
 		// TODO Auto-generated method stub
         Dimension d = this.computeDimension();
@@ -136,6 +136,6 @@ public class KLineComponent extends JComponent implements Scrollable{
 	public boolean getScrollableTracksViewportHeight() {
 		// TODO Auto-generated method stub
 		return false;
-	}
+	}*/
 
 }

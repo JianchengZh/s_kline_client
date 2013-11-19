@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -30,20 +31,26 @@ public class StockPanel extends JPanel {
 		
 		KLineComponent klc = new KLineComponent(kl);
 
-		int preferredSizeWidth = 450;
+/*		int preferredSizeWidth = 450;
 		int preferredSizeHeight = 110;
         
-		setPreferredSize(new Dimension(preferredSizeWidth, preferredSizeHeight));
+		setPreferredSize(new Dimension(preferredSizeWidth, preferredSizeHeight));*/
         
         JScrollPane jp = new JScrollPane(klc);
-        add(new JScrollPane(klc), BorderLayout.CENTER);
-
-        columnView = new DateRule(preferredSizeWidth, kl);
-        rowView = new PriceRule(preferredSizeHeight, kl);
         
+        columnView = new DateRule(420, kl);
+        rowView = new PriceRule(450, kl);
         
+/*        columnView.setPreferredWidth(420);
+        rowView.setPreferredHeight(450);*/
+        
+        //jp.setPreferredSize(new Dimension(300, 250));
+        jp.setViewportBorder(BorderFactory.createLineBorder(Color.black));
         jp.setColumnHeaderView(columnView);
         jp.setRowHeaderView(rowView);
+        
+        add(jp, BorderLayout.CENTER);
+        setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
 	}
 	
 	
@@ -56,15 +63,15 @@ public class StockPanel extends JPanel {
         List<KLineUnit> kl = s.getNDayKline(60, 20131118);
         StockPanel stockPanel = new StockPanel(kl);
         
-        JScrollPane scrollPane = new JScrollPane( stockPanel );
-        scrollPane.getViewport().setBackground( Color.white );
-        frame.add( scrollPane );
+/*        JScrollPane scrollPane = new JScrollPane( stockPanel );
+        scrollPane.getViewport().setBackground( Color.white );*/
+        frame.add( stockPanel );
 
         //frame.add( codePanel );
 
-        frame.setSize( 1024, 768 );
+        frame.setSize( 500, 500 );
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-        frame.setLocation( d.width / 2 - 512, d.height / 2 - 384  );
+        frame.setLocation( d.width / 4, 100  );
         frame.setVisible( true );
 	}
 

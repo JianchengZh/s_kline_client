@@ -76,7 +76,10 @@ public class DateRule extends JComponent {
         }*/
     	
         units = size/kl.size();
-        increment = units / 2;
+        size = units * kl.size();
+        increment = 5*units;
+        
+        setPreferredSize(new Dimension(size, SIZE));
     }
 
 
@@ -84,13 +87,13 @@ public class DateRule extends JComponent {
         return increment;
     }
 
-    public void setPreferredHeight(int ph) {
+/*    public void setPreferredHeight(int ph) {
         setPreferredSize(new Dimension(SIZE, ph));
     }
 
     public void setPreferredWidth(int pw) {
         setPreferredSize(new Dimension(pw, SIZE));
-    }
+    }*/
 
     protected void paintComponent(Graphics g) {
         Rectangle drawHere = g.getClipBounds();
@@ -137,10 +140,15 @@ public class DateRule extends JComponent {
         }
 
         // ticks and labels
-        for (int i = start; i < end; i += increment) {
-            if (i % units == 0)  {
+        for (int i = start; i < end; i += units) {
+            if (i % increment == 0)  {
                 tickLength = 10;
-                text = DateHelper.Day(kl.get(i/units).date)/*Integer.toString(i/units)*/;
+                if(i/units<kl.size()){
+                	text = DateHelper.Day(kl.get(i/units).date);
+                }else{
+                    text = null;
+                }
+                /*Integer.toString(i/units)*/;
             } else {
                 tickLength = 7;
                 text = null;

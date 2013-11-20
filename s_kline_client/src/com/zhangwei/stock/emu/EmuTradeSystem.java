@@ -100,7 +100,9 @@ public class EmuTradeSystem implements TradeSystem{
 		int earnNum = 0;
 		int lossNum = 0;
 		int earnPercentExpectSum = 0;
-		int earnPercentExpectProduct = 100;
+		int lossPercentExpectSum = 0;
+		int totalPercentExpectSum = 0;
+		int totalPercentExpectProduct = 100;
 		int minEarnPercent = 100000;
 		int maxEarnPercent = 0;
 		int minEarnPercentExpectSum = 100000;
@@ -118,37 +120,41 @@ public class EmuTradeSystem implements TradeSystem{
 			
 			if(earnPercent>0){
 				earnNum++;
-			}else{
+				earnPercentExpectSum = earnPercentExpectSum + earnPercent;
+			}else if(earnPercent<0){
 				lossNum++;
+				lossPercentExpectSum = lossPercentExpectSum + earnPercent;
 			}
 			
 			totalNum++;
 
-			earnPercentExpectSum= earnPercentExpectSum + earnPercent;
-			earnPercentExpectProduct = earnPercentExpectProduct * (100 + earnPercent) / 100;
+			totalPercentExpectSum= totalPercentExpectSum + earnPercent;
+			totalPercentExpectProduct = totalPercentExpectProduct * (100 + earnPercent) / 100;
 			
-			if(minEarnPercentExpectSum>earnPercentExpectSum/totalNum){
-				minEarnPercentExpectSum=earnPercentExpectSum/totalNum;
+			if(minEarnPercentExpectSum>totalPercentExpectSum/totalNum){
+				minEarnPercentExpectSum=totalPercentExpectSum/totalNum;
 			}
 			
-			if(minEarnPercentExpectProduct>earnPercentExpectProduct){
-				minEarnPercentExpectProduct=earnPercentExpectProduct;
+			if(minEarnPercentExpectProduct>totalPercentExpectProduct){
+				minEarnPercentExpectProduct=totalPercentExpectProduct;
 			}
 			
 			//Log.v(null, "earnPercent:" + earnPercent + ", earnPercentExpectSum:" + earnPercentExpectSum/totalNum + ", earnPercentExpectProduct:" + earnPercentExpectProduct);
 		}
 		
-		earnPercentExpectSum = earnPercentExpectSum / totalNum;
+		double totalPercentExpectSum_double = (double)totalPercentExpectSum / totalNum;
+		double earnPercentExpectSum_double = (double)earnPercentExpectSum / earnNum;
+		double lossPercentExpectSum_double = (double)lossPercentExpectSum / lossNum;
 				
 		Log.v(null, "===================Report!=========================");
 		Log.v(null, "=== Total Trades:" + totalNum);
-		Log.v(null, "=== earnNum:" + earnNum + ", percent:" + earnNum * 100 / totalNum);
-		Log.v(null, "=== lossNum:" + lossNum + ", percent:" + lossNum * 100 / totalNum);
+		Log.v(null, "=== earnNum:" + earnNum + ", percent:" + earnNum * 100 / totalNum + ", 期望:" + earnPercentExpectSum_double);
+		Log.v(null, "=== lossNum:" + lossNum + ", percent:" + lossNum * 100 / totalNum + ", 期望:" + lossPercentExpectSum_double);
 		
-		Log.v(null, "=== 累计加和盈利(percent):" + earnPercentExpectSum);
+		Log.v(null, "=== 累计加和盈利(percent):" + totalPercentExpectSum_double);
 		Log.v(null, "=== 最低时的加和盈利(percent):" + minEarnPercentExpectSum);
 		
-		Log.v(null, "=== 累计乘积盈利(percent):" + earnPercentExpectProduct);
+		Log.v(null, "=== 累计乘积盈利(percent):" + totalPercentExpectProduct);
 		Log.v(null, "=== 最低时的乘积盈利(percent):" + minEarnPercentExpectProduct);
 		
 		Log.v(null, "=== 单次最小盈利(percent):" + minEarnPercent);

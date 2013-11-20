@@ -8,6 +8,7 @@ import java.util.Map;
 import android.util.Log;
 
 import com.zhangwei.mysql.BaseDao;
+import com.zhangwei.stock.Constants;
 import com.zhangwei.stock.StockInfo;
 import com.zhangwei.stock.BS.BuyPoint;
 import com.zhangwei.stock.BS.IBuy;
@@ -15,6 +16,7 @@ import com.zhangwei.stock.BS.ISell;
 import com.zhangwei.stock.BS.SellPoint;
 import com.zhangwei.stock.BS.TradeSystem;
 import com.zhangwei.stock.BS.TradeUnit;
+import com.zhangwei.stock.gui.GuiManager;
 import com.zhangwei.util.Format;
 
 public class EmuTradeSystem implements TradeSystem{
@@ -96,6 +98,8 @@ public class EmuTradeSystem implements TradeSystem{
 
 	public void Report(List<TradeUnit> rlt) {
 		// TODO Auto-generated method stub
+		GuiManager.getInstance().showResult(rlt, Constants.BUYPOINT_PREFIX_LEN, Constants.SELLPOINT_POSTFIX_LEN);
+		
 		int totalNum = 0;
 		int earnNum = 0;
 		int lossNum = 0;

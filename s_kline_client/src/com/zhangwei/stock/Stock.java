@@ -12,6 +12,7 @@ import com.android.dazhihui.http.StructResponse;
 import com.zhangwei.client.DZHClient;
 import com.zhangwei.mysql.BaseDao;
 import com.zhangwei.mysql.Converter;
+import com.zhangwei.stock.BS.TradeUnit;
 import com.zhangwei.util.DateHelper;
 import com.zhangwei.util.StockHelper;
 
@@ -309,6 +310,34 @@ public class Stock {
 		}
 	}
 	
+	/**
+	 * 得到原始的K线
+	 * 
+	 * @param numDay 多少个交易日
+	 * @param endDate 从哪个日期截至（包括,若没有使用左边最近的），-1从上市开始取， 0取最新的， 20130312普通格式
+	 * 
+	 * */
+	public List<KLineUnit> getNDayKline(TradeUnit tu, int prefixNDay, int posfixNDay) {
+		// TODO Auto-generated method stub
+		KLineUnit buy = StockHelper.binSearch(line.kline_list, tu.buy_date, 0);
+		KLineUnit sell = StockHelper.binSearch(line.kline_list, tu.sell_date, 0);
+		int buy_index = line.kline_list.indexOf(buy);
+		int sell_index = line.kline_list.indexOf(sell);
+		int indexFrom = 0;
+		int indexTo = 0;
+		if(buy_index>prefixNDay){
+			indexFrom=buy_index-prefixNDay;
+		}else{
+			indexFrom = 0;
+		}
+		if(sell_index+posfixNDay<line.kline_list.size()){
+			indexTo = sell_index+posfixNDay;
+		}else{
+			indexTo = line.kline_list.size();
+		}
+		return line.kline_list.subList(indexFrom, indexTo);
+	}
+	
 	public static void main(String[] args){
 		StockInfo info = new StockInfo("600031", 1, "SYZG", 0, 0, "三一重工");
 		Stock s = new Stock(info);
@@ -335,4 +364,6 @@ public class Stock {
 			return line.generateNDayKline(NDay);
 		}
 	}
+
+
 }

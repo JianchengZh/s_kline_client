@@ -48,8 +48,7 @@ public class Client {
 /*		List<Map<String, Object>> rlt = ci.GetStockList();
 		ci.DumpData(rlt);*/
 		
-		StockManager.getInstance().FetchStockInfo(false);
-		StockManager.getInstance().FetchStockInfo(true);
+		StockManager.getInstance().FetchStockInfo(false, null, -1);
 	}
 	
 	public void DumpData(List<Map<String, Object>> list){

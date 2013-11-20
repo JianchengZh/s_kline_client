@@ -19,7 +19,7 @@ import com.zhangwei.stock.Stock;
 import com.zhangwei.stock.StockInfo;
 import com.zhangwei.stock.StockManager;
 
-public class StockPanel extends JPanel {
+public class KLinePanel extends JPanel {
     private DateRule columnView;
     private PriceRule rowView;
 
@@ -29,7 +29,7 @@ public class StockPanel extends JPanel {
 	private static final long serialVersionUID = -1824501043506018932L;
 	private static final String TAG = "StockPanel";
 	
-	public StockPanel(List<KLineUnit> kl, int w, int h){
+	public KLinePanel(List<KLineUnit> kl, int w, int h){
 		super(new BorderLayout());
 		
         columnView = new DateRule(w, kl);
@@ -63,7 +63,7 @@ public class StockPanel extends JPanel {
         for(KLineUnit elem : kl){
         	Log.v(TAG, elem.toString());
         }
-        StockPanel stockPanel = new StockPanel(kl, 420, 420);
+        KLinePanel stockPanel = new KLinePanel(kl, 420, 420);
         
 /*        JScrollPane scrollPane = new JScrollPane( stockPanel );
         scrollPane.getViewport().setBackground( Color.white );*/

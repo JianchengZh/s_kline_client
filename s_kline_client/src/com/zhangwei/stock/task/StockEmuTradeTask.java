@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.util.Log;
 
+import com.zhangwei.stock.Constants;
 import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.Stock;
 import com.zhangwei.stock.StockInfo;
@@ -42,7 +43,7 @@ public class StockEmuTradeTask implements StockTask {
 		int status = 0; //0 empty  1 hold
 		BuyPoint lastBuyPoint = null;
 		SellPoint lastSellPoint = null;
-		while((kl = stock.generateNDayKline(60, false))!=null){
+		while((kl = stock.generateNDayKline(Constants.BUYPOINT_PREFIX_LEN, false))!=null){
 			List<KLineUnit> exRightKl = StockHelper.getExrightKLine(kl);
 			if(status==0){
 				boolean canBuy = bs.checkBuy(info, exRightKl, lastSellPoint);

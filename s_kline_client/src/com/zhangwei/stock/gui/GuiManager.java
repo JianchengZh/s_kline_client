@@ -3,11 +3,13 @@ package com.zhangwei.stock.gui;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.util.List;
 
@@ -24,12 +26,32 @@ import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.Stock;
 import com.zhangwei.stock.StockInfo;
 import com.zhangwei.stock.StockManager;
+import com.zhangwei.stock.BS.TradeUnit;
 
 
-public class GuiMain {
-	static JFrame frame;
+public class GuiManager {
+	private JFrame frame;
+	private List<TradeUnit> list;
+	private int index;
 	
-	public static void main(final String args[]) {
+	private static GuiManager ins;
+	private GuiManager(){
+		index = 0;
+	}
+	
+	public static GuiManager getInstance(){
+		if(ins==null){
+			ins = new GuiManager();
+		}
+		
+		return ins;
+	}
+	
+	public void showResult(final List<TradeUnit> list, final int prefixNDay, final int posfixNDay){
+
+		this.list = list;
+		this.index = 0;
+		
 
 		// MyParser.Paser_dir(args[0]);
 		Runnable runner = new Runnable() {
@@ -41,34 +63,32 @@ public class GuiMain {
 				
 				String title = ("Kline GUI");
 				frame = new JFrame(title);
+				TradeUnit tu = list.get(index);
 
 		        StockManager sm = StockManager.getInstance();
-		        Stock s = sm.getStock(new StockInfo("002572", 2, "SFY", -1, -1, "索菲亚"), false);
-		        List<KLineUnit> kl = s.getNDayKline(60, 20131118);
-		        
-				StockPanel sp = new StockPanel(kl, 420,420);
+		        Stock s = sm.getStock(tu.stock_id, tu.market_type);
+		        List<KLineUnit> kl = s.getNDayKline(tu, prefixNDay, posfixNDay);
 
-				JPanel jp = new JPanel(new GridBagLayout());
-		        addComponent(jp, sp, 0, 0, 1, 0,
-		                GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-		        
-				
-				frame.add(jp, BorderLayout.CENTER);
+				KLinePanel stockPanel = new KLinePanel(kl, 420, 420);
 
+				frame.add(stockPanel);
 
-				frame.setSize(600, 600);
-				frame.setLocation(650, 20);
+				frame.setSize(500, 500);
+				Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+				frame.setLocation(d.width / 4, 100);
 				frame.setVisible(true);
 			}
 		};
 		
 		
 		EventQueue.invokeLater(runner);
+	
 	}
+	
 
-	private static final Insets insets = new Insets(0, 0, 0, 0);
+	private final Insets insets = new Insets(0, 0, 0, 0);
 
-	private static void addComponent(Container container, Component component,
+	private void addComponent(Container container, Component component,
 			int gridx, int gridy, int gridwidth, int gridheight, int anchor,
 			int fill) {
 		GridBagConstraints gbc = new GridBagConstraints(gridx, gridy,

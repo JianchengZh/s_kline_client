@@ -61,20 +61,34 @@ public class StockManager {
 		return ins;
 	}
 	
-	public synchronized ArrayList<StockInfo> FetchStockInfo(boolean index){
+	public synchronized ArrayList<StockInfo> FetchStockInfo(boolean index, String arg_stock_id, int arg_market_type){
 		ArrayList<StockInfo> rlt = new ArrayList<StockInfo>();
 		
 		try {
 			BaseDao dao = BaseDao.getInstance();	
 			
-			String sql = null;
+			StringBuilder sql = new StringBuilder();
 			if(index){
-				sql = "select * from zhishulist";
+				sql.append("select * from zhishulist");
 			}else{
-				sql = "select * from stocklist";
+				sql.append("select * from stocklist");
 			}
 			
-			List<Map<String, Object>> list = dao.query(sql);
+			boolean hasStockID = false;
+			if(arg_stock_id!=null && !arg_stock_id.equals("")){
+				sql.append(" where stock_id='" + arg_stock_id + "'");
+				hasStockID = true;
+			}
+			
+			if(arg_market_type>=0){
+				if(hasStockID){
+					sql.append(" and market_type=" + arg_market_type);
+				}else{
+					sql.append(" where market_type=" + arg_market_type);
+				}
+			}
+			
+			List<Map<String, Object>> list = dao.query(sql.toString());
 			
 			if(list!=null && list.size()>0){
 				for(Map<String, Object> item : list){
@@ -123,9 +137,20 @@ public class StockManager {
 		return stock;
 	}
 	
+	public synchronized Stock getStock(String stock_id, int market_type) {
+		// TODO Auto-generated method stub
+		StockManager sm = StockManager.getInstance();
+		ArrayList<StockInfo> stocks = sm.FetchStockInfo(false, stock_id, market_type);
+		if(stocks!=null && stocks.size()==1){
+			return getStock(stocks.get(0), false);
+		}
+		
+		return null;
+	}
+	
 	public static void main(String[] args){
 		StockManager sm = StockManager.getInstance();
-		ArrayList<StockInfo> stocks = sm.FetchStockInfo(false);
+		ArrayList<StockInfo> stocks = sm.FetchStockInfo(false, null, -1);
 		for(StockInfo item : stocks){
 			//sm.getStock(item, false);
 			ParallelManager.getInstance().submitTask(new StockUpdateTask(item));
@@ -155,5 +180,7 @@ public class StockManager {
 		Log.v(TAG, "createTable - Out");
 
 	}
+
+
 
 }

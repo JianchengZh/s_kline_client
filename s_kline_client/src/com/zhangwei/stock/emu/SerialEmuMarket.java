@@ -29,6 +29,9 @@ public class SerialEmuMarket {
 			ParallelManager.getInstance().submitTask(new StockEmuTradeTask(item, bs));
 		}
 		
+		EmuTradeSystem.getInstance().getReport(bs.getUID());
+		
+		
 	}
 
 }

@@ -74,7 +74,7 @@ public class StockManager {
 				sql = "select * from stocklist";
 			}
 			
-			List<Map<String, Object>> list = dao.query(sql);		
+			List<Map<String, Object>> list = dao.query(sql);
 			
 			if(list!=null && list.size()>0){
 				for(Map<String, Object> item : list){

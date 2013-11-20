@@ -1,5 +1,10 @@
 package com.zhangwei.stock.emu;
 
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
+import com.zhangwei.mysql.BaseDao;
 import com.zhangwei.stock.BS.BuyPoint;
 import com.zhangwei.stock.BS.IBuy;
 import com.zhangwei.stock.BS.ISell;
@@ -41,6 +46,18 @@ public class EmuTradeSystem implements TradeSystem{
 	public void completeSellTransaction(BuyPoint buypoint, SellPoint sellpoint) {
 		// TODO Auto-generated method stub
 		records.addSell(buypoint, sellpoint);
+	}
+
+	public void getReport(String uid) {
+		// TODO Auto-generated method stub
+		BaseDao bd = BaseDao.getInstance();
+		String sql = "select * from BS_" + uid + "where sell_date!=0";
+		try {
+			List<Map<String, Object>> list = bd.query(sql);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

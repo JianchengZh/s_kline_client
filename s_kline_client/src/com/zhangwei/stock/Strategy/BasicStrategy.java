@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
+
 import com.zhangwei.mysql.BaseDao;
 import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.StockInfo;
@@ -19,6 +21,7 @@ import com.zhangwei.stock.condition.ICondition;
  * */
 public abstract class BasicStrategy {
 	
+	private static final String TAG = "BasicStrategy";
 	public ArrayList<ICondition> buyBigConditions;  //独享条件集合 
 	public ArrayList<ICondition> buyLittleConditions; //组合条件集合
 	
@@ -139,11 +142,14 @@ public abstract class BasicStrategy {
 
 	public void init() {
 		// TODO Auto-generated method stub
+
 		cleanUp();
+		BaseDao bd = BaseDao.getInstance();
+		String BStable = "BS_" + getUID();
 		
+		Log.v(TAG, getClass().getName() + " - init, BStable:" + BStable);
 		try {
-			BaseDao bd = BaseDao.getInstance();
-			String BStable = "BS_" + getUID();
+
 			String sql_create_table_bs = "CREATE TABLE IF NOT EXISTS " 
 			                  + BStable  
 			                  + "\n(stock_id VARCHAR(6) NOT NULL, market_type INT, buy_date INT NOT NULL, sell_date INT, buy_price INT, sell_price INT, vol INT, PRIMARY KEY  (stock_id, buy_date))ENGINE=InnoDB DEFAULT CHARSET=utf8;";
@@ -163,16 +169,7 @@ public abstract class BasicStrategy {
 		BaseDao bd = BaseDao.getInstance();
 		String BStable = "BS_" + getUID();
 		try {
-			String sql_clean_table_bs = "TRUNCATE TABLE " + BStable;
-
-			bd.exec(sql_clean_table_bs);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		
-		try {
-		
+			
 			String sql_clean_index_bs = "DROP INDEX buy_date ON " + BStable;
 
 			bd.exec(sql_clean_index_bs);
@@ -180,6 +177,17 @@ public abstract class BasicStrategy {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
+		
+		try {
+			String sql_clean_table_bs = "DROP TABLE " + BStable;
+
+			bd.exec(sql_clean_table_bs);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
+
 	}
 
 }

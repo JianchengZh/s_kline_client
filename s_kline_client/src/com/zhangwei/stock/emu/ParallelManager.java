@@ -2,23 +2,21 @@ package com.zhangwei.stock.emu;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
+import javax.sql.rowset.Joinable;
+
 import com.zhangwei.stock.task.StockTask;
 
 
 
 public class ParallelManager  {
-	private final int workNum = 8;
+	private int workNum;
 	private LinkedBlockingQueue<StockTask> fifo;
 	private ParallelThread[] threads;
+	private ParallelListener pl;
 	private static ParallelManager ins;
 	private ParallelManager(){
 		fifo = new LinkedBlockingQueue<StockTask>();
-		threads = new ParallelThread[workNum];
-		for(ParallelThread thread : threads){
-			thread = new ParallelThread();
-			thread.start();
-		}
-		
+
 	}
 	
 	public static ParallelManager getInstance(){
@@ -26,6 +24,21 @@ public class ParallelManager  {
 			ins = new ParallelManager();
 		}
 		return ins;
+	}
+	
+	
+	
+	public void startTask(ParallelListener pl, int workNum){
+		if(workNum<1){
+			workNum = 8;
+		}
+		this.pl = pl;
+		this.workNum = workNum;
+		threads = new ParallelThread[workNum];
+		for(ParallelThread thread : threads){
+			thread = new ParallelThread();
+			thread.start();
+		}
 	}
 	
 	public void submitTask(StockTask t){
@@ -40,7 +53,7 @@ public class ParallelManager  {
 	public class ParallelThread extends Thread{
 		@Override
 		public void run(){
-			while(true) {
+			while(!fifo.isEmpty()) {
 				try {
 					StockTask task = fifo.take();
 					task.processTask();
@@ -50,6 +63,13 @@ public class ParallelManager  {
 				}
 				
 			}
+			synchronized (this) {
+				workNum--;
+				if(workNum<1 && pl!=null){
+					pl.onComplete();
+				}
+			}
+
 		}
 	}
 

@@ -14,7 +14,6 @@ public class MyHighSellLowBuyStrategy extends BasicStrategy{
 
 	public MyHighSellLowBuyStrategy(){
 		super(MyHighSellLowBuyStrategyUID);
-		init();
 	}
 	
 

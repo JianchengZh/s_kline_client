@@ -18,10 +18,13 @@ import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.Stock;
 import com.zhangwei.stock.StockInfo;
 import com.zhangwei.stock.StockManager;
+import com.zhangwei.stock.BS.TradeUnit;
 
 public class KLinePanel extends JPanel {
     private DateRule columnView;
     private PriceRule rowView;
+    private Stock s;
+	private TradeUnit tu;
 
 	/**
 	 * 
@@ -29,9 +32,12 @@ public class KLinePanel extends JPanel {
 	private static final long serialVersionUID = -1824501043506018932L;
 	private static final String TAG = "StockPanel";
 	
-	public KLinePanel(List<KLineUnit> kl, int w, int h){
+	public KLinePanel(Stock s, TradeUnit tu, int w, int h){
 		super(new BorderLayout());
+		this.s = s;
+		this.tu = tu;
 		
+        List<KLineUnit> kl = s.getNDayKline(tu);
         columnView = new DateRule(w, kl);
         rowView = new PriceRule(h, kl);
         
@@ -39,7 +45,7 @@ public class KLinePanel extends JPanel {
 		int rowUnit = rowView.getUnits();
 		int lowest = rowView.getLowestPrice();
 		int highest = rowView.getHighestPrice();
-		KLineComponent klc = new KLineComponent(kl, w, h, columnUnit, rowUnit, lowest, highest);
+		KLineComponent klc = new KLineComponent(kl, tu, w, h, columnUnit, rowUnit, lowest, highest);
 
        
         JScrollPane jp = new JScrollPane(klc);
@@ -52,29 +58,6 @@ public class KLinePanel extends JPanel {
         //setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
 	}
 	
-	
-	public static void main(String[] args){
-        JFrame frame = new JFrame( "Stock Panel" );
-        frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
 
-        StockManager sm = StockManager.getInstance();
-        Stock s = sm.getStock(new StockInfo("002572", 2, "SFY", -1, -1, "索菲亚"), false);
-        List<KLineUnit> kl = s.getNDayKline(60, 20131118);
-        for(KLineUnit elem : kl){
-        	Log.v(TAG, elem.toString());
-        }
-        KLinePanel stockPanel = new KLinePanel(kl, 420, 420);
-        
-/*        JScrollPane scrollPane = new JScrollPane( stockPanel );
-        scrollPane.getViewport().setBackground( Color.white );*/
-        frame.add( stockPanel );
-
-        //frame.add( codePanel );
-
-        frame.setSize( 500, 500 );
-        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-        frame.setLocation( d.width / 4, 100  );
-        frame.setVisible( true );
-	}
 
 }

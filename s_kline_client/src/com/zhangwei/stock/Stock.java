@@ -317,8 +317,11 @@ public class Stock {
 	 * @param endDate 从哪个日期截至（包括,若没有使用左边最近的），-1从上市开始取， 0取最新的， 20130312普通格式
 	 * 
 	 * */
-	public List<KLineUnit> getNDayKline(TradeUnit tu, int prefixNDay, int posfixNDay) {
+	public List<KLineUnit> getNDayKline(TradeUnit tu) {
 		// TODO Auto-generated method stub
+		int prefixNDay = Constants.BUYPOINT_PREFIX_LEN;
+		int posfixNDay = Constants.SELLPOINT_POSTFIX_LEN;
+		
 		KLineUnit buy = StockHelper.binSearch(line.kline_list, tu.buy_date, 0);
 		KLineUnit sell = StockHelper.binSearch(line.kline_list, tu.sell_date, 0);
 		int buy_index = line.kline_list.indexOf(buy);

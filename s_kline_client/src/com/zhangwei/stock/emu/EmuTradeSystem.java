@@ -98,7 +98,7 @@ public class EmuTradeSystem implements TradeSystem{
 
 	public void Report(List<TradeUnit> rlt) {
 		// TODO Auto-generated method stub
-		GuiManager.getInstance().showResult(rlt, Constants.BUYPOINT_PREFIX_LEN, Constants.SELLPOINT_POSTFIX_LEN);
+		GuiManager.getInstance().showResult(rlt);
 		
 		int totalNum = 0;
 		int earnNum = 0;

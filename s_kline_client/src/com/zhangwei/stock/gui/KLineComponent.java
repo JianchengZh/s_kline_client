@@ -11,6 +11,7 @@ import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
 
 import com.zhangwei.stock.KLineUnit;
+import com.zhangwei.stock.BS.TradeUnit;
 
 public class KLineComponent extends JComponent /*implements Scrollable*/{
     /**
@@ -39,15 +40,18 @@ public class KLineComponent extends JComponent /*implements Scrollable*/{
 
 	private int highestPrice;
 
+	private TradeUnit tu;
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6866575016033251900L;
 	
-	public KLineComponent(List<KLineUnit> kl, int w, int h, int columnUnit, int rowUnit, int lowestPrice, int highestPrice){
+	public KLineComponent(List<KLineUnit> kl, TradeUnit tu, int w, int h, int columnUnit, int rowUnit, int lowestPrice, int highestPrice){
 		//this.getSize();
 		//this.setSize(600, 400);
 		this.setPreferredSize(new Dimension(w, h));
+		this.tu = tu;
 		this.kl = kl;
 		this.w = w;
 		this.h = h;
@@ -75,6 +79,8 @@ public class KLineComponent extends JComponent /*implements Scrollable*/{
 			int x = index*columnUnit;
 			drawKlineElem(g, x, kl.get(index));
 		}
+		
+		drawBSPoint(g, kl, tu);
 	}
 	
     private void drawKlineElem(Graphics g, int x, KLineUnit kLineUnit) {
@@ -93,6 +99,29 @@ public class KLineComponent extends JComponent /*implements Scrollable*/{
 		if(kLineUnit.high>kLineUnit.low){
 			g.drawLine(x+columnUnit/2, h - (kLineUnit.high - lowestPrice)*rowUnit/100, x+columnUnit/2, h - (kLineUnit.low - lowestPrice)*rowUnit/100);
 		}
+	}
+    
+    private void drawBSPoint(Graphics g, List<KLineUnit> kl, TradeUnit tu) {
+		// TODO Auto-generated method stub
+		int index = 0;
+		for(KLineUnit elem : kl){
+			int x = index*columnUnit;
+			
+			if(elem.date==tu.buy_date){
+				int y = h - (tu.buy_price - lowestPrice)*rowUnit/100;
+				g.setColor(Color.CYAN);
+				g.drawOval(x, y, 10, 10);
+				g.drawString("Buy", x, y + 10);
+			}else if(elem.date==tu.sell_date){
+				int y = h - (tu.sell_price - lowestPrice)*rowUnit/100;
+				g.setColor(Color.GREEN);
+				g.drawOval(x, y, 10, 10);
+				g.drawString("Buy", x, y + 10);
+			}
+			
+			index++;
+		}
+
 	}
 
 	/**

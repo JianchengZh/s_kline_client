@@ -47,7 +47,7 @@ public class GuiManager {
 		return ins;
 	}
 	
-	public void showResult(final List<TradeUnit> list, final int prefixNDay, final int posfixNDay){
+	public void showResult(final List<TradeUnit> list){
 
 		this.list = list;
 		this.index = 0;
@@ -67,9 +67,8 @@ public class GuiManager {
 
 		        StockManager sm = StockManager.getInstance();
 		        Stock s = sm.getStock(tu.stock_id, tu.market_type);
-		        List<KLineUnit> kl = s.getNDayKline(tu, prefixNDay, posfixNDay);
 
-				KLinePanel stockPanel = new KLinePanel(kl, 420, 420);
+				KLinePanel stockPanel = new KLinePanel(s, tu, 420, 420);
 
 				frame.add(stockPanel);
 

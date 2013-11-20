@@ -87,14 +87,14 @@ public class EmuTradeSystem implements TradeSystem{
 			e.printStackTrace();
 		}
 		
-		if(rlt!=null && rlt.size()>0){
+/*		if(rlt!=null && rlt.size()>0){
 			Report(rlt);
-		}
+		}*/
 		
 		return rlt;
 	}
 
-	private void Report(List<TradeUnit> rlt) {
+	public void Report(List<TradeUnit> rlt) {
 		// TODO Auto-generated method stub
 		int totalNum = 0;
 		int earnNum = 0;

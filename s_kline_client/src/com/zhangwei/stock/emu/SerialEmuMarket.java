@@ -23,21 +23,23 @@ public class SerialEmuMarket implements ParallelListener {
 		
 		SerialEmuMarket se = new SerialEmuMarket();
 		se.bs = new MyHighSellLowBuyStrategy();
-		
-		List<TradeUnit> rlt = EmuTradeSystem.getInstance().getTradeInfo(se.bs.getUID());
+		EmuTradeSystem es = EmuTradeSystem.getInstance();
+		List<TradeUnit> rlt = es.getTradeInfo(se.bs.getUID());
 		if(rlt!=null && rlt.size()>0){
-			return;
+			es.Report(rlt);
+		}else{
+			se.bs.init();
+			
+			StockManager sm = StockManager.getInstance();
+			ArrayList<StockInfo> stocks = sm.FetchStockInfo(false);
+			ParallelManager pm = ParallelManager.getInstance();
+			for(StockInfo item : stocks){
+				pm.submitTask(new StockEmuTradeTask(item, se.bs));
+			}
+			pm.startTask(se, 8);
 		}
 		
-		se.bs.init();
-		
-		StockManager sm = StockManager.getInstance();
-		ArrayList<StockInfo> stocks = sm.FetchStockInfo(false);
-		ParallelManager pm = ParallelManager.getInstance();
-		for(StockInfo item : stocks){
-			pm.submitTask(new StockEmuTradeTask(item, se.bs));
-		}
-		pm.startTask(se, 8);
+
 
 		
 		
@@ -46,7 +48,9 @@ public class SerialEmuMarket implements ParallelListener {
 	@Override
 	public void onComplete() {
 		// TODO Auto-generated method stub
-		EmuTradeSystem.getInstance().getTradeInfo(bs.getUID());
+		EmuTradeSystem es = EmuTradeSystem.getInstance();
+		List<TradeUnit> ret = es.getTradeInfo(bs.getUID());
+		es.Report(ret);
 	}
 
 }

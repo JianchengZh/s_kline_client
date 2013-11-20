@@ -8,16 +8,15 @@ import com.zhangwei.stock.BS.IBuy;
 public class EmuBuyTransaction implements IBuy {
 	private BuyPoint buypoint;
 	
-	public void buy(StockInfo info, KLineUnit kLineUnit, int vol) {
+/*	public void buy(StockInfo info, KLineUnit kLineUnit, int vol) {
 		// TODO Auto-generated method stub
 		buy(info, kLineUnit.date, 0, kLineUnit.close, vol);
-	}
+	}*/
 
 	@Override
-	public boolean buy(StockInfo stockinfo, int date, int time, int price,
-			int vol) {
+	public boolean buy(StockInfo stockinfo, BuyPoint buypoint) {
 		// TODO Auto-generated method stub
-		buypoint = new BuyPoint(stockinfo, date, 0, price, vol);
+		this.buypoint = buypoint;/*new BuyPoint(stockinfo, date, 0, price, vol);*/
 		EmuTradeSystem.getInstance().submitBuyTransaction(this);
 		return true;
 	}

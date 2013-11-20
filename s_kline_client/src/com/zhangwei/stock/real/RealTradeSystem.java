@@ -27,7 +27,7 @@ public class RealTradeSystem implements TradeSystem {
 	}
 
 	@Override
-	public void completeSellTransaction(SellPoint Sellpoint) {
+	public void completeSellTransaction(BuyPoint buypoint, SellPoint Sellpoint) {
 		// TODO Auto-generated method stub
 
 	}

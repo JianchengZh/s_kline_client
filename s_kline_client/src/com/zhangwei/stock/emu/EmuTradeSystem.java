@@ -38,9 +38,9 @@ public class EmuTradeSystem implements TradeSystem{
 	}
 
 	@Override
-	public void completeSellTransaction(SellPoint sellpoint) {
+	public void completeSellTransaction(BuyPoint buypoint, SellPoint sellpoint) {
 		// TODO Auto-generated method stub
-		records.addSell(sellpoint);
+		records.addSell(buypoint, sellpoint);
 	}
 
 }

@@ -1,8 +1,10 @@
 package com.zhangwei.stock.Strategy;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.zhangwei.mysql.BaseDao;
 import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.StockInfo;
 import com.zhangwei.stock.BS.BuyPoint;
@@ -22,13 +24,20 @@ public abstract class BasicStrategy {
 	
 	public ArrayList<ICondition> sellBigConditions;  //独享条件集合 
 	public ArrayList<ICondition> sellLittleConditions; //组合条件集合
+	
+	private long serialVersionUID;
 
-	public BasicStrategy(){
+	public BasicStrategy(long serialversionuid){
+		this.serialVersionUID = serialversionuid;
 		buyBigConditions = new ArrayList<ICondition>();
 		buyLittleConditions = new ArrayList<ICondition>();
 		
 		sellBigConditions = new ArrayList<ICondition>();
 		sellLittleConditions = new ArrayList<ICondition>();
+	}
+	
+	public String getUID(){
+		return String.valueOf(serialVersionUID);
 	}
 	
 	public boolean checkBuy(StockInfo info, List<KLineUnit> kl, SellPoint lastPoint){
@@ -126,6 +135,51 @@ public abstract class BasicStrategy {
 	public void addSellSufficientCondition(ICondition c){
 		sellLittleConditions.remove(c);
 		sellLittleConditions.add(c);
+	}
+
+	public void init() {
+		// TODO Auto-generated method stub
+		cleanUp();
+		
+		try {
+			BaseDao bd = BaseDao.getInstance();
+			String BStable = "BS_" + getUID();
+			String sql_create_table_bs = "CREATE TABLE IF NOT EXISTS " 
+			                  + BStable  
+			                  + "\n(stock_id VARCHAR(6) NOT NULL, market_type INT, buy_date INT NOT NULL, sell_date INT, buy_price INT, sell_price INT, vol INT, PRIMARY KEY  (stock_id, buy_date))ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+
+			bd.exec(sql_create_table_bs);
+			
+			String sql_create_index_bs = "CREATE INDEX  buy_date ON " + BStable + " (buy_date);";
+			bd.exec(sql_create_index_bs);
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void cleanUp(){
+		BaseDao bd = BaseDao.getInstance();
+		String BStable = "BS_" + getUID();
+		try {
+			String sql_clean_table_bs = "TRUNCATE TABLE " + BStable;
+
+			bd.exec(sql_clean_table_bs);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
+		try {
+		
+			String sql_clean_index_bs = "DROP INDEX buy_date ON " + BStable;
+
+			bd.exec(sql_clean_index_bs);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
 	}
 
 }

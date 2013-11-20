@@ -3,6 +3,8 @@ package com.zhangwei.stock.BS;
 import com.zhangwei.stock.StockInfo;
 
 public class Point {
+	public String BSID;
+	
 	public boolean buyFlag = true;
 	
 	/**
@@ -27,7 +29,8 @@ public class Point {
 	 * */
 	public StockInfo info;
 	
-	public Point(StockInfo info, int date, int time, int price, int vol, boolean buyFlag){
+	public Point(String BSID, StockInfo info, int date, int time, int price, int vol, boolean buyFlag){
+		this.BSID = BSID;
 		this.info = info;
 		this.date = date;
 		this.price = price;

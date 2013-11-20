@@ -6,13 +6,15 @@ import com.zhangwei.stock.BS.ISell;
 import com.zhangwei.stock.BS.SellPoint;
 
 public class EmuSellTransaction implements ISell {
+	private BuyPoint buypoint;
 	private SellPoint sellpoint;
 	
 	@Override
-	public boolean sell(StockInfo stockinfo, int date, int time, int price,
-			int vol) {
+	public boolean sell(StockInfo stockinfo, BuyPoint buypoint, SellPoint sellpoint) {
 		// TODO Auto-generated method stub
-		sellpoint = new SellPoint(stockinfo, date, 0, price, vol);
+		/*sellpoint = new SellPoint(stockinfo, date, 0, price, vol);*/
+		this.buypoint = buypoint;
+		this.sellpoint = sellpoint;
 		EmuTradeSystem.getInstance().submitSellTransaction(this);
 		return true;
 	}
@@ -26,7 +28,7 @@ public class EmuSellTransaction implements ISell {
 	@Override
 	public boolean onSucess() {
 		// TODO Auto-generated method stub
-		EmuTradeSystem.getInstance().completeSellTransaction(sellpoint);
+		EmuTradeSystem.getInstance().completeSellTransaction(buypoint, sellpoint);
 		return true;
 	}
 

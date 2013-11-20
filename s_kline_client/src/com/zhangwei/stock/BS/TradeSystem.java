@@ -8,5 +8,5 @@ public interface TradeSystem {
 	
 	public void submitSellTransaction(ISell sell);
 	
-	public void completeSellTransaction(SellPoint Sellpoint);
+	public void completeSellTransaction(BuyPoint buypoint, SellPoint Sellpoint);
 }

@@ -5,8 +5,8 @@ import com.zhangwei.stock.StockInfo;
 public class BuyPoint extends Point {
 
 
-	public BuyPoint(StockInfo info, int date, int time, int price, int vol) {
-		super(info, date, time, price, vol, true);
+	public BuyPoint(String BSID, StockInfo info, int date, int time, int price, int vol) {
+		super(BSID, info, date, time, price, vol, true);
 		// TODO Auto-generated constructor stub
 
 	}

@@ -22,9 +22,11 @@ public class StockEmuTradeTask implements StockTask {
 
 	private static final String TAG = "StockEmuTradeTask";
 	private StockInfo info;
+	private BasicStrategy bs;
 
-	public StockEmuTradeTask(StockInfo info){
+	public StockEmuTradeTask(StockInfo info, BasicStrategy bs){
 		this.info = info;
+		this.bs = bs;
 	}
 	
 	@Override
@@ -34,7 +36,7 @@ public class StockEmuTradeTask implements StockTask {
 		Stock stock = sm.getStock(info, false);
 		stock.generateNDayKline(60, true);
 		
-		BasicStrategy bs = new MyHighSellLowBuyStrategy();
+		//BasicStrategy bs = new MyHighSellLowBuyStrategy();
 		
 		List<KLineUnit> kl;
 		int status = 0; //0 empty  1 hold
@@ -49,9 +51,12 @@ public class StockEmuTradeTask implements StockTask {
 					int date = last.date;
 					int price = last.close;
 					//Log.v(TAG, "BuyPoint: stock:" + info.stock_id + ", date:" + date + ", price:" + price);
+
+					lastBuyPoint = new BuyPoint(bs.getUID(), info, date, 0, price, 100);
+					
 					EmuBuyTransaction ebt = new EmuBuyTransaction();
-					ebt.buy(info, date, 0, price, 100);
-					lastBuyPoint = new BuyPoint(info, date, 0, price, 100);
+					ebt.buy(info, lastBuyPoint);
+					
 					status = 1;
 				}
 				
@@ -62,9 +67,11 @@ public class StockEmuTradeTask implements StockTask {
 					int date = last.date;
 					int price = last.close;
 					//Log.v(TAG, "SellPoint: stock:" + info.stock_id + ", date:" + date + ", price:" + price);
+					lastSellPoint = new SellPoint(bs.getUID(), lastBuyPoint.info, date, 0, price, lastBuyPoint.vol);
+					
 					EmuSellTransaction est = new EmuSellTransaction();
-					est.sell(info, date, 0, price, 100);
-					lastSellPoint = new SellPoint(info, date, 0, price, 100);
+					est.sell(info, lastBuyPoint, lastSellPoint);
+					
 					status = 0;
 				}
 			}

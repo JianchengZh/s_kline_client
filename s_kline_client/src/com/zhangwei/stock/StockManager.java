@@ -80,7 +80,7 @@ public class StockManager {
 				for(Map<String, Object> item : list){
 					String stock_id =  (String) item.get("stock_id");
 					String name = (String) item.get("name");
-					int market = Format.parserInt((String) item.get("market_type"), -1);
+					int market = Format.parserInt(item.get("market_type").toString(), -1);
 					String quick = (String) item.get("quick");
 					int start = Format.parserInt(item.get("start").toString(), -1);/*(Integer)item.get("start");*/
 					int last = Format.parserInt(item.get("last").toString(), -1);/*(Integer)item.get("last");*/

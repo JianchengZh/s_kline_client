@@ -2,6 +2,7 @@ package com.zhangwei.stock.gui;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -27,6 +28,9 @@ public class CtrlPanel extends JPanel {
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 		
 		//setSize(420, 50);
+		Dimension size = new Dimension(420, 50);
+		setSize(size);
+		setPreferredSize(size);
 	}
 	
 	private static final Insets insets = new Insets(0,0,0,0);

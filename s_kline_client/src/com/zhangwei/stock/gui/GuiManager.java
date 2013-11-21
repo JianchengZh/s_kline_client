@@ -78,9 +78,9 @@ public class GuiManager {
 				KLinePanel stockPanel = new KLinePanel(s, tu, 420, 420);
 				CtrlPanel ctrlPanel = new CtrlPanel();
 				
-				addComponent(jp, stockPanel, 0, 0, 0, 4,
+				addComponent(jp, stockPanel, 0, 0, 0, 8,
 		                GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-				addComponent(jp, ctrlPanel, 0, 5, 0, 1,
+				addComponent(jp, ctrlPanel, 0, 8, 0, 1,
 		                GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 				
 /*				frame.add(stockPanel);

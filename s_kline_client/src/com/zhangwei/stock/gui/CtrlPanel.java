@@ -14,7 +14,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class CtrlPanel extends JPanel implements ActionListener {
+import com.zhangwei.stock.BS.TradeUnit;
+
+public class CtrlPanel extends JPanel implements ActionListener, TradeInfoListener {
 	JLabel jl;
 	JButton stockPreBtn;
 	JButton stockNxtBtn;
@@ -38,7 +40,7 @@ public class CtrlPanel extends JPanel implements ActionListener {
 		addComponent(this, btnPanel, 1, 0, 1, 0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH);*/
 		
-		jl = new JLabel("<html><HTML><body style=color:red>   date: 2010-10-10 <br> open: 123.33, high: 123.33<br> close: 123.33, low: 123.33<br> vol: 1233390, cje: 1233390<br></body></html>");
+		jl = new JLabel();
 		stockPreBtn = new JButton("<<");
 		stockNxtBtn = new JButton(">>");
 		tradePreBtn = new JButton("<");
@@ -115,6 +117,28 @@ public class CtrlPanel extends JPanel implements ActionListener {
 	public void setBtn4Enable(boolean b) {
 		// TODO Auto-generated method stub
 		tradeNxtBtn.setEnabled(b);
+	}
+
+	@Override
+	public void onUpdate(TradeUnit tu) {
+		// TODO Auto-generated method stub
+		StringBuilder sb = new StringBuilder();
+		sb.append("<html><HTML><body style=color:red>");
+		sb.append(tu.stock_id);
+		sb.append(", buy date:");
+		sb.append(tu.buy_date);
+		sb.append(", sell date:");
+		sb.append(tu.sell_date);
+		sb.append("<br> buy_price:");
+		sb.append(tu.buy_price);
+		sb.append(", sell_price:");
+		sb.append(tu.sell_price);
+		sb.append("<br> earn(%):");
+		sb.append(tu.getEarnPercent());
+		sb.append(", vol:");
+		sb.append(tu.vol);
+		sb.append("</body></html>");
+		jl.setText(sb.toString());
 	}
 
 

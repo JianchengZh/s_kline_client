@@ -88,6 +88,9 @@ public class GuiManager {
 
 				//func
 				ctrlPanel.setNotify(stockPanel);
+				stockPanel.setNotify(ctrlPanel);
+				
+				ctrlPanel.onUpdate(stockPanel.getTU());
 				
 				
 				//UI

@@ -33,6 +33,7 @@ public class KLinePanel extends JPanel implements KLineBtnListener{
 	private int w;
 	private int h;
 	private CtrlPanel ctrlPanel;
+	private TradeInfoListener tradeInfoListener;
 
 	/**
 	 * 
@@ -102,6 +103,8 @@ public class KLinePanel extends JPanel implements KLineBtnListener{
         add(jp, BorderLayout.CENTER);
         
         checkBtnVaild();
+        
+        
 	}
 	
 	private void checkBtnVaild(){
@@ -160,6 +163,10 @@ public class KLinePanel extends JPanel implements KLineBtnListener{
 		klc.Update(kl, tu, columnUnit, rowUnit, lowest, highest);
 		
         checkBtnVaild();
+        
+        if(tradeInfoListener!=null){
+        	tradeInfoListener.onUpdate(tu);
+        }
 		
 	}
 
@@ -193,6 +200,10 @@ public class KLinePanel extends JPanel implements KLineBtnListener{
 		klc.Update(kl, tu, columnUnit, rowUnit, lowest, highest);
 		
         checkBtnVaild();
+        
+        if(tradeInfoListener!=null){
+        	tradeInfoListener.onUpdate(tu);
+        }
 	}
 
 	@Override
@@ -223,6 +234,10 @@ public class KLinePanel extends JPanel implements KLineBtnListener{
 		klc.Update(kl, tu, columnUnit, rowUnit, lowest, highest);
 		
         checkBtnVaild();
+        
+        if(tradeInfoListener!=null){
+        	tradeInfoListener.onUpdate(tu);
+        }
 	}
 
 	@Override
@@ -252,6 +267,20 @@ public class KLinePanel extends JPanel implements KLineBtnListener{
 		klc.Update(kl, tu, columnUnit, rowUnit, lowest, highest);
 		
         checkBtnVaild();
+        
+        if(tradeInfoListener!=null){
+        	tradeInfoListener.onUpdate(tu);
+        }
+	}
+
+	public void setNotify(TradeInfoListener tradeInfoListener) {
+		// TODO Auto-generated method stub
+		this.tradeInfoListener = tradeInfoListener;
+	}
+
+	
+	public TradeUnit getTU(){
+		return tu;
 	}
 	
 

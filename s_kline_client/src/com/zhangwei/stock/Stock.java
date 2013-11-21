@@ -311,6 +311,22 @@ public class Stock {
 	}
 	
 	/**
+	 * 得到复权的K线
+	 * 
+	 * @param numDay 多少个交易日
+	 * @param endDate 从哪个日期截至（包括,若没有使用左边最近的），-1从上市开始取， 0取最新的， 20130312普通格式
+	 * 
+	 * */
+	public List<KLineUnit> getNDayExRightKline(TradeUnit tu) {
+		List<KLineUnit> kl = getNDayKline(tu);
+		if(kl!=null){
+			return StockHelper.getExrightKLine(kl);
+		}else{
+			return null;
+		}
+	}
+	
+	/**
 	 * 得到原始的K线
 	 * 
 	 * @param numDay 多少个交易日

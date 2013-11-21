@@ -83,7 +83,7 @@ public class KLinePanel extends JPanel implements KLineBtnListener{
         this.h = h;
         this.s = sm.getStock(tu.stock_id, tu.market_type);
 		
-        List<KLineUnit> kl = s.getNDayKline(tu);
+        List<KLineUnit> kl = s.getNDayExRightKline(tu);
         columnView = new DateRule(w, kl);
         rowView = new PriceRule(h, kl);
         
@@ -151,7 +151,7 @@ public class KLinePanel extends JPanel implements KLineBtnListener{
         this.s = sm.getStock(tu.stock_id, tu.market_type);
 
 		
-        List<KLineUnit> kl = s.getNDayKline(tu);
+        List<KLineUnit> kl = s.getNDayExRightKline(tu);
         columnView.Update(w, kl);
         rowView.Update(h, kl);
         
@@ -188,7 +188,7 @@ public class KLinePanel extends JPanel implements KLineBtnListener{
         this.s = sm.getStock(tu.stock_id, tu.market_type);
 
 		
-        List<KLineUnit> kl = s.getNDayKline(tu);
+        List<KLineUnit> kl = s.getNDayExRightKline(tu);
         columnView.Update(w, kl);
         rowView.Update(h, kl);
         
@@ -222,7 +222,7 @@ public class KLinePanel extends JPanel implements KLineBtnListener{
         this.s = sm.getStock(tu.stock_id, tu.market_type);
 
 		
-        List<KLineUnit> kl = s.getNDayKline(tu);
+        List<KLineUnit> kl = s.getNDayExRightKline(tu);
         columnView.Update(w, kl);
         rowView.Update(h, kl);
         
@@ -255,7 +255,7 @@ public class KLinePanel extends JPanel implements KLineBtnListener{
         this.s = sm.getStock(tu.stock_id, tu.market_type);
 
 		
-        List<KLineUnit> kl = s.getNDayKline(tu);
+        List<KLineUnit> kl = s.getNDayExRightKline(tu);
         columnView.Update(w, kl);
         rowView.Update(h, kl);
         

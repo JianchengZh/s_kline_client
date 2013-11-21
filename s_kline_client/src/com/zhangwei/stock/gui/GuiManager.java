@@ -77,7 +77,11 @@ public class GuiManager {
 		        
 				KLinePanel stockPanel = new KLinePanel(s, tu, 420, 420);
 				CtrlPanel ctrlPanel = new CtrlPanel();
+				//func
+				ctrlPanel.setNotify(stockPanel);
 				
+				
+				//UI
 				addComponent(jp, stockPanel, 0, 0, 0, 8,
 		                GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 				addComponent(jp, ctrlPanel, 0, 8, 0, 1,

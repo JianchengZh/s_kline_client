@@ -20,7 +20,7 @@ import com.zhangwei.stock.StockInfo;
 import com.zhangwei.stock.StockManager;
 import com.zhangwei.stock.BS.TradeUnit;
 
-public class KLinePanel extends JPanel {
+public class KLinePanel extends JPanel implements KLineBtnListener{
     private DateRule columnView;
     private PriceRule rowView;
     private Stock s;
@@ -58,6 +58,31 @@ public class KLinePanel extends JPanel {
         //setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
         //setPreferredSize(new Dimension(w, h));
         //setSize(w, h);
+	}
+
+	@Override
+	public void onPreStock() {
+		// TODO Auto-generated method stub
+		Log.v(TAG, "onPreStock");
+		
+	}
+
+	@Override
+	public void onNxtStock() {
+		// TODO Auto-generated method stub
+		Log.v(TAG, "onNxtStock");
+	}
+
+	@Override
+	public void onPreTrade() {
+		// TODO Auto-generated method stub
+		Log.v(TAG, "onPreTrade");
+	}
+
+	@Override
+	public void onNxtTrade() {
+		// TODO Auto-generated method stub
+		Log.v(TAG, "onNxtTrade");
 	}
 	
 

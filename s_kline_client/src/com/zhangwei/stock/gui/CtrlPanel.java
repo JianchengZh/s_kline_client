@@ -6,17 +6,21 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class CtrlPanel extends JPanel {
+public class CtrlPanel extends JPanel implements ActionListener {
 	JLabel jl;
 	JButton stockPreBtn;
 	JButton stockNxtBtn;
 	JButton tradePreBtn;
 	JButton tradeNxtBtn;
+	private KLineBtnListener listener;
 
 	/**
 	 * 
@@ -39,6 +43,11 @@ public class CtrlPanel extends JPanel {
 		stockNxtBtn = new JButton(">>");
 		tradePreBtn = new JButton("<");
 		tradeNxtBtn = new JButton(">");
+		
+		stockPreBtn.addActionListener(this);
+		stockNxtBtn.addActionListener(this);
+		tradePreBtn.addActionListener(this);
+		tradeNxtBtn.addActionListener(this);
 		
 		addComponent(this, jl, 0, 0, 2, 2,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH);
@@ -67,5 +76,27 @@ public class CtrlPanel extends JPanel {
 		      gridwidth, gridheight, 1.0, 1.0, anchor, fill, insets, 0, 0);
 		    container.add(component, gbc);
 	}
+
+	public void setNotify(KLineBtnListener listener) {
+		// TODO Auto-generated method stub
+		this.listener = listener;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		String cmdID = e.getActionCommand();
+		if("<<".equals(cmdID)){
+			listener.onPreStock();
+		}else if(">>".equals(cmdID)){
+			listener.onNxtStock();
+		}else if("<".equals(cmdID)){
+			listener.onPreTrade();
+		}else if(">".equals(cmdID)){
+			listener.onNxtTrade();
+		}
+	}
+
+
 
 }

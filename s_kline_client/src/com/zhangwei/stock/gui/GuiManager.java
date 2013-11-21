@@ -73,6 +73,7 @@ public class GuiManager {
 				
 				String title = ("Kline GUI");
 				frame = new JFrame(title);
+				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 /*				TradeUnit tu = list.get(index_x).get(index_y);*/
 
 		        StockManager sm = StockManager.getInstance();

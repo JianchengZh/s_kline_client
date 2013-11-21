@@ -14,6 +14,7 @@ import java.awt.event.KeyEvent;
 import java.util.List;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -68,14 +69,28 @@ public class GuiManager {
 		        StockManager sm = StockManager.getInstance();
 		        Stock s = sm.getStock(tu.stock_id, tu.market_type);
 
+		        JPanel jp = new JPanel();
+		        jp.setLayout(new GridBagLayout());
+		        frame.setContentPane(jp);
+		        
+		        //frame.getContentPane().setLayout(new GridBagLayout());
+		        
 				KLinePanel stockPanel = new KLinePanel(s, tu, 420, 420);
-
-				frame.add(stockPanel);
-
-				frame.setSize(500, 500);
+				CtrlPanel ctrlPanel = new CtrlPanel();
+				
+				addComponent(jp, stockPanel, 0, 0, 0, 4,
+		                GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+				addComponent(jp, ctrlPanel, 0, 5, 0, 1,
+		                GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+				
+/*				frame.add(stockPanel);
+				frame.add(ctrlPanel);*/
+				/*frame.setSize(500, 500);*/
+				frame.setSize(new Dimension(700, 600));
 				Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-				frame.setLocation(d.width / 4, 100);
+				frame.setLocation(d.width / 4, 50);
 				frame.setVisible(true);
+				frame.setResizable(false);
 			}
 		};
 		

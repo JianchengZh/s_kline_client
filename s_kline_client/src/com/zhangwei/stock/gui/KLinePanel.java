@@ -56,6 +56,8 @@ public class KLinePanel extends JPanel {
         
         add(jp, BorderLayout.CENTER);
         //setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
+        //setPreferredSize(new Dimension(w, h));
+        //setSize(w, h);
 	}
 	
 

@@ -37,6 +37,8 @@ import java.util.List;
 
 import javax.swing.*;
 
+import android.util.Log;
+
 import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.util.DateHelper;
 
@@ -60,6 +62,15 @@ public class DateRule extends JComponent {
         orientation = HORIZONTAL;
         setIncrementAndUnits();
     }
+    
+    public void Update(int size, List<KLineUnit> kl){
+    	this.size = size;
+    	this.kl = kl;
+        orientation = HORIZONTAL;
+        setIncrementAndUnits();
+        
+        repaint();
+    }
 
     public void setIsMetric() {
         setIncrementAndUnits();
@@ -78,6 +89,9 @@ public class DateRule extends JComponent {
         units = size/kl.size();
         size = units * kl.size();
         increment = 5*units;
+        if(increment<1){
+        	Log.e("******DateRule****", "increment:" + increment + ", size:"  + size + ", units:" + units);
+        }
         
         setPreferredSize(new Dimension(size, SIZE));
     }

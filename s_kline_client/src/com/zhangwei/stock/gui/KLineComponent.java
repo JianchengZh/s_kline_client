@@ -153,6 +153,22 @@ public class KLineComponent extends JComponent /*implements Scrollable*/{
         }
         return this.preferredScrollableViewportSize;
     }
+
+	public void Update(List<KLineUnit> kl, TradeUnit tu, int columnUnit,
+			int rowUnit, int lowest, int highest) {
+		// TODO Auto-generated method stub
+		this.setPreferredSize(new Dimension(w, h));
+		this.tu = tu;
+		this.kl = kl;
+		
+		this.columnUnit = columnUnit;
+		this.rowUnit = rowUnit;
+		
+		this.lowestPrice = lowest;
+		this.highestPrice = highest;
+		
+		repaint();
+	}
 	
 
 /*	@Override

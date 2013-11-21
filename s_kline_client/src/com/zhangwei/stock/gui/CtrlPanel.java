@@ -97,6 +97,26 @@ public class CtrlPanel extends JPanel implements ActionListener {
 		}
 	}
 
+	public void setBtn1Enable(boolean b) {
+		// TODO Auto-generated method stub
+		stockPreBtn.setEnabled(b);
+	}
+	
+	public void setBtn2Enable(boolean b) {
+		// TODO Auto-generated method stub
+		stockNxtBtn.setEnabled(b);
+	}
+	
+	public void setBtn3Enable(boolean b) {
+		// TODO Auto-generated method stub
+		tradePreBtn.setEnabled(b);
+	}
+	
+	public void setBtn4Enable(boolean b) {
+		// TODO Auto-generated method stub
+		tradeNxtBtn.setEnabled(b);
+	}
+
 
 
 }

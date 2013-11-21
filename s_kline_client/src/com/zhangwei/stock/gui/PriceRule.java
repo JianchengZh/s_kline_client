@@ -37,6 +37,8 @@ import java.util.List;
 
 import javax.swing.*;
 
+import android.util.Log;
+
 import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.basic.StockException;
 import com.zhangwei.stock.kline.KLineTypeResult;
@@ -65,6 +67,15 @@ public class PriceRule extends JComponent {
         orientation = VERTICAL;
         setIncrementAndUnits();
     }
+    
+    public void Update(int size, List<KLineUnit> kl){
+    	this.size = size;
+    	this.kl = kl;
+        orientation = VERTICAL;
+        setIncrementAndUnits();
+        
+        repaint();
+    }
 
     public void setIsMetric() {
         setIncrementAndUnits();
@@ -87,6 +98,10 @@ public class PriceRule extends JComponent {
 	        units = size * 100 / h ; //每一元对应多少像素
 	        size = units * h /100; 
 	        increment = units;
+	        
+	        if(increment<1){
+	        	Log.e("******PriceRule****", "increment:" + increment + ", size:"  + size + ", units:" + units);
+	        }
 		} catch (StockException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

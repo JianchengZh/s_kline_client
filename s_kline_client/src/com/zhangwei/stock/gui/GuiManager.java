@@ -11,6 +11,7 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -32,12 +33,11 @@ import com.zhangwei.stock.BS.TradeUnit;
 
 public class GuiManager {
 	private JFrame frame;
-	private List<TradeUnit> list;
-	private int index;
+	private List<List<TradeUnit>> list;
+
 	
 	private static GuiManager ins;
 	private GuiManager(){
-		index = 0;
 	}
 	
 	public static GuiManager getInstance(){
@@ -48,11 +48,20 @@ public class GuiManager {
 		return ins;
 	}
 	
-	public void showResult(final List<TradeUnit> list){
+	public void showResult(final List<TradeUnit> list_arg){
+		this.list = new ArrayList<>();
+		String stock_id = null;
+		int index_x = -1;
+		for(TradeUnit tu : list_arg){
+			if(!tu.stock_id.equals(stock_id)){
+				this.list.add(new ArrayList<TradeUnit>());
+				index_x++;
+			}
+			stock_id = tu.stock_id;
+			this.list.get(index_x).add(tu);
+			
+		}
 
-		this.list = list;
-		this.index = 0;
-		
 
 		// MyParser.Paser_dir(args[0]);
 		Runnable runner = new Runnable() {
@@ -64,19 +73,19 @@ public class GuiManager {
 				
 				String title = ("Kline GUI");
 				frame = new JFrame(title);
-				TradeUnit tu = list.get(index);
+/*				TradeUnit tu = list.get(index_x).get(index_y);*/
 
 		        StockManager sm = StockManager.getInstance();
-		        Stock s = sm.getStock(tu.stock_id, tu.market_type);
+		        //Stock s = sm.getStock(tu.stock_id, tu.market_type);
 
 		        JPanel jp = new JPanel();
 		        jp.setLayout(new GridBagLayout());
 		        frame.setContentPane(jp);
 		        
 		        //frame.getContentPane().setLayout(new GridBagLayout());
-		        
-				KLinePanel stockPanel = new KLinePanel(s, tu, 420, 420);
 				CtrlPanel ctrlPanel = new CtrlPanel();
+				KLinePanel stockPanel = new KLinePanel(ctrlPanel, list, 420, 420);
+
 				//func
 				ctrlPanel.setNotify(stockPanel);
 				

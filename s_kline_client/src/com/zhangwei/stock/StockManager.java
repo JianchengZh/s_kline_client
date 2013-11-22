@@ -115,7 +115,7 @@ public class StockManager {
 	}
 	
 	public synchronized Stock getStock(StockInfo info, boolean force){
-		Log.v(TAG, "getStock - stock_id:" + info.stock_id + ", force:" + force);
+		//Log.v(TAG, "getStock - stock_id:" + info.stock_id + ", force:" + force);
 		//先内存
 		Stock stock = cache.get(info.getKey());
 		

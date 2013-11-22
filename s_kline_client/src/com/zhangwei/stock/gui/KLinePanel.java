@@ -137,7 +137,7 @@ public class KLinePanel extends JPanel implements KLineBtnListener{
 	@Override
 	public void onPreStock() {
 		// TODO Auto-generated method stub
-		Log.v(TAG, "onPreStock");
+		//Log.v(TAG, "onPreStock");
 		
         StockManager sm = StockManager.getInstance();
 
@@ -175,7 +175,7 @@ public class KLinePanel extends JPanel implements KLineBtnListener{
 	@Override
 	public void onNxtStock() {
 		// TODO Auto-generated method stub
-		Log.v(TAG, "onNxtStock");
+		//Log.v(TAG, "onNxtStock");
 		
         StockManager sm = StockManager.getInstance();
 
@@ -212,7 +212,7 @@ public class KLinePanel extends JPanel implements KLineBtnListener{
 	@Override
 	public void onPreTrade() {
 		// TODO Auto-generated method stub
-		Log.v(TAG, "onPreTrade");
+		//Log.v(TAG, "onPreTrade");
         StockManager sm = StockManager.getInstance();
 
     	index_y--;
@@ -247,7 +247,7 @@ public class KLinePanel extends JPanel implements KLineBtnListener{
 	@Override
 	public void onNxtTrade() {
 		// TODO Auto-generated method stub
-		Log.v(TAG, "onNxtTrade");
+		//Log.v(TAG, "onNxtTrade");
         StockManager sm = StockManager.getInstance();
         
     	index_y++;

@@ -60,7 +60,7 @@ public class Stock {
 	 *  @param end 结束时间点，不包括；若为0则从今天（包括）回溯
 	 * */
 	public void fetchFromDZH(int begin, int end){
-		Log.v(TAG, "FetchFromDZH - begin:" +  begin + ", end:" + end);
+		//Log.v(TAG, "FetchFromDZH - begin:" +  begin + ", end:" + end);
 		ArrayList<KLineUnit> kl = new ArrayList<KLineUnit>();
 		ArrayList<ExRightUnit> rl = new ArrayList<ExRightUnit>();
 		
@@ -96,12 +96,12 @@ public class Stock {
 		}while(num>=150 && firstDate>begin);
 
 		if(kl!=null && kl.size()>0){
-			Log.v(TAG, "KL fetched: " + kl.size() + ", start:" + kl.get(0).date + ", last:" + kl.get(kl.size()-1).date);
+			//Log.v(TAG, "KL fetched: " + kl.size() + ", start:" + kl.get(0).date + ", last:" + kl.get(kl.size()-1).date);
 		}
 
 		
 		if(rl!=null && rl.size()>0){
-			Log.v(TAG, "RL fetched: " + rl.size() + ", start:" + rl.get(0).date + ", last:" + rl.get(rl.size()-1).date);
+			//Log.v(TAG, "RL fetched: " + rl.size() + ", start:" + rl.get(0).date + ", last:" + rl.get(rl.size()-1).date);
 		}
 
 				
@@ -109,7 +109,7 @@ public class Stock {
 		int index = 0;
 
 
-		Log.v(TAG, "FetchFromDZH - beginTrans");
+		//Log.v(TAG, "FetchFromDZH - beginTrans");
 		
 		if(kl!=null && kl.size()>0){
 			final int size = 100;
@@ -135,9 +135,7 @@ public class Stock {
 			}
 		}
 		
-
-
-		Log.v(TAG, "FetchFromDZH - Out");
+		//Log.v(TAG, "FetchFromDZH - Out");
 	}	
 	
 /*	private void persit2sql_info(String transId, StockInfo info, ArrayList<KLineUnit> kl) throws SQLException {

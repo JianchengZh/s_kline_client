@@ -20,6 +20,7 @@ import com.zhangwei.stock.gui.GuiManager;
 import com.zhangwei.util.Format;
 
 public class EmuTradeSystem implements TradeSystem{
+	private static final String TAG = "EmuTradeSystem";
 	EmuTradeRecorder records;
 	private static EmuTradeSystem ins;
 	private EmuTradeSystem(){
@@ -104,7 +105,8 @@ public class EmuTradeSystem implements TradeSystem{
 
 	public void Report(List<TradeUnit> rlt) {
 		// TODO Auto-generated method stub
-		GuiManager.getInstance().showResult(rlt);
+		Log.v(TAG, "Report rlt.size:" + rlt.size());
+
 		
 		int totalNum = 0;
 		int earnNum = 0;
@@ -170,6 +172,8 @@ public class EmuTradeSystem implements TradeSystem{
 		Log.v(null, "=== 单次最小盈利(percent):" + minEarnPercent);
 		Log.v(null, "=== 单次最大盈利(percent):" + maxEarnPercent);
 		Log.v(null, "===================Report!=========================");
+		
+		GuiManager.getInstance().showResult(rlt);
 	}
 
 }

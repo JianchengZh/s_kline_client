@@ -63,7 +63,7 @@ public class ParallelManager  {
 				}
 				
 			}
-			synchronized (this) {
+			synchronized (ParallelManager.this) {
 				workNum--;
 				if(workNum<1 && pl!=null){
 					pl.onComplete();

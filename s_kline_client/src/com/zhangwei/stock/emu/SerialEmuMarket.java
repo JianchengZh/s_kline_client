@@ -12,6 +12,7 @@ import com.zhangwei.stock.StockInfo;
 import com.zhangwei.stock.BS.TradeUnit;
 import com.zhangwei.stock.Strategy.BasicStrategy;
 import com.zhangwei.stock.Strategy.MyHighSellLowBuyStrategy;
+import com.zhangwei.stock.Strategy.MyWeakBuyStrategy;
 import com.zhangwei.stock.task.StockEmuTradeTask;
 import com.zhangwei.stock.task.StockUpdateTask;
 
@@ -22,7 +23,8 @@ public class SerialEmuMarket implements ParallelListener {
 	public static void main(String[] args){
 		
 		SerialEmuMarket se = new SerialEmuMarket();
-		se.bs = new MyHighSellLowBuyStrategy();
+		//se.bs = new MyHighSellLowBuyStrategy();
+		se.bs = new MyWeakBuyStrategy();
 		EmuTradeSystem es = EmuTradeSystem.getInstance();
 		List<TradeUnit> rlt = es.getTradeInfo(se.bs.getUID(), -1);
 		if(rlt!=null && rlt.size()>0){
@@ -48,6 +50,7 @@ public class SerialEmuMarket implements ParallelListener {
 	@Override
 	public void onComplete() {
 		// TODO Auto-generated method stub
+		Log.v(TAG, "onComplete ");
 		EmuTradeSystem es = EmuTradeSystem.getInstance();
 		List<TradeUnit> ret = es.getTradeInfo(bs.getUID(), -1);
 		es.Report(ret);

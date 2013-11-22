@@ -24,21 +24,33 @@ import com.zhangwei.util.StockHelper;
 public abstract class BasicStrategy {
 	
 	private static final String TAG = "BasicStrategy";
-	public ArrayList<ICondition> buyBigConditions;  //独享条件集合 
-	public ArrayList<ICondition> buyLittleConditions; //组合条件集合
+	public ArrayList<ICondition> buyBigYesConditions;  //独享条件集合 
+	public ArrayList<ICondition> buyLittleYesConditions; //组合条件集合
 	
-	public ArrayList<ICondition> sellBigConditions;  //独享条件集合 
-	public ArrayList<ICondition> sellLittleConditions; //组合条件集合
+	public ArrayList<ICondition> buyBigNoConditions;  //独享条件集合 
+	//public ArrayList<ICondition> buyLittleNoConditions; //组合条件集合
+	
+	public ArrayList<ICondition> sellBigYesConditions;  //独享条件集合 
+	public ArrayList<ICondition> sellLittleYesConditions; //组合条件集合
+	
+	public ArrayList<ICondition> sellBigNoConditions;  //独享条件集合 
+	//public ArrayList<ICondition> sellLittleNoConditions; //组合条件集合
 	
 	private long serialVersionUID;
 
 	public BasicStrategy(long serialversionuid){
 		this.serialVersionUID = serialversionuid;
-		buyBigConditions = new ArrayList<ICondition>();
-		buyLittleConditions = new ArrayList<ICondition>();
+		buyBigYesConditions = new ArrayList<ICondition>();
+		buyLittleYesConditions = new ArrayList<ICondition>();
 		
-		sellBigConditions = new ArrayList<ICondition>();
-		sellLittleConditions = new ArrayList<ICondition>();
+		sellBigYesConditions = new ArrayList<ICondition>();
+		sellLittleYesConditions = new ArrayList<ICondition>();
+		
+		buyBigNoConditions = new ArrayList<ICondition>();
+		//buyLittleNoConditions = new ArrayList<ICondition>();
+		
+		sellBigNoConditions = new ArrayList<ICondition>();
+		//sellLittleNoConditions = new ArrayList<ICondition>();
 	}
 	
 	public String getUID(){
@@ -53,7 +65,7 @@ public abstract class BasicStrategy {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		for(ICondition c : buyBigConditions){
+		for(ICondition c : buyBigYesConditions){
 			try {
 				if(c.checkCondition(info, rlt, kl, lastPoint)){
 					return true;
@@ -64,8 +76,19 @@ public abstract class BasicStrategy {
 			}
 		}
 		
-		if(buyLittleConditions.size()>0){
-			for(ICondition c : buyLittleConditions){
+		for(ICondition c : buyBigNoConditions){
+			try {
+				if(c.checkCondition(info, rlt, kl, lastPoint)){
+					return false;
+				}
+			} catch (StockException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		if(buyLittleYesConditions.size()>0){
+			for(ICondition c : buyLittleYesConditions){
 				try {
 					if(!c.checkCondition(info, rlt, kl, lastPoint)){
 						return false;
@@ -93,7 +116,7 @@ public abstract class BasicStrategy {
 			e1.printStackTrace();
 		}
 		
-		for(ICondition c : sellBigConditions){
+		for(ICondition c : sellBigYesConditions){
 			try {
 				if(c.checkCondition(info, rlt, kl, lastPoint)){
 					return true;
@@ -104,8 +127,19 @@ public abstract class BasicStrategy {
 			}
 		}
 		
-		if(sellLittleConditions.size()>0){
-			for(ICondition c : sellLittleConditions){
+		for(ICondition c : sellBigNoConditions){
+			try {
+				if(c.checkCondition(info, rlt, kl, lastPoint)){
+					return false;
+				}
+			} catch (StockException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		if(sellLittleYesConditions.size()>0){
+			for(ICondition c : sellLittleYesConditions){
 				try {
 					if(!c.checkCondition(info, rlt, kl, lastPoint)){
 						return false;
@@ -124,35 +158,49 @@ public abstract class BasicStrategy {
 	}
 	
 	public boolean isEmpty(){
-		if(buyBigConditions.size()==0 && buyLittleConditions.size()==0){
-			return false;
+		if(buyBigYesConditions.size()==0 && buyLittleYesConditions.size()==0 && buyBigNoConditions.size()==0){
+			return true;
 		}
 		
-		if(sellBigConditions.size()==0 && sellLittleConditions.size()==0){
-			return false;
+		if(sellBigYesConditions.size()==0 && sellLittleYesConditions.size()==0 && sellBigNoConditions.size()==0){
+			return true;
 		}
 		
-		return true;
+		return false;
 	}
 	
-	public void addBuyNecessaryCondition(ICondition c){
-		buyBigConditions.remove(c);
-		buyBigConditions.add(c);
+	public void addBuyBigCondition(ICondition c, boolean yes){
+		if(yes){
+			buyBigYesConditions.remove(c);
+			buyBigYesConditions.add(c);
+		}else{
+			buyBigNoConditions.remove(c);
+			buyBigNoConditions.add(c);
+		}
+
 	}
 	
-	public void addBuySufficientCondition(ICondition c){
-		buyLittleConditions.remove(c);
-		buyLittleConditions.add(c);
+	public void addBuyLittleCondition(ICondition c){
+		buyLittleYesConditions.remove(c);
+		buyLittleYesConditions.add(c);
+
 	}
 	
-	public void addSellNecessaryCondition(ICondition c){
-		sellBigConditions.remove(c);
-		sellBigConditions.add(c);
+	public void addSellBigCondition(ICondition c, boolean yes){
+		if(yes){
+			sellBigYesConditions.remove(c);
+			sellBigYesConditions.add(c);
+		}else{
+			sellBigNoConditions.remove(c);
+			sellBigNoConditions.add(c);
+		}
+
 	}
 	
-	public void addSellSufficientCondition(ICondition c){
-		sellLittleConditions.remove(c);
-		sellLittleConditions.add(c);
+	public void addSellLittleCondition(ICondition c){
+		sellLittleYesConditions.remove(c);
+		sellLittleYesConditions.add(c);
+
 	}
 
 	public void init() {

@@ -20,10 +20,10 @@ public class MyHighSellLowBuyStrategy extends BasicStrategy{
 	public void init() {
 		// TODO Auto-generated method stub
 		super.init();
-		addBuySufficientCondition(new KUpDownUpCondition(30, 30, 20, 20, 5, 5));
+		addBuyLittleCondition(new KUpDownUpCondition(30, 30, 20, 20, 5, 5));
 		
-		addSellNecessaryCondition(new StopLossCondition(10));
-		addSellNecessaryCondition(new LastNdayCondition(10));
-		addSellNecessaryCondition(new StopEarnCondition(10));
+		addSellBigCondition(new StopLossCondition(10), true);
+		addSellBigCondition(new LastNdayCondition(10), true);
+		addSellBigCondition(new StopEarnCondition(10), true);
 	}
 }

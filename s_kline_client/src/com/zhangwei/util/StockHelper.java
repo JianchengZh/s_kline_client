@@ -296,4 +296,9 @@ public class StockHelper {
 		return 0;
 	}
 
+	public static int compare(KLineUnit left, KLineUnit right) {
+		// TODO Auto-generated method stub
+		return (right.close -left.close) * 100 / left.close;
+	}
+
 }

@@ -28,7 +28,7 @@ public class KUpDownUpCondition implements ICondition {
 	}
 
 	@Override
-	public boolean checkCondition(StockInfo info, List<KLineUnit> kl,
+	public boolean checkCondition(StockInfo info, KLineTypeResult rlt, List<KLineUnit> kl,
 			Point lastPoint) throws StockException {
 		// TODO Auto-generated method stub
 		if(!StockHelper.checkKlineVaild(kl)){

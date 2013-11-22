@@ -26,8 +26,9 @@ public class SerialEmuMarket implements ParallelListener {
 		//se.bs = new MyHighSellLowBuyStrategy();
 		se.bs = new MyWeakBuyStrategy();
 		EmuTradeSystem es = EmuTradeSystem.getInstance();
-		List<TradeUnit> rlt = es.getTradeInfo(se.bs.getUID(), -1);
-		if(rlt!=null && rlt.size()>0){
+		List<TradeUnit> rlt = es.getTradeInfo(se.bs.getUID(), 0);
+		boolean flag = false;
+		if(flag && rlt!=null && rlt.size()>0){
 			es.Report(rlt);
 		}else{
 			se.bs.init();
@@ -52,7 +53,7 @@ public class SerialEmuMarket implements ParallelListener {
 		// TODO Auto-generated method stub
 		Log.v(TAG, "onComplete ");
 		EmuTradeSystem es = EmuTradeSystem.getInstance();
-		List<TradeUnit> ret = es.getTradeInfo(bs.getUID(), -1);
+		List<TradeUnit> ret = es.getTradeInfo(bs.getUID(), 0);
 		es.Report(ret);
 	}
 

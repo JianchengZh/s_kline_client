@@ -7,6 +7,7 @@ import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.StockInfo;
 import com.zhangwei.stock.BS.Point;
 import com.zhangwei.stock.basic.StockException;
+import com.zhangwei.stock.kline.KLineTypeResult;
 import com.zhangwei.util.StockHelper;
 
 /**
@@ -26,7 +27,7 @@ public class StopLossCondition implements ICondition {
 	 * 注意：止损期过长，中间发生扩股的情况
 	 * */
 	@Override
-	public boolean checkCondition(StockInfo info, List<KLineUnit> kl,
+	public boolean checkCondition(StockInfo info, KLineTypeResult rlt, List<KLineUnit> kl,
 			Point lastPoint) throws StockException{
 		// TODO Auto-generated method stub
 		if(!StockHelper.checkKlineVaild(kl)){

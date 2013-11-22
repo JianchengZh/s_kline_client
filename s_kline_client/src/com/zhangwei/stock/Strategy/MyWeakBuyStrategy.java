@@ -5,6 +5,7 @@ import com.zhangwei.stock.condition.KUpDownUpCondition;
 import com.zhangwei.stock.condition.LastNdayCondition;
 import com.zhangwei.stock.condition.StopEarnCondition;
 import com.zhangwei.stock.condition.StopLossCondition;
+import com.zhangwei.stock.condition.VolumeChangeCondition;
 
 public class MyWeakBuyStrategy extends BasicStrategy {
 	
@@ -21,11 +22,12 @@ public class MyWeakBuyStrategy extends BasicStrategy {
 	public void init() {
 		// TODO Auto-generated method stub
 		super.init();
-		addBuySufficientCondition(new ContinuousDeclineCondition(3, 12));
+		addBuySufficientCondition(new ContinuousDeclineCondition(10, 30));
+		addBuySufficientCondition(new VolumeChangeCondition(3, 50));
 		
 		addSellNecessaryCondition(new StopLossCondition(10));
-		addSellNecessaryCondition(new LastNdayCondition(10));
-		addSellNecessaryCondition(new StopEarnCondition(10));
+		addSellNecessaryCondition(new LastNdayCondition(15));
+		addSellNecessaryCondition(new StopEarnCondition(20));
 	}
 
 }

@@ -14,6 +14,8 @@ import com.zhangwei.stock.BS.Point;
 import com.zhangwei.stock.BS.SellPoint;
 import com.zhangwei.stock.basic.StockException;
 import com.zhangwei.stock.condition.ICondition;
+import com.zhangwei.stock.kline.KLineTypeResult;
+import com.zhangwei.util.StockHelper;
 
 /**
  * 先判断必要条件，若有一个为true，则直接返回true
@@ -44,10 +46,16 @@ public abstract class BasicStrategy {
 	}
 	
 	public boolean checkBuy(StockInfo info, List<KLineUnit> kl, SellPoint lastPoint){
-		
+		KLineTypeResult rlt = null;
+		try {
+			rlt = StockHelper.getKlineType(kl);
+		} catch (StockException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		for(ICondition c : buyBigConditions){
 			try {
-				if(c.checkCondition(info, kl, lastPoint)){
+				if(c.checkCondition(info, rlt, kl, lastPoint)){
 					return true;
 				}
 			} catch (StockException e) {
@@ -59,7 +67,7 @@ public abstract class BasicStrategy {
 		if(buyLittleConditions.size()>0){
 			for(ICondition c : buyLittleConditions){
 				try {
-					if(!c.checkCondition(info, kl, lastPoint)){
+					if(!c.checkCondition(info, rlt, kl, lastPoint)){
 						return false;
 					}
 				} catch (StockException e) {
@@ -77,10 +85,17 @@ public abstract class BasicStrategy {
 	}
 	
 	public boolean checkSell(StockInfo info, List<KLineUnit> kl, BuyPoint lastPoint){
+		KLineTypeResult rlt = null;
+		try {
+			rlt = StockHelper.getKlineType(kl);
+		} catch (StockException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		for(ICondition c : sellBigConditions){
 			try {
-				if(c.checkCondition(info, kl, lastPoint)){
+				if(c.checkCondition(info, rlt, kl, lastPoint)){
 					return true;
 				}
 			} catch (StockException e) {
@@ -92,7 +107,7 @@ public abstract class BasicStrategy {
 		if(sellLittleConditions.size()>0){
 			for(ICondition c : sellLittleConditions){
 				try {
-					if(!c.checkCondition(info, kl, lastPoint)){
+					if(!c.checkCondition(info, rlt, kl, lastPoint)){
 						return false;
 					}
 				} catch (StockException e) {

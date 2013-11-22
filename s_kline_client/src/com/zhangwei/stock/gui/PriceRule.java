@@ -92,7 +92,7 @@ public class PriceRule extends JComponent {
 			KLineTypeResult ret = StockHelper.getKlineType(kl);
 			this.lowestPrice = ret.lowest_price;
 			this.highestPrice = ret.highest_price;
-			int h = ret.HIGH.high - ret.LOW.low;
+			int h = highestPrice - lowestPrice;
 	        price_units = price_size * 100 / h ; //每一元对应多少像素
 	        price_size = price_units * h /100; 
 	        increment = price_units;

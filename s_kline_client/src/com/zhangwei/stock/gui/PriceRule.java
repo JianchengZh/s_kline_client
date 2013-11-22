@@ -57,12 +57,14 @@ public class PriceRule extends JComponent {
     public int orientation;
     private int increment;
     private int price_units;
+    private int vol_units;
     private List<KLineUnit> kl;
 	private int size; //total pixels of the width
 	private int lowestPrice;
 	private int highestPrice;
 	private int vol_size;
 	private int price_size;
+	private int vol_max;
 
     public PriceRule(int size, List<KLineUnit> kl) {
     	this.size = size;
@@ -76,6 +78,8 @@ public class PriceRule extends JComponent {
     public void Update(int size, List<KLineUnit> kl){
     	this.size = size;
     	this.kl = kl;
+    	vol_size = size/SIZE_PERCENT_FACTOR;
+    	price_size = size - vol_size;
         orientation = VERTICAL;
         setIncrementAndUnits();
         
@@ -90,12 +94,15 @@ public class PriceRule extends JComponent {
     private void setIncrementAndUnits() {
     	try {
 			KLineTypeResult ret = StockHelper.getKlineType(kl);
+			this.vol_max = ret.vol_max;
 			this.lowestPrice = ret.lowest_price;
 			this.highestPrice = ret.highest_price;
 			int h = highestPrice - lowestPrice;
 	        price_units = price_size * 100 / h ; //每一元对应多少像素
 	        price_size = price_units * h /100; 
 	        increment = price_units;
+	        
+	        /*vol_units = vol_size * 100 / ret.vol_max;*/
 	        
 	        if(increment<1){
 	        	Log.e("******PriceRule****", "increment:" + increment + ", price_size:"  + price_size + ", units:" + price_units);
@@ -142,7 +149,7 @@ public class PriceRule extends JComponent {
         g.fillRect(drawHere.x, drawHere.y, drawHere.width, drawHere.height);
 
         // Do the ruler labels in a small font that's black.
-        g.setFont(new Font("SansSerif", Font.PLAIN, 10));
+        g.setFont(new Font("SansSerif", Font.BOLD, 10));
         g.setColor(Color.black);
 
         // Some vars we need.
@@ -200,6 +207,10 @@ public class PriceRule extends JComponent {
                 }
             }
         }
+        
+        g.drawLine(SIZE-2, price_size+vol_size/2, SIZE, price_size+vol_size/2);
+        text = String.valueOf(vol_max/2);
+        g.drawString(text, drawHere.x, price_size+vol_size/2+4);
     }
 
 	public int getPriceHeight() {

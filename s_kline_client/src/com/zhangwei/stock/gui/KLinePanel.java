@@ -91,8 +91,9 @@ public class KLinePanel extends JPanel implements KLineBtnListener{
 		int rowUnit = rowView.getUnits();
 		int lowest = rowView.getLowestPrice();
 		int highest = rowView.getHighestPrice();
+		int vol_max = rowView.getMaxVol();
 		
-		klc = new KLineComponent(kl, tu, w, h, rowView.getPriceHeight(), columnUnit, rowUnit, lowest, highest);
+		klc = new KLineComponent(kl, tu, w, h, rowView.getPriceHeight(), columnUnit, rowUnit, lowest, highest, vol_max);
 
         JScrollPane jp = new JScrollPane(klc);
       
@@ -159,8 +160,9 @@ public class KLinePanel extends JPanel implements KLineBtnListener{
 		int rowUnit = rowView.getUnits();
 		int lowest = rowView.getLowestPrice();
 		int highest = rowView.getHighestPrice();
+		int vol_max = rowView.getMaxVol();
 		
-		klc.Update(kl, tu, columnUnit, rowUnit, lowest, highest);
+		klc.Update(kl, tu, columnUnit, rowUnit, lowest, highest, vol_max);
 		
         checkBtnVaild();
         
@@ -196,8 +198,9 @@ public class KLinePanel extends JPanel implements KLineBtnListener{
 		int rowUnit = rowView.getUnits();
 		int lowest = rowView.getLowestPrice();
 		int highest = rowView.getHighestPrice();
+		int vol_max = rowView.getMaxVol();
 		
-		klc.Update(kl, tu, columnUnit, rowUnit, lowest, highest);
+		klc.Update(kl, tu, columnUnit, rowUnit, lowest, highest, vol_max);
 		
         checkBtnVaild();
         
@@ -230,8 +233,9 @@ public class KLinePanel extends JPanel implements KLineBtnListener{
 		int rowUnit = rowView.getUnits();
 		int lowest = rowView.getLowestPrice();
 		int highest = rowView.getHighestPrice();
+		int vol_max = rowView.getMaxVol();
 		
-		klc.Update(kl, tu, columnUnit, rowUnit, lowest, highest);
+		klc.Update(kl, tu, columnUnit, rowUnit, lowest, highest, vol_max);
 		
         checkBtnVaild();
         
@@ -263,8 +267,9 @@ public class KLinePanel extends JPanel implements KLineBtnListener{
 		int rowUnit = rowView.getUnits();
 		int lowest = rowView.getLowestPrice();
 		int highest = rowView.getHighestPrice();
+		int vol_max = rowView.getMaxVol();
 		
-		klc.Update(kl, tu, columnUnit, rowUnit, lowest, highest);
+		klc.Update(kl, tu, columnUnit, rowUnit, lowest, highest, vol_max);
 		
         checkBtnVaild();
         

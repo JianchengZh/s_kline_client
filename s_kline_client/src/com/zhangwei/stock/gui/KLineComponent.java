@@ -44,12 +44,14 @@ public class KLineComponent extends JComponent /*implements Scrollable*/{
 
 	private int price_h;
 
+	private int vol_max;
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6866575016033251900L;
 	
-	public KLineComponent(List<KLineUnit> kl, TradeUnit tu, int w, int h, int price_h, int columnUnit, int rowUnit, int lowestPrice, int highestPrice){
+	public KLineComponent(List<KLineUnit> kl, TradeUnit tu, int w, int h, int price_h, int columnUnit, int rowUnit, int lowestPrice, int highestPrice, int vol_max){
 		//this.getSize();
 		//this.setSize(600, 400);
 		this.setPreferredSize(new Dimension(w, h));
@@ -64,29 +66,24 @@ public class KLineComponent extends JComponent /*implements Scrollable*/{
 		
 		this.lowestPrice = lowestPrice;
 		this.highestPrice = highestPrice;
+		this.vol_max = vol_max;
 	}
 
 	@Override
 	public void paint(Graphics g) {
-/*		int height = 200;
-		int width = 120;
-		g.setColor(Color.red);
-		g.drawRect(10, 10, height, width);
-		g.setColor(Color.gray);
-		g.fillRect(11, 11, height, width);
-		g.setColor(Color.red);
-		g.drawOval(250, 20, height, width);
-		g.setColor(Color.magenta);
-		g.fillOval(249, 19, height, width);*/
+
 		for(int index=0; index<kl.size(); index++){
 			int x = index*columnUnit;
 			drawKlineElem(g, x, kl.get(index));
+			drawVolElem(g, x, kl.get(index));
 		}
 		
 		drawBSPoint(g, kl, tu);
 		
 		g.setColor(Color.BLACK);
 		g.drawLine(0, price_h, w, price_h);
+		
+		
 	}
 	
     private void drawKlineElem(Graphics g, int x, KLineUnit kLineUnit) {
@@ -105,6 +102,22 @@ public class KLineComponent extends JComponent /*implements Scrollable*/{
 		if(kLineUnit.high>kLineUnit.low){
 			g.drawLine(x+columnUnit/2, price_h - (kLineUnit.high - lowestPrice)*rowUnit/100, x+columnUnit/2, price_h - (kLineUnit.low - lowestPrice)*rowUnit/100);
 		}
+	}
+    
+    private void drawVolElem(Graphics g, int x, KLineUnit kLineUnit) {
+		// TODO Auto-generated method stub
+    	int vol_len = (h-price_h) * kLineUnit.vol / vol_max;
+		if(kLineUnit.isUp()>0){
+			g.setColor(Color.red);
+			g.fillRect(x, h-vol_len, columnUnit, vol_len);
+		}else if(kLineUnit.isUp()<0){
+			g.setColor(Color.blue);
+			g.fillRect(x, h-vol_len, columnUnit, vol_len);
+		}else{
+			g.setColor(Color.BLACK);
+			g.drawRect(x, h-vol_len, columnUnit, vol_len);
+		}
+		
 	}
     
     private void drawBSPoint(Graphics g, List<KLineUnit> kl, TradeUnit tu) {
@@ -163,7 +176,7 @@ public class KLineComponent extends JComponent /*implements Scrollable*/{
     }
 
 	public void Update(List<KLineUnit> kl, TradeUnit tu, int columnUnit,
-			int rowUnit, int lowest, int highest) {
+			int rowUnit, int lowest, int highest, int vol_max) {
 		// TODO Auto-generated method stub
 		this.setPreferredSize(new Dimension(w, h));
 		this.tu = tu;
@@ -174,6 +187,7 @@ public class KLineComponent extends JComponent /*implements Scrollable*/{
 		
 		this.lowestPrice = lowest;
 		this.highestPrice = highest;
+		this.vol_max = vol_max;
 		
 		repaint();
 	}

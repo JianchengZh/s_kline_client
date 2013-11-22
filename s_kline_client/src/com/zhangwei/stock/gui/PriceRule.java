@@ -217,5 +217,10 @@ public class PriceRule extends JComponent {
 		// TODO Auto-generated method stub
 		return price_size;
 	}
+
+	public int getMaxVol() {
+		// TODO Auto-generated method stub
+		return vol_max;
+	}
 }
 

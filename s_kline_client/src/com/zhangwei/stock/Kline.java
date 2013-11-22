@@ -23,13 +23,13 @@ public class Kline {
 	//如果联网成功，结果为空，更新
 	//如果联网成功，结果不为空，写入mysql失败，不更新
 	//如果联网成功，结果不为空，写入mysql成功，更新
-	public  int last_scan_day;
+	//public  int last_scan_day;
 	private int nDay; 
 	
 	public Kline(StockInfo stockInfo){
 		kline_list = null;
 		ex_rights = null;
-		last_scan_day = -1;
+		//last_scan_day = -1;
 		pos = 0;
 		nDay = 0;
 		
@@ -54,15 +54,13 @@ public class Kline {
 			String sql_exrights = "select * from data_exrights_" + stockInfo.stock_id + "_" + stockInfo.market_type;
 					
 			List<Map<String, Object>> list_kline = dao.query(sql_kline);
-			List<Map<String, Object>> list_exrights = dao.query(sql_exrights);
-			
 			kline_list = Converter.ListConvert2KLineUnit(list_kline);
-			ex_rights = Converter.ListConvert2ExRightUnit(list_exrights);
 			
-			if(kline_list!=null && kline_list.size()>0){
-				last_scan_day = kline_list.get(kline_list.size()-1).date;
+			if(!stockInfo.index){
+				List<Map<String, Object>> list_exrights = dao.query(sql_exrights);
+				ex_rights = Converter.ListConvert2ExRightUnit(list_exrights);
 			}
-
+			
 			String transID = dao.beginTrans();
 			try{
 				persit2sql_info(transID, stockInfo, kline_list);
@@ -77,7 +75,7 @@ public class Kline {
 		}
 	}
 
-	public boolean outOfDate() {
+/*	public boolean outOfDate() {
 		// TODO Auto-generated method stub
 		if(kline_list!=null){
 			if(DateHelper.checkVaildDate(last_scan_day)){
@@ -90,7 +88,7 @@ public class Kline {
 
 		}
 		return true;
-	}
+	}*/
 	
 	public void persit2sql_kline(String transId, StockInfo info, List<KLineUnit> kl, List<ExRightUnit> rl) throws SQLException{
 		//Log.v(TAG, "persit2sql_kline - IN");
@@ -105,7 +103,10 @@ public class Kline {
 		dao.batchUpdate(transId, sql_replace_kline, Converter.ListConvertKLine2Object(kl));
 		
 		//Log.v(TAG, "batchUpdate sql_replace_exright");
-		dao.batchUpdate(transId, sql_replace_exright, Converter.ListConvertExright2Object(rl));
+		if(!info.index){
+			dao.batchUpdate(transId, sql_replace_exright, Converter.ListConvertExright2Object(rl));
+		}
+		
 		//Log.v(TAG, "persit2sql_kline - Out");
 	}
 	

@@ -98,8 +98,8 @@ public class StockManager {
 					String quick = (String) item.get("quick");
 					int start = Format.parserInt(item.get("start").toString(), -1);/*(Integer)item.get("start");*/
 					int last = Format.parserInt(item.get("last").toString(), -1);/*(Integer)item.get("last");*/
-							
-					StockInfo si = new StockInfo(stock_id, market, quick, start, last, name);
+					int scan = Format.parserInt(item.get("scan").toString(), -1);
+					StockInfo si = new StockInfo(stock_id, market, quick, start, last, name, scan);
 					rlt.add(si);
 				}
 
@@ -115,7 +115,7 @@ public class StockManager {
 	}
 	
 	public synchronized Stock getStock(StockInfo info, boolean force){
-		//Log.v(TAG, "getStock - stock_id:" + info.stock_id + ", force:" + force);
+		Log.v(TAG, "getStock - stock_id:" + info.stock_id + ", force:" + force);
 		//先内存
 		Stock stock = cache.get(info.getKey());
 		
@@ -153,10 +153,12 @@ public class StockManager {
 		ArrayList<StockInfo> stocks = sm.FetchStockInfo(false, null, -1);
 		for(StockInfo item : stocks){
 			//sm.getStock(item, false);
+			//sm.createTable(item);
 			ParallelManager.getInstance().submitTask(new StockUpdateTask(item));
 		}
-		//Stock s = mm.getStock(new StockInfo("600031", 1, "SYZG", -1, -1, "三一重工"));
-		//Stock s2 = mm.getStock(new StockInfo("002572", 2, "SFY", -1, -1, "索菲亚"));
+		
+		ParallelManager.getInstance().startTask(null, 8);
+
 	}
 	
 	public void createTable(StockInfo info){
@@ -171,7 +173,11 @@ public class StockManager {
 		Log.v(TAG, "sql_create_table_kline");
 		try {
 			dao.exec(sql_create_table_kline);
-			dao.exec(sql_create_table_exright);
+			
+			if(!info.index){
+				dao.exec(sql_create_table_exright);
+			}
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

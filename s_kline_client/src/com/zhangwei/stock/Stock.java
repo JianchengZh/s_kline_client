@@ -38,8 +38,8 @@ public class Stock {
 
 	public boolean outOfDate() {
 		// TODO Auto-generated method stub
-		if(line!=null){
-			return line.outOfDate();
+		if(line!=null && info!=null){
+			return info.outOfDate();
 		}
 		return true;
 	}
@@ -48,8 +48,9 @@ public class Stock {
 		// TODO Auto-generated method stub
 		if(line==null || force){
 			fetchFromDZH(0, 0);
-		}else if(line.outOfDate()){
-			fetchFromDZH(line.last_scan_day, 0);
+		}else if(info.outOfDate()){
+			fetchFromDZH(info.getScanDay(), 0);
+			//fetchFromDZH(20131110, 0);
 		}
 		
 	}
@@ -60,7 +61,7 @@ public class Stock {
 	 *  @param end 结束时间点，不包括；若为0则从今天（包括）回溯
 	 * */
 	public void fetchFromDZH(int begin, int end){
-		//Log.v(TAG, "FetchFromDZH - begin:" +  begin + ", end:" + end);
+		Log.v(TAG, "FetchFromDZH - begin:" +  begin + ", end:" + end);
 		ArrayList<KLineUnit> kl = new ArrayList<KLineUnit>();
 		ArrayList<ExRightUnit> rl = new ArrayList<ExRightUnit>();
 		
@@ -128,6 +129,22 @@ public class Stock {
 				}while(index<=endIndex);
 				
 				line.persit2sql_info(transID, info, kl);
+				
+				StringBuilder sql_update_scan = new StringBuilder();
+				if(info.index){
+					sql_update_scan.append("UPDATE zhishulist SET scan=");
+				}else{
+					sql_update_scan.append("UPDATE stocklist SET scan=");
+				}
+				
+				sql_update_scan.append(DateHelper.TodayHour());
+				sql_update_scan.append(" WHERE stock_id='");
+				sql_update_scan.append(info.stock_id);
+				sql_update_scan.append("' AND market_type=");
+				sql_update_scan.append(info.market_type);
+				sql_update_scan.append(";");
+				
+				dao.update(transID, sql_update_scan.toString());
 				
 				dao.commitTrans(transID);
 			}catch(SQLException e){
@@ -356,7 +373,7 @@ public class Stock {
 	}
 	
 	public static void main(String[] args){
-		StockInfo info = new StockInfo("600031", 1, "SYZG", 0, 0, "三一重工");
+		StockInfo info = new StockInfo("600031", 1, "SYZG", 0, 0, "三一重工", 2013112216);
 		Stock s = new Stock(info);
 		s.fetchFromDZH(20121106, 20131106);
 	}

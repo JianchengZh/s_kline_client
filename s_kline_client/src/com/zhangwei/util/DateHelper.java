@@ -22,6 +22,15 @@ public class DateHelper {
 		return Integer.valueOf(d_str);
 
 	}
+	
+	public static int TodayHour(){
+		Date d = new Date();
+		SimpleDateFormat df=new SimpleDateFormat("yyyyMMddHH");
+		String d_str = df.format(d);
+		
+		return Integer.valueOf(d_str);
+
+	}
 
 	
 	public static int Yesteray(){

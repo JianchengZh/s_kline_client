@@ -1,5 +1,7 @@
 package com.zhangwei.stock;
 
+import com.zhangwei.util.DateHelper;
+
 
 public class StockInfo {
 	public String stock_id; //600031
@@ -11,7 +13,10 @@ public class StockInfo {
 	public String name; //utf-8, 股票名称 如ST*昌鱼、 三一重工
 	public String quick; //快捷键  STCY
 	
-	public StockInfo(String stock_id, int market, String quick, int start, int last, String name){
+	public int lastScanDayAndHour; //2010101314 包括小时
+	private int scan;
+	
+	public StockInfo(String stock_id, int market, String quick, int start, int last, String name, int scan){
 		if(market==1 || market==2){
 			index = false;
 		}else if(market==3 || market==4){
@@ -27,6 +32,8 @@ public class StockInfo {
 		this.name = name;
 		this.quick = quick;
 		
+		this.scan = scan;
+		
 		
 	}
 
@@ -37,6 +44,32 @@ public class StockInfo {
 		}else{
 			return null;
 		}
+	}
+	
+	public int getScanDay(){
+		return scan/100;
+	}
+	
+	public boolean outOfDate() {
+		// TODO Auto-generated method stub
+		if(scan>0){
+			if(DateHelper.checkVaildDate(scan/100)){
+				if(scan/100<DateHelper.Today()){
+					return true;
+				}
+				
+				if(scan%100>=15){
+					return false;
+				}
+				
+				if(scan>=DateHelper.Hour()){
+					return false;
+				}
+
+			}
+
+		}
+		return true;
 	}
 	
 	public String getDZHStockID() {

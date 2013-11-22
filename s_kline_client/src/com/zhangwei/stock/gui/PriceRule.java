@@ -52,7 +52,7 @@ public class PriceRule extends JComponent {
     public static final int HORIZONTAL = 0;
     public static final int VERTICAL = 1;
     public static final int SIZE = 35;
-    public static final int SIZE_PERCENT_FACTOR = 2;
+    public static final int SIZE_PERCENT_FACTOR = 4;
 
     public int orientation;
     private int increment;
@@ -166,7 +166,7 @@ public class PriceRule extends JComponent {
         // within the rule and draw a units label.
         if (start == 0) {
             text = "Price";
-            tickLength = 10;
+            tickLength = 2;
             if (orientation == HORIZONTAL) {
                 g.drawLine(0, SIZE-1, 0, SIZE-tickLength-1);
                 g.drawString(text, 2, 21);
@@ -181,10 +181,10 @@ public class PriceRule extends JComponent {
         // ticks and labels
         for (int i = start; i < end; i += increment) {
             if (i % price_units == 0)  {
-                tickLength = 10;
-                text = String.valueOf((double)(end-i-1)*100/price_units + lowestPrice)/*Integer.toString(i/units)*/;
+                tickLength = 1;
+                text = String.valueOf((end-i-1)*100/price_units + lowestPrice)/*Integer.toString(i/units)*/;
             } else {
-                tickLength = 7;
+                tickLength = 0;
                 text = null;
             }
 

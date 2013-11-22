@@ -52,17 +52,22 @@ public class PriceRule extends JComponent {
     public static final int HORIZONTAL = 0;
     public static final int VERTICAL = 1;
     public static final int SIZE = 35;
+    public static final int SIZE_PERCENT_FACTOR = 2;
 
     public int orientation;
     private int increment;
-    private int units;
+    private int price_units;
     private List<KLineUnit> kl;
 	private int size; //total pixels of the width
 	private int lowestPrice;
 	private int highestPrice;
+	private int vol_size;
+	private int price_size;
 
     public PriceRule(int size, List<KLineUnit> kl) {
     	this.size = size;
+    	vol_size = size/SIZE_PERCENT_FACTOR;
+    	price_size = size - vol_size;
     	this.kl = kl;
         orientation = VERTICAL;
         setIncrementAndUnits();
@@ -83,24 +88,17 @@ public class PriceRule extends JComponent {
     }
 
     private void setIncrementAndUnits() {
-/*        if (isMetric) {
-            units = (int)((double)INCH / (double)2.54); // dots per centimeter
-            increment = units;
-        } else {
-            units = INCH;
-            increment = units / 2;
-        }*/
     	try {
 			KLineTypeResult ret = StockHelper.getKlineType(kl);
-			this.lowestPrice = ret.LOW.low;
-			this.highestPrice = ret.HIGH.high;
+			this.lowestPrice = ret.lowest_price;
+			this.highestPrice = ret.highest_price;
 			int h = ret.HIGH.high - ret.LOW.low;
-	        units = size * 100 / h ; //每一元对应多少像素
-	        size = units * h /100; 
-	        increment = units;
+	        price_units = price_size * 100 / h ; //每一元对应多少像素
+	        price_size = price_units * h /100; 
+	        increment = price_units;
 	        
 	        if(increment<1){
-	        	Log.e("******PriceRule****", "increment:" + increment + ", size:"  + size + ", units:" + units);
+	        	Log.e("******PriceRule****", "increment:" + increment + ", price_size:"  + price_size + ", units:" + price_units);
 	        }
 		} catch (StockException e) {
 			// TODO Auto-generated catch block
@@ -117,7 +115,7 @@ public class PriceRule extends JComponent {
     }
     
     public int getUnits(){
-    	return units;
+    	return price_units;
     }
     
     public int getLowestPrice(){
@@ -156,11 +154,11 @@ public class PriceRule extends JComponent {
         // Use clipping bounds to calculate first and last tick locations.
         if (orientation == HORIZONTAL) {
             start = (drawHere.x / increment) * increment;
-            end = (((drawHere.x + drawHere.width) / increment) + 1)
+            end = (((drawHere.x + drawHere.width - vol_size) / increment) + 1)
                   * increment;
         } else {
             start = (drawHere.y / increment) * increment;
-            end = (((drawHere.y + drawHere.height) / increment) + 1)
+            end = (((drawHere.y + drawHere.height - vol_size) / increment) + 1)
                   * increment;
         }
 
@@ -182,9 +180,9 @@ public class PriceRule extends JComponent {
 
         // ticks and labels
         for (int i = start; i < end; i += increment) {
-            if (i % units == 0)  {
+            if (i % price_units == 0)  {
                 tickLength = 10;
-                text = String.valueOf((double)(end-i-1)*100/units + lowestPrice)/*Integer.toString(i/units)*/;
+                text = String.valueOf((double)(end-i-1)*100/price_units + lowestPrice)/*Integer.toString(i/units)*/;
             } else {
                 tickLength = 7;
                 text = null;
@@ -203,5 +201,10 @@ public class PriceRule extends JComponent {
             }
         }
     }
+
+	public int getPriceHeight() {
+		// TODO Auto-generated method stub
+		return price_size;
+	}
 }
 

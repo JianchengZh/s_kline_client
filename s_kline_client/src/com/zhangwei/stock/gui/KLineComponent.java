@@ -42,12 +42,14 @@ public class KLineComponent extends JComponent /*implements Scrollable*/{
 
 	private TradeUnit tu;
 
+	private int price_h;
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6866575016033251900L;
 	
-	public KLineComponent(List<KLineUnit> kl, TradeUnit tu, int w, int h, int columnUnit, int rowUnit, int lowestPrice, int highestPrice){
+	public KLineComponent(List<KLineUnit> kl, TradeUnit tu, int w, int h, int price_h, int columnUnit, int rowUnit, int lowestPrice, int highestPrice){
 		//this.getSize();
 		//this.setSize(600, 400);
 		this.setPreferredSize(new Dimension(w, h));
@@ -55,6 +57,7 @@ public class KLineComponent extends JComponent /*implements Scrollable*/{
 		this.kl = kl;
 		this.w = w;
 		this.h = h;
+		this.price_h = price_h;
 		
 		this.columnUnit = columnUnit;
 		this.rowUnit = rowUnit;
@@ -81,23 +84,26 @@ public class KLineComponent extends JComponent /*implements Scrollable*/{
 		}
 		
 		drawBSPoint(g, kl, tu);
+		
+		g.setColor(Color.BLACK);
+		g.drawLine(0, price_h, w, price_h);
 	}
 	
     private void drawKlineElem(Graphics g, int x, KLineUnit kLineUnit) {
 		// TODO Auto-generated method stub
 		if(kLineUnit.isUp()>0){
 			g.setColor(Color.red);
-			g.fillRect(x, h - (kLineUnit.close-lowestPrice)*rowUnit/100, columnUnit, (kLineUnit.close - kLineUnit.open)*rowUnit/100);
+			g.fillRect(x, price_h - (kLineUnit.close-lowestPrice)*rowUnit/100, columnUnit, (kLineUnit.close - kLineUnit.open)*rowUnit/100);
 		}else if(kLineUnit.isUp()<0){
 			g.setColor(Color.blue);
-			g.fillRect(x, h - (kLineUnit.open - lowestPrice)*rowUnit/100, columnUnit, (kLineUnit.open - kLineUnit.close)*rowUnit/100);
+			g.fillRect(x, price_h - (kLineUnit.open - lowestPrice)*rowUnit/100, columnUnit, (kLineUnit.open - kLineUnit.close)*rowUnit/100);
 		}else{
 			g.setColor(Color.BLACK);
-			g.drawLine(x, h - (kLineUnit.open - lowestPrice)*rowUnit/100, x+columnUnit, h - (kLineUnit.open - lowestPrice)*rowUnit/100);
+			g.drawLine(x, price_h - (kLineUnit.open - lowestPrice)*rowUnit/100, x+columnUnit, price_h - (kLineUnit.open - lowestPrice)*rowUnit/100);
 		}
 		
 		if(kLineUnit.high>kLineUnit.low){
-			g.drawLine(x+columnUnit/2, h - (kLineUnit.high - lowestPrice)*rowUnit/100, x+columnUnit/2, h - (kLineUnit.low - lowestPrice)*rowUnit/100);
+			g.drawLine(x+columnUnit/2, price_h - (kLineUnit.high - lowestPrice)*rowUnit/100, x+columnUnit/2, price_h - (kLineUnit.low - lowestPrice)*rowUnit/100);
 		}
 	}
     
@@ -108,15 +114,17 @@ public class KLineComponent extends JComponent /*implements Scrollable*/{
 			int x = index*columnUnit;
 			
 			if(elem.date==tu.buy_date){
-				int y = h - (tu.buy_price - lowestPrice)*rowUnit/100;
-				g.setColor(Color.CYAN);
-				g.drawOval(x, y, 10, 10);
-				g.drawString("Buy", x, y + 10);
+				int y = price_h - (tu.buy_price - lowestPrice)*rowUnit/100;
+				g.setColor(Color.GRAY);
+				g.drawLine(x+columnUnit/2, price_h-10, x+columnUnit/2, y);
+				g.setColor(Color.RED);
+				g.drawString("B", x, price_h);
 			}else if(elem.date==tu.sell_date){
-				int y = h - (tu.sell_price - lowestPrice)*rowUnit/100;
-				g.setColor(Color.GREEN);
-				g.drawOval(x, y, 10, 10);
-				g.drawString("Buy", x, y + 10);
+				int y = price_h - (tu.sell_price - lowestPrice)*rowUnit/100;
+				g.setColor(Color.GRAY);
+				g.drawLine(x+columnUnit/2, price_h-10, x+columnUnit/2, y);
+				g.setColor(Color.BLUE);
+				g.drawString("S", x, price_h);
 			}
 			
 			index++;

@@ -92,7 +92,7 @@ public class KLinePanel extends JPanel implements KLineBtnListener{
 		int lowest = rowView.getLowestPrice();
 		int highest = rowView.getHighestPrice();
 		
-		klc = new KLineComponent(kl, tu, w, h, columnUnit, rowUnit, lowest, highest);
+		klc = new KLineComponent(kl, tu, w, h, rowView.getPriceHeight(), columnUnit, rowUnit, lowest, highest);
 
         JScrollPane jp = new JScrollPane(klc);
       

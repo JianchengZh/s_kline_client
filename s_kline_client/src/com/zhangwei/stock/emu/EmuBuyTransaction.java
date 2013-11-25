@@ -1,6 +1,5 @@
 package com.zhangwei.stock.emu;
 
-import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.StockInfo;
 import com.zhangwei.stock.BS.BuyPoint;
 import com.zhangwei.stock.BS.IBuy;

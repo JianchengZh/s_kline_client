@@ -108,6 +108,10 @@ public class EmuTradeSystem implements TradeSystem{
 		return rlt;
 	}
 	
+	public void EmuReport(List<TradeUnit> rlt){
+		
+	}
+	
 	
 
 	public void Report(List<TradeUnit> rlt) {

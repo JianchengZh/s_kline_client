@@ -10,6 +10,7 @@ public class TradeUnit {
 	public int buy_price;
 	public int sell_price;
 	public int vol;
+	public int earnPercent;
 	
 	public TradeUnit(String stock_id, int market, int buy_date,
 			int sell_date, int buy_price, int sell_price, int vol) {
@@ -21,11 +22,12 @@ public class TradeUnit {
 		this.buy_price = buy_price;
 		this.sell_price = sell_price;
 		this.vol = vol;
+		earnPercent = (sell_price - buy_price)*100/buy_price;
 	}
 	
 	public int getEarnPercent(){
 		if(sell_price>0 && buy_price>0){
-			return (sell_price - buy_price)*100/buy_price - Constants.YONGJIN_PERCENT;
+			return earnPercent - Constants.YONGJIN_PERCENT;
 		}else{
 			return 0;
 		}

@@ -12,6 +12,7 @@ import com.android.dazhihui.http.StructResponse;
 import com.zhangwei.client.DZHClient;
 import com.zhangwei.mysql.BaseDao;
 import com.zhangwei.mysql.Converter;
+import com.zhangwei.stock.BS.BuyPoint;
 import com.zhangwei.stock.BS.TradeUnit;
 import com.zhangwei.util.DateHelper;
 import com.zhangwei.util.StockHelper;
@@ -276,7 +277,7 @@ public class Stock {
 	public List<KLineUnit> getNDayExRightKline(int numDay, int endDate){
 		List<KLineUnit> kl = getNDayKline(numDay, endDate);
 		if(kl!=null){
-			return StockHelper.getExrightKLine(kl);
+			return StockHelper.getExrightKLine(kl, -1);
 		}else{
 			return null;
 		}
@@ -335,7 +336,7 @@ public class Stock {
 	public List<KLineUnit> getNDayExRightKline(TradeUnit tu) {
 		List<KLineUnit> kl = getNDayKline(tu);
 		if(kl!=null){
-			return StockHelper.getExrightKLine(kl);
+			return StockHelper.getExrightKLine(kl, tu.buy_date);
 		}else{
 			return null;
 		}
@@ -381,8 +382,9 @@ public class Stock {
 	/**
 	 * @param Nday 指定返回的list有几天
 	 * @param reset 初始化pos
+	 * @param lastBuyPoint 
 	 * */
-	public List<KLineUnit> generateNDayKline(int NDay, boolean reset) {
+	public List<KLineUnit> generateNDayKline(int NDay, boolean reset, int lastBuyDate) {
 		// TODO Auto-generated method stub
 		if(NDay<5){
 			NDay = 60;
@@ -395,7 +397,7 @@ public class Stock {
 			
 			return null;
 		}else{
-			return line.generateNDayKline(NDay);
+			return line.generateNDayKline(NDay, lastBuyDate);
 		}
 	}
 

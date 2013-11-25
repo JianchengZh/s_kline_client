@@ -94,7 +94,10 @@ public class StockHelper {
 		return ret;
 	}
 	
-	public   static List<KLineUnit> getExrightKLine(List<KLineUnit> kl){
+	/**
+	 * 若lastBuyDate命中，则返回lastBuyDate以前不复权，但lastBuyDate以后复权的K线图
+	 * */
+	public   static List<KLineUnit> getExrightKLine(List<KLineUnit> kl, int lastBuyDate){
 		int factorRet = 100;
 		if(!checkKlineVaild(kl)){
 			return null;
@@ -103,22 +106,24 @@ public class StockHelper {
 		List<KLineUnit> retKl = new ArrayList<KLineUnit>();
 		KLineUnit last = null;
 		for(KLineUnit cur : kl){
-			if(last!=null && !last.equals(cur)){
-				factorRet = factorRet * calcExrightFactor(last, cur) / 100;
-			}
-			
-			last = cur;
-			if(factorRet>100){
-				retKl.add(new KLineUnit(cur, factorRet));
+			if(DateHelper.checkVaildDate(lastBuyDate) && cur.date>lastBuyDate){
+				if(last!=null && !last.equals(cur)){
+					factorRet = factorRet * calcExrightFactor(last, cur) / 100;
+				}
+				
+				last = cur;
+				if(factorRet>100){
+					retKl.add(new KLineUnit(cur, factorRet));
+				}else{
+					retKl.add(cur);
+				}
 			}else{
 				retKl.add(cur);
 			}
 
+
 		}
 		
-/*		for(KLineUnit elem : retKl){
-			Log.v(TAG, "date:" + elem.date + ", close:" + elem.close + ", vol:" + elem.vol);
-		}*/
 		return retKl;
 	}
 	
@@ -299,6 +304,41 @@ public class StockHelper {
 	public static int compare(KLineUnit left, KLineUnit right) {
 		// TODO Auto-generated method stub
 		return (right.close -left.close) * 100 / left.close;
+	}
+
+	/**
+	 * 向前复权
+	 * */
+	public static List<KLineUnit> getForwardExrightKLine(List<KLineUnit> kl) {
+		// TODO Auto-generated method stub
+		int factorRet = 100;
+		if(!checkKlineVaild(kl)){
+			return null;
+		}
+		
+		List<KLineUnit> tmpKl = new ArrayList<KLineUnit>();
+		List<KLineUnit> retKL = new ArrayList<KLineUnit>();
+		KLineUnit last = null;
+
+		for(int index = kl.size()-1; index>=0; index--){
+			KLineUnit cur = kl.get(index);
+			if(last!=null && !last.equals(cur)){
+				factorRet = factorRet * calcExrightFactor(last, cur) / 100;
+			}
+			
+			last = cur;
+			if(factorRet!=100){
+				tmpKl.add(new KLineUnit(cur, factorRet));
+			}else{
+				tmpKl.add(cur);
+			}
+		}
+		
+		for(int index = kl.size()-1; index>=0; index--){
+			retKL.add(tmpKl.get(index));
+		}
+		
+		return retKL;
 	}
 
 }

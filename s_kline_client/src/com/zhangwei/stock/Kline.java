@@ -9,7 +9,9 @@ import android.util.Log;
 
 import com.zhangwei.mysql.BaseDao;
 import com.zhangwei.mysql.Converter;
+import com.zhangwei.stock.BS.BuyPoint;
 import com.zhangwei.util.DateHelper;
+import com.zhangwei.util.StockHelper;
 
 public class Kline {
 	private static final String TAG = "Kline";
@@ -168,7 +170,7 @@ public class Kline {
 		this.nDay = nDay;
 	}
 
-	public List<KLineUnit> generateNDayKline(int nDay) {
+	public List<KLineUnit> generateNDayKline(int nDay, int lastBuyDate) {
 		// TODO Auto-generated method stub
 		
 		if(kline_list==null){
@@ -182,11 +184,22 @@ public class Kline {
 		}
 		
 		int indexFrom = pos;
+		int index_buy = indexFrom;
 		int indexTo;
+		if(DateHelper.checkVaildDate(lastBuyDate)){
+			KLineUnit lastBP = StockHelper.binSearch(kline_list, lastBuyDate, 0);
+			index_buy = kline_list.indexOf(lastBP);
+			if(index_buy<0){
+				index_buy = indexFrom;
+			}
+		}
+
+		
 		if(pos + nDay>kline_list.size()){
 			return null;
 		}else{
 			indexTo = pos + nDay;
+			indexFrom = Math.min(indexFrom, index_buy);
 			pos++;
 			return kline_list.subList(indexFrom, indexTo);
 		}

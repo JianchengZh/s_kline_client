@@ -215,7 +215,7 @@ public abstract class BasicStrategy {
 
 			String sql_create_table_bs = "CREATE TABLE IF NOT EXISTS " 
 			                  + BStable  
-			                  + "\n(stock_id VARCHAR(6) NOT NULL, market_type INT, buy_date INT NOT NULL, sell_date INT, buy_price INT, sell_price INT, vol INT, PRIMARY KEY  (stock_id, buy_date))ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+			                  + "\n(stock_id VARCHAR(6) NOT NULL, market_type INT, buy_date INT NOT NULL, sell_date INT, buy_price INT, sell_price INT, vol INT, earn_percent INT, PRIMARY KEY  (stock_id, buy_date))ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
 			bd.exec(sql_create_table_bs);
 			

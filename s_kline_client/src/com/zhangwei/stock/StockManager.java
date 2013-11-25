@@ -150,7 +150,7 @@ public class StockManager {
 	
 	public static void main(String[] args){
 		StockManager sm = StockManager.getInstance();
-		ArrayList<StockInfo> stocks = sm.FetchStockInfo(false, null, -1);
+		ArrayList<StockInfo> stocks = sm.FetchStockInfo(true, null, -1);
 		for(StockInfo item : stocks){
 			//sm.getStock(item, false);
 			//sm.createTable(item);

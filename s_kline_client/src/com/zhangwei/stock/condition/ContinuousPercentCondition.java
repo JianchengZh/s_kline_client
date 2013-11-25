@@ -10,15 +10,15 @@ import com.zhangwei.stock.kline.KLineTypeResult;
 import com.zhangwei.util.StockHelper;
 
 /**
- * n天累计下跌Percent
+ * n天累计Percent
  * */
-public class ContinuousDeclineCondition implements ICondition {
+public class ContinuousPercentCondition implements ICondition {
 	private int nDay;
 	private int Percent;
 
-	public ContinuousDeclineCondition(int nDay, int Percent){
+	public ContinuousPercentCondition(int nDay, int Percent){
 		this.nDay = Math.abs(nDay);
-		this.Percent = Math.abs(Percent);
+		this.Percent = Percent;
 	}
 
 	@Override
@@ -37,11 +37,13 @@ public class ContinuousDeclineCondition implements ICondition {
 		int index2 = kl.size() - 1;
 		
 		int fudu = kl.get(index2).close * 100 / kl.get(index1).close - 100;
-		if(fudu>-Percent){
-			return false;
+
+		if(Percent>0){
+			return fudu>Percent;
+		}else{
+			return fudu<Percent;
 		}
 		
-		return true;
 	}
 
 }

@@ -1,6 +1,6 @@
 package com.zhangwei.stock.Strategy;
 
-import com.zhangwei.stock.condition.ContinuousDeclineCondition;
+import com.zhangwei.stock.condition.ContinuousPercentCondition;
 import com.zhangwei.stock.condition.DetectBigChangeCondition;
 import com.zhangwei.stock.condition.KUpDownUpCondition;
 import com.zhangwei.stock.condition.LastNdayCondition;
@@ -25,11 +25,11 @@ public class MyWeakBuyStrategy extends BasicStrategy {
 		super.init();
 		//addBuyBigCondition(new DetectBigChangeCondition(-7, 1, 150, false), false);
 		addBuyBigCondition(new DetectBigChangeCondition(-5, 1, -1, true), false);
-		addBuyLittleCondition(new ContinuousDeclineCondition(10, 30));
+		addBuyLittleCondition(new ContinuousPercentCondition(10, 30));
 		addBuyLittleCondition(new VolumeChangeCondition(3, 50));
 		
-		addSellBigCondition(new StopLossCondition(10), true);
-		addSellBigCondition(new LastNdayCondition(15), true);
+		addSellBigCondition(new StopLossCondition(8), true);
+		addSellBigCondition(new LastNdayCondition(5), true);
 		addSellBigCondition(new StopEarnCondition(20), true);
 	}
 

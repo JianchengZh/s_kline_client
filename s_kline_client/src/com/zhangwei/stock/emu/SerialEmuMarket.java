@@ -27,7 +27,7 @@ public class SerialEmuMarket implements ParallelListener {
 		se.bs = new MyWeakBuyStrategy();
 		EmuTradeSystem es = EmuTradeSystem.getInstance();
 		List<TradeUnit> rlt = es.getTradeInfo(se.bs.getUID(), 0);
-		boolean flag = true;
+		boolean flag = false;
 		if(flag && rlt!=null && rlt.size()>0){
 			es.Report(rlt);
 		}else{

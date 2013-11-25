@@ -1,5 +1,6 @@
 package com.zhangwei.stock.emu;
 
+import java.math.BigInteger;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -108,17 +109,17 @@ public class EmuTradeSystem implements TradeSystem{
 		Log.v(TAG, "Report rlt.size:" + rlt.size());
 
 		
-		int totalNum = 0;
-		int earnNum = 0;
-		int lossNum = 0;
-		int earnPercentExpectSum = 0;
-		int lossPercentExpectSum = 0;
-		int totalPercentExpectSum = 0;
-		int totalPercentExpectProduct = 100;
-		int minEarnPercent = 100000;
-		int maxEarnPercent = 0;
-		int minEarnPercentExpectSum = 100000;
-		int minEarnPercentExpectProduct = 100000;
+		long totalNum = 0;
+		long earnNum = 0;
+		long lossNum = 0;
+		long earnPercentExpectSum = 0;
+		long lossPercentExpectSum = 0;
+		long totalPercentExpectSum = 0;
+		BigInteger totalPercentExpectProduct = new BigInteger("100");
+		long minEarnPercent = Long.MAX_VALUE;
+		long maxEarnPercent = Long.MIN_VALUE;
+		long minEarnPercentExpectSum = Long.MAX_VALUE;
+		BigInteger minEarnPercentExpectProduct = new BigInteger("100");
 		
 		for(TradeUnit elem : rlt){
 			int earnPercent = elem.getEarnPercent();
@@ -141,17 +142,19 @@ public class EmuTradeSystem implements TradeSystem{
 			totalNum++;
 
 			totalPercentExpectSum= totalPercentExpectSum + earnPercent;
-			totalPercentExpectProduct = totalPercentExpectProduct * (100 + earnPercent) / 100;
+			
+			totalPercentExpectProduct = totalPercentExpectProduct.multiply(new BigInteger(String.valueOf(100 + earnPercent))).divide(new BigInteger(String.valueOf(100)));
+			//totalPercentExpectProduct = totalPercentExpectProduct * (100 + earnPercent) / 100;
 			
 			if(minEarnPercentExpectSum>totalPercentExpectSum/totalNum){
 				minEarnPercentExpectSum=totalPercentExpectSum/totalNum;
 			}
 			
-			if(minEarnPercentExpectProduct>totalPercentExpectProduct){
+			if(minEarnPercentExpectProduct.compareTo(totalPercentExpectProduct)>0){
 				minEarnPercentExpectProduct=totalPercentExpectProduct;
 			}
 			
-			//Log.v(null, "earnPercent:" + earnPercent + ", earnPercentExpectSum:" + earnPercentExpectSum/totalNum + ", earnPercentExpectProduct:" + earnPercentExpectProduct);
+			Log.v(null, "earnPercent:" + earnPercent + ", earnPercentExpectSum:" + earnPercentExpectSum/totalNum + ", totalPercentExpectProduct:" + totalPercentExpectProduct);
 		}
 		
 		double totalPercentExpectSum_double = (double)totalPercentExpectSum / totalNum;

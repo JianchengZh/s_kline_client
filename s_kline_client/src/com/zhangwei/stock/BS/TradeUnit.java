@@ -1,5 +1,7 @@
 package com.zhangwei.stock.BS;
 
+import com.zhangwei.stock.Constants;
+
 public class TradeUnit {
 	public String stock_id;
 	public int market_type;
@@ -23,7 +25,7 @@ public class TradeUnit {
 	
 	public int getEarnPercent(){
 		if(sell_price>0 && buy_price>0){
-			return (sell_price - buy_price)*100/buy_price;
+			return (sell_price - buy_price)*100/buy_price - Constants.YONGJIN_PERCENT;
 		}else{
 			return 0;
 		}

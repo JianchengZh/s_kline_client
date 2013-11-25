@@ -1,12 +1,13 @@
 package com.zhangwei.stock.BS;
 
+import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.StockInfo;
 
 public class BuyPoint extends Point {
 
 
-	public BuyPoint(String BSID, StockInfo info, int date, int time, int price, int vol) {
-		super(BSID, info, date, time, price, vol, true);
+	public BuyPoint(String BSID, StockInfo info, int date, int time, int price, int vol, KLineUnit last) {
+		super(BSID, info, date, time, price, vol, true, last);
 		// TODO Auto-generated constructor stub
 
 	}

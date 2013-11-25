@@ -17,7 +17,7 @@ public class EmuBuyTransaction implements IBuy {
 	public boolean buy(StockInfo stockinfo, BuyPoint buypoint) {
 		// TODO Auto-generated method stub
 		this.buypoint = buypoint;/*new BuyPoint(stockinfo, date, 0, price, vol);*/
-		EmuTradeSystem.getInstance().submitBuyTransaction(this);
+		EmuTradeSystem.getInstance().submitBuyTransaction(this, buypoint);
 		return true;
 	}
 

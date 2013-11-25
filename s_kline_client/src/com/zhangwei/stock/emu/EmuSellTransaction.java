@@ -15,7 +15,7 @@ public class EmuSellTransaction implements ISell {
 		/*sellpoint = new SellPoint(stockinfo, date, 0, price, vol);*/
 		this.buypoint = buypoint;
 		this.sellpoint = sellpoint;
-		EmuTradeSystem.getInstance().submitSellTransaction(this);
+		EmuTradeSystem.getInstance().submitSellTransaction(this, sellpoint);
 		return true;
 	}
 

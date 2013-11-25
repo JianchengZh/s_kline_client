@@ -37,7 +37,7 @@ public class EmuTradeSystem implements TradeSystem{
 	}
 	
 	@Override
-	public void submitBuyTransaction(IBuy buy){
+	public void submitBuyTransaction(IBuy buy, BuyPoint buypoint){
 		buy.onSucess();
 	}
 
@@ -48,7 +48,7 @@ public class EmuTradeSystem implements TradeSystem{
 	}
 	
 	@Override
-	public void submitSellTransaction(ISell sell){
+	public void submitSellTransaction(ISell sell, SellPoint sellpoint){
 		sell.onSucess();
 	}
 

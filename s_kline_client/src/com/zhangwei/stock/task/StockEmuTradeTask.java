@@ -53,12 +53,15 @@ public class StockEmuTradeTask implements StockTask {
 					int price = last.close;
 					//Log.v(TAG, "BuyPoint: stock:" + info.stock_id + ", date:" + date + ", price:" + price);
 
-					lastBuyPoint = new BuyPoint(bs.getUID(), info, date, 0, price, 100);
 					
-					EmuBuyTransaction ebt = new EmuBuyTransaction();
-					ebt.buy(info, lastBuyPoint);
-					
-					status = 1;
+					boolean isUpBan = exRightKl.get(exRightKl.size()-2).isUpBan(last);
+					if(!isUpBan){
+						EmuBuyTransaction ebt = new EmuBuyTransaction();
+						lastBuyPoint = new BuyPoint(bs.getUID(), info, date, 0, price, 100, exRightKl.get(exRightKl.size()-2));
+						ebt.buy(info, lastBuyPoint);
+						status = 1;
+					}
+
 				}
 				
 			}else if(status==1){
@@ -68,12 +71,16 @@ public class StockEmuTradeTask implements StockTask {
 					int date = last.date;
 					int price = last.close;
 					//Log.v(TAG, "SellPoint: stock:" + info.stock_id + ", date:" + date + ", price:" + price);
-					lastSellPoint = new SellPoint(bs.getUID(), lastBuyPoint.info, date, 0, price, lastBuyPoint.vol);
+					boolean isDownBan = exRightKl.get(exRightKl.size()-2).isDownBan(last);
+					if(!isDownBan){
+						EmuSellTransaction est = new EmuSellTransaction();
+						lastSellPoint = new SellPoint(bs.getUID(), lastBuyPoint.info, date, 0, price, lastBuyPoint.vol, exRightKl.get(exRightKl.size()-2));
+						est.sell(info, lastBuyPoint, lastSellPoint);
+						
+						status = 0;
+					}
 					
-					EmuSellTransaction est = new EmuSellTransaction();
-					est.sell(info, lastBuyPoint, lastSellPoint);
-					
-					status = 0;
+
 				}
 			}
 		}

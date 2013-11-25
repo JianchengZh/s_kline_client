@@ -9,7 +9,7 @@ import com.zhangwei.stock.BS.TradeSystem;
 public class RealTradeSystem implements TradeSystem {
 
 	@Override
-	public void submitBuyTransaction(IBuy buy) {
+	public void submitBuyTransaction(IBuy buy, BuyPoint buypoint) {
 		// TODO Auto-generated method stub
 
 	}
@@ -21,7 +21,7 @@ public class RealTradeSystem implements TradeSystem {
 	}
 
 	@Override
-	public void submitSellTransaction(ISell sell) {
+	public void submitSellTransaction(ISell sell, SellPoint Sellpoint) {
 		// TODO Auto-generated method stub
 
 	}

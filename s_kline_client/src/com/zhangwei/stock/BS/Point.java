@@ -1,5 +1,6 @@
 package com.zhangwei.stock.BS;
 
+import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.StockInfo;
 
 public class Point {
@@ -29,7 +30,9 @@ public class Point {
 	 * */
 	public StockInfo info;
 	
-	public Point(String BSID, StockInfo info, int date, int time, int price, int vol, boolean buyFlag){
+	public KLineUnit last;
+	
+	public Point(String BSID, StockInfo info, int date, int time, int price, int vol, boolean buyFlag, KLineUnit last){
 		this.BSID = BSID;
 		this.info = info;
 		this.date = date;
@@ -37,6 +40,7 @@ public class Point {
 		this.buyFlag = buyFlag;
 		this.time = time;
 		this.vol = vol;
+		this.last = last;
 	}
 	
 	public int getPrice(){

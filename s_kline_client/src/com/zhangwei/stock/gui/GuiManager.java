@@ -33,7 +33,8 @@ import com.zhangwei.stock.BS.TradeUnit;
 
 public class GuiManager {
 	private JFrame frame;
-	private List<List<TradeUnit>> list;
+	//private List<List<TradeUnit>> list;
+	private List<TradeUnit> list;
 
 	
 	private static GuiManager ins;
@@ -49,7 +50,7 @@ public class GuiManager {
 	}
 	
 	public void showResult(final List<TradeUnit> list_arg){
-		this.list = new ArrayList<>();
+/*		this.list = new ArrayList<>();
 		String stock_id = null;
 		int index_x = -1;
 		for(TradeUnit tu : list_arg){
@@ -60,7 +61,8 @@ public class GuiManager {
 			stock_id = tu.stock_id;
 			this.list.get(index_x).add(tu);
 			
-		}
+		}*/
+		this.list = list_arg;
 
 
 		// MyParser.Paser_dir(args[0]);

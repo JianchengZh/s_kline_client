@@ -58,7 +58,7 @@ public class EmuTradeSystem implements TradeSystem{
 		records.addSell(buypoint, sellpoint);
 	}
 
-	public List<TradeUnit> getTradeInfo(String uid, int type) {
+	public List<TradeUnit> getTradeInfo(String uid, int type, String order_key) {
 		// TODO Auto-generated method stub
 		BaseDao bd = BaseDao.getInstance();
 		StringBuilder sb = new StringBuilder();
@@ -68,6 +68,14 @@ public class EmuTradeSystem implements TradeSystem{
 		}else if(type<0){
 			sb.append(" and buy_price>sell_price");
 		}
+		
+		if(order_key!=null && !order_key.equals("")){
+			sb.append(" order by ");
+			sb.append(order_key);
+		}
+		
+		sb.append(";");
+		
 		List<TradeUnit> rlt = new ArrayList<TradeUnit>();
 		
 		try {
@@ -97,12 +105,10 @@ public class EmuTradeSystem implements TradeSystem{
 			e.printStackTrace();
 		}
 		
-/*		if(rlt!=null && rlt.size()>0){
-			Report(rlt);
-		}*/
-		
 		return rlt;
 	}
+	
+	
 
 	public void Report(List<TradeUnit> rlt) {
 		// TODO Auto-generated method stub

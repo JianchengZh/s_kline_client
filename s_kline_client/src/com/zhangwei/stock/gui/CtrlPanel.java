@@ -89,9 +89,9 @@ public class CtrlPanel extends JPanel implements ActionListener, TradeInfoListen
 		// TODO Auto-generated method stub
 		String cmdID = e.getActionCommand();
 		if("<<".equals(cmdID)){
-			listener.onPreStock();
+			listener.onFirstTrade();
 		}else if(">>".equals(cmdID)){
-			listener.onNxtStock();
+			listener.onLastTrade();
 		}else if("<".equals(cmdID)){
 			listener.onPreTrade();
 		}else if(">".equals(cmdID)){

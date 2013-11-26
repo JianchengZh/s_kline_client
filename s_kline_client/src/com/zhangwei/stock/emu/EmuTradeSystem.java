@@ -130,6 +130,7 @@ public class EmuTradeSystem implements TradeSystem{
 		long maxEarnPercent = Long.MIN_VALUE;
 		long minEarnPercentExpectSum = Long.MAX_VALUE;
 		BigInteger minEarnPercentExpectProduct = new BigInteger("100");
+		int emptyCount = 0;
 		
 		for(TradeUnit elem : rlt){
 			int earnPercent = elem.getEarnPercent();
@@ -165,6 +166,13 @@ public class EmuTradeSystem implements TradeSystem{
 			}
 			
 			Log.v(null, "earnPercent:" + earnPercent + ", earnPercentExpectSum:" + earnPercentExpectSum/totalNum + ", totalPercentExpectProduct:" + totalPercentExpectProduct);
+		
+			if(minEarnPercentExpectProduct.compareTo(new BigInteger("0"))<=0){
+				Log.v(null, "爆仓" + emptyCount + "次！重置minEarnPercentExpectProduct=100");
+				emptyCount++;
+				minEarnPercentExpectProduct = new BigInteger("100");
+				totalPercentExpectProduct = new BigInteger("100");
+			}
 		}
 		
 		double totalPercentExpectSum_double = (double)totalPercentExpectSum / totalNum;
@@ -173,6 +181,7 @@ public class EmuTradeSystem implements TradeSystem{
 				
 		Log.v(null, "===================Report!=========================");
 		Log.v(null, "=== Total Trades:" + totalNum);
+		Log.v(null, "=== 爆仓:" + emptyCount);
 		Log.v(null, "=== earnNum:" + earnNum + ", percent:" + earnNum * 100 / totalNum + ", 期望:" + earnPercentExpectSum_double);
 		Log.v(null, "=== lossNum:" + lossNum + ", percent:" + lossNum * 100 / totalNum + ", 期望:" + lossPercentExpectSum_double);
 		

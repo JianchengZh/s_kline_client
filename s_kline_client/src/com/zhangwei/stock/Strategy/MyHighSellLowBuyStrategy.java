@@ -17,9 +17,9 @@ public class MyHighSellLowBuyStrategy extends BasicStrategy{
 	}
 	
 
-	public void init() {
+	public void init(String MarketID) {
 		// TODO Auto-generated method stub
-		super.init();
+		super.init(MarketID);
 		addBuyLittleCondition(new KUpDownUpCondition(30, 30, 20, 20, 5, 5));
 		
 		addSellBigCondition(new StopLossCondition(10), true);

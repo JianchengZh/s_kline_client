@@ -20,9 +20,9 @@ public class MyWeakBuyStrategy extends BasicStrategy {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public void init() {
+	public void init(String MarketID) {
 		// TODO Auto-generated method stub
-		super.init();
+		super.init(MarketID);
 		//addBuyBigCondition(new DetectBigChangeCondition(-7, 1, 150, false), false);
 		addBuyBigCondition(new DetectBigChangeCondition(-5, 1, -1, true), false);
 		addBuyLittleCondition(new ContinuousPercentCondition(5, -15));

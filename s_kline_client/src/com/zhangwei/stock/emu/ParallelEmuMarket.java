@@ -20,6 +20,7 @@ import com.zhangwei.stock.task.StockUpdateTask;
 public class ParallelEmuMarket implements ParallelListener {
 	private static final String TAG = "ParallelEmuMarket";
 	public  BasicStrategy bs;
+	public static final String UID = "PEM";
 	
 	public final static String order_key = "buy_date"; //"earn_percent desc", null
 
@@ -29,13 +30,13 @@ public class ParallelEmuMarket implements ParallelListener {
 		//se.bs = new MyHighSellLowBuyStrategy();
 		se.bs = new MyWeakBuyStrategy();
 		EmuTradeSystem es = EmuTradeSystem.getInstance();
-		List<TradeUnit> rlt = es.getTradeInfo(se.bs.getUID(), 0, order_key);
+		List<TradeUnit> rlt = es.getTradeInfo(UID, se.bs.getUID(), 0, order_key);
 		//List<TradeUnit> rlt = es.getTradeInfo(se.bs.getUID(), 0, "earn_percent desc");
 		boolean flag = false;
 		if(flag && rlt!=null && rlt.size()>0){
 			es.Report(rlt);
 		}else{
-			se.bs.init();
+			se.bs.init(UID);
 			
 			StockManager sm = StockManager.getInstance();
 			ArrayList<StockInfo> stocks = sm.FetchStockInfo(false, null, -1);
@@ -57,7 +58,7 @@ public class ParallelEmuMarket implements ParallelListener {
 		// TODO Auto-generated method stub
 		Log.v(TAG, "onComplete ");
 		EmuTradeSystem es = EmuTradeSystem.getInstance();
-		List<TradeUnit> ret = es.getTradeInfo(bs.getUID(), 0, order_key);
+		List<TradeUnit> ret = es.getTradeInfo(UID, bs.getUID(), 0, order_key);
 		es.Report(ret);
 	}
 

@@ -203,12 +203,12 @@ public abstract class BasicStrategy {
 
 	}
 
-	public void init() {
+	public void init(String MarketID) {
 		// TODO Auto-generated method stub
 
 		cleanUp();
 		BaseDao bd = BaseDao.getInstance();
-		String BStable = "BS_" + getUID();
+		String BStable = "BS_" + MarketID + "_" + getUID();
 		
 		Log.v(TAG, getClass().getName() + " - init, BStable:" + BStable);
 		try {

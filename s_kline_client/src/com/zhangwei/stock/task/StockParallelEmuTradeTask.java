@@ -19,13 +19,13 @@ import com.zhangwei.stock.emu.EmuSellTransaction;
 import com.zhangwei.stock.emu.EmuTradeSystem;
 import com.zhangwei.util.StockHelper;
 
-public class StockEmuTradeTask implements StockTask {
+public class StockParallelEmuTradeTask implements StockTask {
 
-	private static final String TAG = "StockEmuTradeTask";
+	private static final String TAG = "StockParallelEmuTradeTask";
 	private StockInfo info;
 	private BasicStrategy bs;
 
-	public StockEmuTradeTask(StockInfo info, BasicStrategy bs){
+	public StockParallelEmuTradeTask(StockInfo info, BasicStrategy bs){
 		this.info = info;
 		this.bs = bs;
 	}

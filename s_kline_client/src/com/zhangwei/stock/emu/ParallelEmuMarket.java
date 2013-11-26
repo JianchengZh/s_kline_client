@@ -13,18 +13,19 @@ import com.zhangwei.stock.BS.TradeUnit;
 import com.zhangwei.stock.Strategy.BasicStrategy;
 import com.zhangwei.stock.Strategy.MyHighSellLowBuyStrategy;
 import com.zhangwei.stock.Strategy.MyWeakBuyStrategy;
+import com.zhangwei.stock.task.StockParallelEmuTradeTask;
 import com.zhangwei.stock.task.StockSerialEmuTradeTask;
 import com.zhangwei.stock.task.StockUpdateTask;
 
-public class SerialEmuMarket implements ParallelListener {
-	private static final String TAG = "SerialEmuMarket";
+public class ParallelEmuMarket implements ParallelListener {
+	private static final String TAG = "ParallelEmuMarket";
 	public  BasicStrategy bs;
 	
 	public final static String order_key = "buy_date"; //"earn_percent desc", null
 
 	public static void main(String[] args){
 		
-		SerialEmuMarket se = new SerialEmuMarket();
+		ParallelEmuMarket se = new ParallelEmuMarket();
 		//se.bs = new MyHighSellLowBuyStrategy();
 		se.bs = new MyWeakBuyStrategy();
 		EmuTradeSystem es = EmuTradeSystem.getInstance();
@@ -40,7 +41,7 @@ public class SerialEmuMarket implements ParallelListener {
 			ArrayList<StockInfo> stocks = sm.FetchStockInfo(false, null, -1);
 			ParallelManager pm = ParallelManager.getInstance();
 			for(StockInfo item : stocks){
-				pm.submitTask(new StockSerialEmuTradeTask(item, se.bs));
+				pm.submitTask(new StockParallelEmuTradeTask(item, se.bs));
 			}
 			pm.startTask(se, 8);
 		}

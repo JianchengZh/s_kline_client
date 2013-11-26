@@ -1,8 +1,8 @@
 package com.zhangwei.stock.task;
 
+import java.util.Iterator;
 import java.util.List;
 
-import android.util.Log;
 
 import com.zhangwei.stock.Constants;
 import com.zhangwei.stock.KLineUnit;
@@ -10,13 +10,10 @@ import com.zhangwei.stock.Stock;
 import com.zhangwei.stock.StockInfo;
 import com.zhangwei.stock.StockManager;
 import com.zhangwei.stock.BS.BuyPoint;
-import com.zhangwei.stock.BS.Point;
 import com.zhangwei.stock.BS.SellPoint;
 import com.zhangwei.stock.Strategy.BasicStrategy;
-import com.zhangwei.stock.Strategy.MyHighSellLowBuyStrategy;
 import com.zhangwei.stock.emu.EmuBuyTransaction;
 import com.zhangwei.stock.emu.EmuSellTransaction;
-import com.zhangwei.stock.emu.EmuTradeSystem;
 import com.zhangwei.util.StockHelper;
 
 public class StockParallelEmuTradeTask implements StockTask {
@@ -40,53 +37,62 @@ public class StockParallelEmuTradeTask implements StockTask {
 		//BasicStrategy bs = new MyHighSellLowBuyStrategy();
 		
 		List<KLineUnit> kl;
-		int status = 0; //0 empty  1 hold
-		BuyPoint lastBuyPoint = null;
-		SellPoint lastSellPoint = null;
-		int lastBuyDate = -1;
-		while((kl = stock.generateNDayKline(Constants.BUYPOINT_PREFIX_LEN, false, lastBuyDate))!=null){
+
+		BuyPointQueue queue = new BuyPointQueue();
+		
+		while((kl = stock.generateNDayKline(Constants.BUYPOINT_PREFIX_LEN, false, -1))!=null){
+
+			List<KLineUnit> exRightKl = StockHelper.getForwardExrightKLine(kl);
 			
-			if(status==0){
-				List<KLineUnit> exRightKl = StockHelper.getForwardExrightKLine(kl);
-				boolean canBuy = bs.checkBuy(info, exRightKl, lastSellPoint);
-				if(canBuy){
-					KLineUnit last = exRightKl.get(exRightKl.size()-1);
-					int date = last.date;
-					int price = last.close;
-					//Log.v(TAG, "BuyPoint: stock:" + info.stock_id + ", date:" + date + ", price:" + price);
+			//check buy
+			boolean canBuy = bs.checkBuy(info, exRightKl, null);
+			if(canBuy){
+				KLineUnit last = exRightKl.get(exRightKl.size()-1);
+				int date = last.date;
+				int price = last.close;
 
-					
-					boolean isUpBan = last.isUpBan(exRightKl.get(exRightKl.size()-2));
-					if(!isUpBan){
-						EmuBuyTransaction ebt = new EmuBuyTransaction();
-						lastBuyPoint = new BuyPoint(bs.getUID(), info, date, 0, price, 100, exRightKl.get(exRightKl.size()-2));
-						lastBuyDate = lastBuyPoint.date;
-						ebt.buy(info, lastBuyPoint);
-						status = 1;
-					}
-
+				boolean isUpBan = last.isUpBan(exRightKl.get(exRightKl.size()-2));
+				if(!isUpBan){
+					EmuBuyTransaction ebt = new EmuBuyTransaction();
+					BuyPoint lastBuyPoint = new BuyPoint(bs.getUID(), info, date, 0, price, 100, exRightKl.get(exRightKl.size()-2));
+					ebt.buy(info, lastBuyPoint);
+					queue.addBuyPoint(lastBuyPoint);
 				}
-				
-			}else if(status==1){
-				List<KLineUnit> exRightKl = StockHelper.getExrightKLine(kl, lastBuyDate);
-				boolean canSell = bs.checkSell(info, exRightKl, lastBuyPoint);
-				if(canSell){
-					KLineUnit last = exRightKl.get(exRightKl.size()-1);
-					int date = last.date;
-					int price = last.close;
-					//Log.v(TAG, "SellPoint: stock:" + info.stock_id + ", date:" + date + ", price:" + price);
-					boolean isDownBan = last.isDownBan(exRightKl.get(exRightKl.size()-2));
-					if(!isDownBan){
-						EmuSellTransaction est = new EmuSellTransaction();
-						lastSellPoint = new SellPoint(bs.getUID(), lastBuyPoint.info, date, 0, price, lastBuyPoint.vol, exRightKl.get(exRightKl.size()-2));
-						est.sell(info, lastBuyPoint, lastSellPoint);
-						
-						status = 0;
-					}
-					
 
-				}
 			}
+			
+			//check sell
+			if (queue.getBPList().size() > 0) {
+				Iterator<BuyPoint> it = queue.getBPList().iterator();
+				while (it.hasNext()) {
+					BuyPoint bp = it.next();
+					List<KLineUnit> kl_sell = stock.generateNDayKline(Constants.BUYPOINT_PREFIX_LEN, false, bp.date);
+					List<KLineUnit> exRightKl_sell = StockHelper.getExrightKLine(kl_sell, bp.date);
+					boolean canSell = bs.checkSell(info, exRightKl_sell, bp);
+					if(canSell){
+						KLineUnit last = exRightKl_sell.get(exRightKl_sell.size()-1);
+						int date = last.date;
+						int price = last.close;
+						//Log.v(TAG, "SellPoint: stock:" + info.stock_id + ", date:" + date + ", price:" + price);
+						boolean isDownBan = last.isDownBan(exRightKl_sell.get(exRightKl_sell.size()-2));
+						if(!isDownBan){
+							EmuSellTransaction est = new EmuSellTransaction();
+							SellPoint lastSellPoint = new SellPoint(bs.getUID(), bp.info, date, 0, price, bp.vol, exRightKl.get(exRightKl.size()-2));
+							est.sell(info, bp, lastSellPoint);
+							
+							//queue.removeBuyPoint(bp);
+							it.remove();
+						}
+					}
+					
+					
+				}
+
+				
+			}
+			
+			stock.nextPos();
+
 		}
 	}
 

@@ -400,6 +400,10 @@ public class Stock {
 			return line.generateNDayKline(NDay, lastBuyDate);
 		}
 	}
+	
+	public void nextPos(){
+		line.nextPos();
+	}
 
 
 }

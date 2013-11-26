@@ -15,14 +15,14 @@ public class MyWeakBuyStrategy extends BasicStrategy {
 	 */
 	private static final long MyWeakBuyStrategyUID = 7287298140871L;
 
-	public MyWeakBuyStrategy() {
-		super(MyWeakBuyStrategyUID);
+	public MyWeakBuyStrategy(String MarketID) {
+		super(MarketID, MyWeakBuyStrategyUID);
 		// TODO Auto-generated constructor stub
 	}
 	
-	public void init(String MarketID) {
+	public void init() {
 		// TODO Auto-generated method stub
-		super.init(MarketID);
+		super.init();
 		//addBuyBigCondition(new DetectBigChangeCondition(-7, 1, 150, false), false);
 		addBuyBigCondition(new DetectBigChangeCondition(-5, 1, -1, true), false);
 		addBuyLittleCondition(new ContinuousPercentCondition(5, -15));

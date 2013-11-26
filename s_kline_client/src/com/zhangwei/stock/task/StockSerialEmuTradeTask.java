@@ -87,6 +87,8 @@ public class StockSerialEmuTradeTask implements StockTask {
 
 				}
 			}
+			
+			stock.nextPos();
 		}
 	}
 

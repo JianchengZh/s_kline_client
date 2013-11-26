@@ -58,13 +58,11 @@ public class EmuTradeSystem implements TradeSystem{
 		records.addSell(buypoint, sellpoint);
 	}
 
-	public List<TradeUnit> getTradeInfo(String MarketID, String uid, int type, String order_key) {
+	public List<TradeUnit> getTradeInfo(String uid, int type, String order_key) {
 		// TODO Auto-generated method stub
 		BaseDao bd = BaseDao.getInstance();
 		StringBuilder sb = new StringBuilder();
 		sb.append("select * from BS_");
-		sb.append(MarketID);
-		sb.append("_");
 		sb.append(uid);
 		sb.append(" where sell_date!=0");
 		if(type>0){

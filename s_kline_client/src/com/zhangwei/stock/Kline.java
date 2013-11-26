@@ -200,12 +200,14 @@ public class Kline {
 		}else{
 			indexTo = pos + nDay;
 			indexFrom = Math.min(indexFrom, index_buy);
-			pos++;
+			//pos++;
 			return kline_list.subList(indexFrom, indexTo);
 		}
 
-		
-
+	}
+	
+	public void nextPos(){
+		pos++;
 	}
 	
 }

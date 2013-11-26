@@ -37,8 +37,10 @@ public abstract class BasicStrategy {
 	//public ArrayList<ICondition> sellLittleNoConditions; //组合条件集合
 	
 	private long serialVersionUID;
+	private String MarketID;
 
-	public BasicStrategy(long serialversionuid){
+	public BasicStrategy(String MarketID, long serialversionuid){
+		this.MarketID = MarketID;
 		this.serialVersionUID = serialversionuid;
 		buyBigYesConditions = new ArrayList<ICondition>();
 		buyLittleYesConditions = new ArrayList<ICondition>();
@@ -54,7 +56,7 @@ public abstract class BasicStrategy {
 	}
 	
 	public String getUID(){
-		return String.valueOf(serialVersionUID);
+		return MarketID + String.valueOf(serialVersionUID);
 	}
 	
 	public boolean checkBuy(StockInfo info, List<KLineUnit> kl, SellPoint lastPoint){
@@ -203,12 +205,12 @@ public abstract class BasicStrategy {
 
 	}
 
-	public void init(String MarketID) {
+	public void init() {
 		// TODO Auto-generated method stub
 
 		cleanUp();
 		BaseDao bd = BaseDao.getInstance();
-		String BStable = "BS_" + MarketID + "_" + getUID();
+		String BStable = "BS_" + getUID();
 		
 		Log.v(TAG, getClass().getName() + " - init, BStable:" + BStable);
 		try {

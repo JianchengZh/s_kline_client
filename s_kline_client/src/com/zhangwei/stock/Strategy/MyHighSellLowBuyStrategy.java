@@ -12,14 +12,14 @@ public class MyHighSellLowBuyStrategy extends BasicStrategy{
 	 */
 	private static final long MyHighSellLowBuyStrategyUID = 8287568540830L;
 
-	public MyHighSellLowBuyStrategy(){
-		super(MyHighSellLowBuyStrategyUID);
+	public MyHighSellLowBuyStrategy(String MarketID){
+		super(MarketID, MyHighSellLowBuyStrategyUID);
 	}
 	
 
-	public void init(String MarketID) {
+	public void init() {
 		// TODO Auto-generated method stub
-		super.init(MarketID);
+		super.init();
 		addBuyLittleCondition(new KUpDownUpCondition(30, 30, 20, 20, 5, 5));
 		
 		addSellBigCondition(new StopLossCondition(10), true);

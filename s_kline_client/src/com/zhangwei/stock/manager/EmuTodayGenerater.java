@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.zhangwei.mysql.BaseDao;
-import com.zhangwei.stock.BS.TradeUnit;
+import com.zhangwei.stock.Strategy.BasicStrategy;
 import com.zhangwei.stock.emu.FParallelEmuMarket;
 import com.zhangwei.util.Format;
 
@@ -14,43 +14,59 @@ public class EmuTodayGenerater implements DayGenerater{
 	int index;
 	ArrayList<Integer> todays;
 	
-	public EmuTodayGenerater(String bs_table_name){
-		index = 0;
-		todays = new ArrayList<Integer>();
+	public EmuTodayGenerater(BasicStrategy bs){
+		index = -1;
+
 		//select buy_date,avg(earn_percent) from bs_pem7287298140871 group by buy_date HAVING COUNT(buy_date) > 0
-		BaseDao bd = BaseDao.getInstance();
 		StringBuilder sb = new StringBuilder();
-		sb.append("select buy_date from bs_table_name");
+		sb.append("select buy_date from "); 
+		sb.append(bs.getBSTableName());
 		sb.append(" group by buy_date");
 		sb.append(";");
 		
-		try {
-			List<Map<String, Object>> list = bd.query(sb.toString());
-			
-			if(list!=null && list.size()>0){
-				for(Map<String, Object> item : list){
-					int buy_date = Format.parserInt(item.get("buy_date").toString(), -1);/*(Integer)item.get("start");*/
-					todays .add(buy_date);
-				}
-
+		int tryCount = 2;
+		for(int index=0; index<tryCount; index++){
+			try {
+				todays = new ArrayList<Integer>();
+				QuerySQL(sb.toString());
+				index=0;
+				break;
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				
+				FParallelEmuMarket se = new FParallelEmuMarket();
+				se.run(false);
 			}
-			
-
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
-			FParallelEmuMarket se = new FParallelEmuMarket();
-			se.run(false);
 		}
+
 	
 	}
+	
+	public void QuerySQL(String sql) throws SQLException{
+		BaseDao bd = BaseDao.getInstance();
+		List<Map<String, Object>> list = bd.query(sql);
+		
+		if(list!=null && list.size()>0){
+			for(Map<String, Object> item : list){
+				int buy_date = Format.parserInt(item.get("buy_date").toString(), -1);/*(Integer)item.get("start");*/
+				todays .add(buy_date);
+			}
+		}
+	}
+	
 
 	@Override
 	public int getToday() {
 		// TODO Auto-generated method stub
-		return todays.get(index);
+		if(index>=0 && index<todays.size()){
+			int ret =  todays.get(index);
+			index++;
+			return ret;
+		}else{
+			return -1;
+		}
+
 	}
 
 }

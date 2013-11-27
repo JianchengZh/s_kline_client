@@ -63,4 +63,18 @@ public class DateHelper {
 		// TODO Auto-generated method stub
 		return String.valueOf(date%10000);
 	}
+
+	public static int Week() {
+		// TODO Auto-generated method stub
+		Date d = new Date();
+		Calendar cal=Calendar.getInstance();
+		cal.setTime(d);
+		cal.add(Calendar.DATE, -1);
+		Date date = cal.getTime();
+
+		SimpleDateFormat df=new SimpleDateFormat("u");
+		String d_str = df.format(date);
+		
+		return Integer.valueOf(d_str);
+	}
 }

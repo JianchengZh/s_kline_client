@@ -9,6 +9,7 @@ import com.zhangwei.stock.task.StockTask;
 
 
 public class ParallelManager  {
+	private String flag[] = { "true" };
 	private int workNum;
 	private LinkedBlockingQueue<StockTask> fifo;
 	private ParallelThread[] threads;
@@ -39,6 +40,21 @@ public class ParallelManager  {
 			thread = new ParallelThread();
 			thread.start();
 		}
+		
+	}
+	
+	public void join(){
+		while(workNum>0){
+			synchronized (flag) {
+				try {
+					flag.wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+		}
 	}
 	
 	public void submitTask(StockTask t){
@@ -63,8 +79,9 @@ public class ParallelManager  {
 				}
 				
 			}
-			synchronized (ParallelManager.this) {
+			synchronized (flag) {
 				workNum--;
+				flag.notify();
 				if(workNum<1 && pl!=null){
 					pl.onComplete();
 				}

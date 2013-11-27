@@ -38,6 +38,7 @@ public abstract class BasicStrategy {
 	
 	private long serialVersionUID;
 	private String MarketID;
+	private String BStable;
 
 	public BasicStrategy(String MarketID, long serialversionuid){
 		this.MarketID = MarketID;
@@ -53,6 +54,10 @@ public abstract class BasicStrategy {
 		
 		sellBigNoConditions = new ArrayList<ICondition>();
 		//sellLittleNoConditions = new ArrayList<ICondition>();
+	}
+	
+	public String getBSTableName(){
+		return BStable;
 	}
 	
 	public String getUID(){
@@ -210,7 +215,7 @@ public abstract class BasicStrategy {
 
 		cleanUp();
 		BaseDao bd = BaseDao.getInstance();
-		String BStable = "BS_" + getUID();
+		BStable = "BS_" + getUID();
 		
 		Log.v(TAG, getClass().getName() + " - init, BStable:" + BStable);
 		try {

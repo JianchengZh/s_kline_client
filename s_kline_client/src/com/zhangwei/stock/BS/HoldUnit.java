@@ -22,14 +22,43 @@ public class HoldUnit {
 	private int sell_vol;
 	private int sell_yongjin; //买入佣金,单位 分
 	
-	public HoldUnit(BuyPoint bp, int vol){
-		this.stock_id = bp.info.stock_id;
-		this.market_type = bp.info.market_type;
-		this.buy_date = bp.date;
-		this.buy_price = bp.price;
-		this.buy_vol = vol;
+	/**
+	 * 1. 实时买入时产生
+	 * */
+	public HoldUnit(String stock_id, int market_type, int buy_date, int buy_price, int buy_vol){
+		this.stock_id = stock_id;
+		this.market_type = market_type;
+		this.buy_date = buy_date;
+		this.buy_price = buy_price;
+		this.buy_vol = buy_vol;
 		//this.buy_yongjin = (150 * buy_price * buy_vol + 50000)/ 100000;
 		this.buy_yongjin = StockHelper.calcCircaCost(buy_price * buy_vol, 15, 10000);
+	
+		sold = false;
+	}
+	
+	/**
+	 * 2. 从系统mysql中获取
+	 * */
+	public HoldUnit(String stock_id, int market_type, int buy_date, int buy_price, int buy_vol, boolean sold, int sell_date, int sell_price, int sell_vol){
+		this.stock_id = stock_id;
+		this.market_type = market_type;
+		this.buy_date = buy_date;
+		this.buy_price = buy_price;
+		this.buy_vol = buy_vol;
+		//this.buy_yongjin = (150 * buy_price * buy_vol + 50000)/ 100000;
+		this.buy_yongjin = StockHelper.calcCircaCost(buy_price * buy_vol, 15, 10000);
+	
+		this.sold = sold;
+		if(sold){
+			this.sell_date = sell_date;
+			this.sell_price = sell_price;
+			this.sell_vol = sell_vol;
+			int sell_value = sell_price*sell_vol;
+			sell_yongjin = StockHelper.calcCircaCost(sell_value, 1, 1000) + StockHelper.calcCircaCost(sell_value, 15, 10000);
+		}
+
+	
 	}
 	
 	/**
@@ -99,6 +128,16 @@ public class HoldUnit {
 		}else{
 			return -1;
 		}
+	}
+
+	public boolean isSold() {
+		// TODO Auto-generated method stub
+		return sold;
+	}
+
+	public int buyDate() {
+		// TODO Auto-generated method stub
+		return buy_date;
 	}
 
 }

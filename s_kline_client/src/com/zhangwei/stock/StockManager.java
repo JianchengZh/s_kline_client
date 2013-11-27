@@ -26,7 +26,7 @@ public class StockManager {
 	//
 	private StockManager(){		
 		cache = new ConcurrentLinkedHashMap.Builder<String, Stock>()
-				.maximumWeightedCapacity(4* 1024 * 1024 * 1024) // 4GB
+				.maximumWeightedCapacity(1* 1024 * 1024 * 1024) // 4GB
 			    .weigher(memoryUsageWeigher)
 			    .listener(listener)
 			    .build();
@@ -150,7 +150,7 @@ public class StockManager {
 	
 	public static void main(String[] args){
 		StockManager sm = StockManager.getInstance();
-		ArrayList<StockInfo> stocks = sm.FetchStockInfo(true, null, -1);
+		ArrayList<StockInfo> stocks = sm.FetchStockInfo(false, null, -1);
 		for(StockInfo item : stocks){
 			//sm.getStock(item, false);
 			//sm.createTable(item);
@@ -158,7 +158,10 @@ public class StockManager {
 		}
 		
 		ParallelManager.getInstance().startTask(null, 8);
-
+		
+		ParallelManager.getInstance().join();
+		
+		Log.v(TAG, "join done 923819u983");
 	}
 	
 	public void createTable(StockInfo info){

@@ -20,8 +20,8 @@ import com.zhangwei.stock.task.StockSerialEmuTradeTask;
 import com.zhangwei.stock.task.StockUpdateTask;
 import com.zhangwei.stock.tradesystem.EmuTradeSystem;
 
-public class FParallelEmuMarket implements ParallelListener {
-	private static final String TAG = "ParallelEmuMarket";
+public class PreEmuProcesser implements ParallelListener {
+	private static final String TAG = "PreEmuProcesser";
 	public  BasicStrategy bs;
 	public static final String UID = "PEM";
 	
@@ -54,7 +54,7 @@ public class FParallelEmuMarket implements ParallelListener {
 	
 	public static void main(String[] args){
 
-		FParallelEmuMarket se = new FParallelEmuMarket();
+		PreEmuProcesser se = new PreEmuProcesser();
 		se.run(false);
 	}
 

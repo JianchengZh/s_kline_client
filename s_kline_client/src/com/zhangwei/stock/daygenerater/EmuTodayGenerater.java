@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.zhangwei.mysql.BaseDao;
-import com.zhangwei.stock.emu.FParallelEmuMarket;
+import com.zhangwei.stock.emu.PreEmuProcesser;
 import com.zhangwei.stock.strategy.BasicStrategy;
 import com.zhangwei.util.Format;
 
@@ -35,7 +35,7 @@ public class EmuTodayGenerater implements DayGenerater{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				
-				FParallelEmuMarket se = new FParallelEmuMarket();
+				PreEmuProcesser se = new PreEmuProcesser();
 				se.run(false);
 			}
 		}

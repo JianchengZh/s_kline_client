@@ -1,10 +1,9 @@
-package com.zhangwei.stock.real;
+package com.zhangwei.stock.tradesystem;
 
 import com.zhangwei.stock.bs.BuyPoint;
 import com.zhangwei.stock.bs.IBuy;
 import com.zhangwei.stock.bs.ISell;
 import com.zhangwei.stock.bs.SellPoint;
-import com.zhangwei.stock.tradesystem.ITradeSystem;
 
 public class RealTradeSystem implements ITradeSystem {
 

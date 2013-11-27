@@ -9,13 +9,16 @@ import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.StockManager;
 import com.zhangwei.stock.Stock;
 import com.zhangwei.stock.StockInfo;
-import com.zhangwei.stock.BS.TradeUnit;
-import com.zhangwei.stock.Strategy.BasicStrategy;
-import com.zhangwei.stock.Strategy.MyHighSellLowBuyStrategy;
-import com.zhangwei.stock.Strategy.MyWeakBuyStrategy;
+import com.zhangwei.stock.bs.TradeUnit;
+import com.zhangwei.stock.parallel.ParallelListener;
+import com.zhangwei.stock.parallel.ParallelManager;
+import com.zhangwei.stock.strategy.BasicStrategy;
+import com.zhangwei.stock.strategy.MyHighSellLowBuyStrategy;
+import com.zhangwei.stock.strategy.MyWeakBuyStrategy;
 import com.zhangwei.stock.task.StockParallelEmuTradeTask;
 import com.zhangwei.stock.task.StockSerialEmuTradeTask;
 import com.zhangwei.stock.task.StockUpdateTask;
+import com.zhangwei.stock.tradesystem.EmuTradeSystem;
 
 public class TParallelEmuMarket implements ParallelListener {
 	private static final String TAG = "ParallelEmuMarket";

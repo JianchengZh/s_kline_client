@@ -1,4 +1,4 @@
-package com.zhangwei.stock.Strategy;
+package com.zhangwei.stock.strategy;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -9,10 +9,10 @@ import android.util.Log;
 import com.zhangwei.mysql.BaseDao;
 import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.StockInfo;
-import com.zhangwei.stock.BS.BuyPoint;
-import com.zhangwei.stock.BS.Point;
-import com.zhangwei.stock.BS.SellPoint;
 import com.zhangwei.stock.basic.StockException;
+import com.zhangwei.stock.bs.BuyPoint;
+import com.zhangwei.stock.bs.Point;
+import com.zhangwei.stock.bs.SellPoint;
 import com.zhangwei.stock.condition.ICondition;
 import com.zhangwei.stock.kline.KLineTypeResult;
 import com.zhangwei.util.StockHelper;

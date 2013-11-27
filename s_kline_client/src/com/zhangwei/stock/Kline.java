@@ -9,7 +9,7 @@ import android.util.Log;
 
 import com.zhangwei.mysql.BaseDao;
 import com.zhangwei.mysql.Converter;
-import com.zhangwei.stock.BS.BuyPoint;
+import com.zhangwei.stock.bs.BuyPoint;
 import com.zhangwei.util.DateHelper;
 import com.zhangwei.util.StockHelper;
 

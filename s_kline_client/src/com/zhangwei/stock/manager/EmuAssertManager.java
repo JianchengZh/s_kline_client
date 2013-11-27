@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.zhangwei.stock.BS.HoldUnit;
+import com.zhangwei.stock.bs.HoldUnit;
 import com.zhangwei.util.StockHelper;
 
 public class EmuAssertManager implements IAssertManager{

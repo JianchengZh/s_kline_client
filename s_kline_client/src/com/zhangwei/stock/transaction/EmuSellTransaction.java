@@ -1,9 +1,10 @@
-package com.zhangwei.stock.emu;
+package com.zhangwei.stock.transaction;
 
 import com.zhangwei.stock.StockInfo;
-import com.zhangwei.stock.BS.BuyPoint;
-import com.zhangwei.stock.BS.ISell;
-import com.zhangwei.stock.BS.SellPoint;
+import com.zhangwei.stock.bs.BuyPoint;
+import com.zhangwei.stock.bs.ISell;
+import com.zhangwei.stock.bs.SellPoint;
+import com.zhangwei.stock.tradesystem.EmuTradeSystem;
 
 public class EmuSellTransaction implements ISell {
 	private BuyPoint buypoint;

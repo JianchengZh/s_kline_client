@@ -11,7 +11,7 @@ import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
 
 import com.zhangwei.stock.KLineUnit;
-import com.zhangwei.stock.BS.TradeUnit;
+import com.zhangwei.stock.bs.TradeUnit;
 
 public class KLineComponent extends JComponent /*implements Scrollable*/{
     /**

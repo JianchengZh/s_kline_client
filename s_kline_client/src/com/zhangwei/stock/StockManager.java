@@ -14,7 +14,7 @@ import com.googlecode.concurrentlinkedhashmap.EntryWeigher;
 import com.googlecode.concurrentlinkedhashmap.EvictionListener;
 /*import com.zhangwei.cache.MemoryMeter;*/
 import com.zhangwei.mysql.BaseDao;
-import com.zhangwei.stock.emu.ParallelManager;
+import com.zhangwei.stock.parallel.ParallelManager;
 import com.zhangwei.stock.task.StockUpdateTask;
 import com.zhangwei.util.Format;
 

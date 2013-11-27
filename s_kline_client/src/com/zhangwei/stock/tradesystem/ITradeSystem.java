@@ -1,7 +1,12 @@
-package com.zhangwei.stock.BS;
+package com.zhangwei.stock.tradesystem;
+
+import com.zhangwei.stock.bs.BuyPoint;
+import com.zhangwei.stock.bs.IBuy;
+import com.zhangwei.stock.bs.ISell;
+import com.zhangwei.stock.bs.SellPoint;
 
 
-public interface TradeMethod {
+public interface ITradeSystem {
 	public void submitBuyTransaction(IBuy buy, BuyPoint buypoint);
 
 	public void completeBuyTransaction(BuyPoint buypoint);

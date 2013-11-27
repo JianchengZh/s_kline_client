@@ -1,4 +1,4 @@
-package com.zhangwei.stock.emu;
+package com.zhangwei.stock.tradesystem;
 
 import java.math.BigInteger;
 import java.sql.SQLException;
@@ -11,16 +11,16 @@ import android.util.Log;
 import com.zhangwei.mysql.BaseDao;
 import com.zhangwei.stock.Constants;
 import com.zhangwei.stock.StockInfo;
-import com.zhangwei.stock.BS.BuyPoint;
-import com.zhangwei.stock.BS.IBuy;
-import com.zhangwei.stock.BS.ISell;
-import com.zhangwei.stock.BS.SellPoint;
-import com.zhangwei.stock.BS.TradeMethod;
-import com.zhangwei.stock.BS.TradeUnit;
+import com.zhangwei.stock.bs.BuyPoint;
+import com.zhangwei.stock.bs.IBuy;
+import com.zhangwei.stock.bs.ISell;
+import com.zhangwei.stock.bs.SellPoint;
+import com.zhangwei.stock.bs.TradeUnit;
 import com.zhangwei.stock.gui.GuiManager;
+import com.zhangwei.stock.record.EmuTradeRecorder;
 import com.zhangwei.util.Format;
 
-public class EmuTradeSystem implements TradeMethod{
+public class EmuTradeSystem implements ITradeSystem{
 	private static final String TAG = "EmuTradeSystem";
 	EmuTradeRecorder records;
 	private static EmuTradeSystem ins;

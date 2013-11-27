@@ -2,7 +2,7 @@ package com.zhangwei.stock.task;
 
 import java.util.ArrayList;
 
-import com.zhangwei.stock.BS.BuyPoint;
+import com.zhangwei.stock.bs.BuyPoint;
 
 public class BuyPointQueue {
 	ArrayList<BuyPoint> pendingBuyList;

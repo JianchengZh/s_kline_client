@@ -1,4 +1,4 @@
-package com.zhangwei.stock.Strategy;
+package com.zhangwei.stock.strategy;
 
 import com.zhangwei.stock.condition.ContinuousPercentCondition;
 import com.zhangwei.stock.condition.DetectBigChangeCondition;

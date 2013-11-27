@@ -1,12 +1,12 @@
-package com.zhangwei.stock.emu;
+package com.zhangwei.stock.record;
 
 import java.sql.SQLException;
 
 import android.util.Log;
 
 import com.zhangwei.mysql.BaseDao;
-import com.zhangwei.stock.BS.BuyPoint;
-import com.zhangwei.stock.BS.SellPoint;
+import com.zhangwei.stock.bs.BuyPoint;
+import com.zhangwei.stock.bs.SellPoint;
 
 public class EmuTradeRecorder {
 

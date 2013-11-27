@@ -1,4 +1,4 @@
-package com.zhangwei.stock.Strategy;
+package com.zhangwei.stock.strategy;
 
 import com.zhangwei.stock.condition.KUpDownUpCondition;
 import com.zhangwei.stock.condition.LastNdayCondition;

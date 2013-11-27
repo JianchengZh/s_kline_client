@@ -9,14 +9,14 @@ import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.Stock;
 import com.zhangwei.stock.StockInfo;
 import com.zhangwei.stock.StockManager;
-import com.zhangwei.stock.BS.BuyPoint;
-import com.zhangwei.stock.BS.Point;
-import com.zhangwei.stock.BS.SellPoint;
-import com.zhangwei.stock.Strategy.BasicStrategy;
-import com.zhangwei.stock.Strategy.MyHighSellLowBuyStrategy;
-import com.zhangwei.stock.emu.EmuBuyTransaction;
-import com.zhangwei.stock.emu.EmuSellTransaction;
-import com.zhangwei.stock.emu.EmuTradeSystem;
+import com.zhangwei.stock.bs.BuyPoint;
+import com.zhangwei.stock.bs.Point;
+import com.zhangwei.stock.bs.SellPoint;
+import com.zhangwei.stock.strategy.BasicStrategy;
+import com.zhangwei.stock.strategy.MyHighSellLowBuyStrategy;
+import com.zhangwei.stock.tradesystem.EmuTradeSystem;
+import com.zhangwei.stock.transaction.EmuBuyTransaction;
+import com.zhangwei.stock.transaction.EmuSellTransaction;
 import com.zhangwei.util.StockHelper;
 
 public class StockSerialEmuTradeTask implements StockTask {

@@ -1,4 +1,4 @@
-package com.zhangwei.stock.emu;
+package com.zhangwei.stock.parallel;
 
 import java.util.concurrent.LinkedBlockingQueue;
 

@@ -12,8 +12,8 @@ import com.android.dazhihui.http.StructResponse;
 import com.zhangwei.client.DZHClient;
 import com.zhangwei.mysql.BaseDao;
 import com.zhangwei.mysql.Converter;
-import com.zhangwei.stock.BS.BuyPoint;
-import com.zhangwei.stock.BS.TradeUnit;
+import com.zhangwei.stock.bs.BuyPoint;
+import com.zhangwei.stock.bs.TradeUnit;
 import com.zhangwei.util.DateHelper;
 import com.zhangwei.util.StockHelper;
 

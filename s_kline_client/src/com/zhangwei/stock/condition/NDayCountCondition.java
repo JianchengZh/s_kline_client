@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.StockInfo;
-import com.zhangwei.stock.BS.Point;
 import com.zhangwei.stock.basic.StockException;
+import com.zhangwei.stock.bs.Point;
 import com.zhangwei.stock.kline.KLineTypeResult;
 import com.zhangwei.util.StockHelper;
 

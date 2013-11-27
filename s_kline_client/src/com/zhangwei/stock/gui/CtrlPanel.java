@@ -14,7 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.zhangwei.stock.BS.TradeUnit;
+import com.zhangwei.stock.bs.TradeUnit;
 
 public class CtrlPanel extends JPanel implements ActionListener, TradeInfoListener {
 	JLabel jl;

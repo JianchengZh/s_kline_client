@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.zhangwei.stock.BS.HoldUnit;
+import com.zhangwei.stock.bs.HoldUnit;
 
 
 public interface IAssertManager {

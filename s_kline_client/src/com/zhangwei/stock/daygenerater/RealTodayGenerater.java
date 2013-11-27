@@ -1,4 +1,4 @@
-package com.zhangwei.stock.manager;
+package com.zhangwei.stock.daygenerater;
 
 import com.zhangwei.util.DateHelper;
 

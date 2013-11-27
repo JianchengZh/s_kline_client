@@ -1,4 +1,4 @@
-package com.zhangwei.stock.manager;
+package com.zhangwei.stock.daygenerater;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.zhangwei.mysql.BaseDao;
-import com.zhangwei.stock.Strategy.BasicStrategy;
 import com.zhangwei.stock.emu.FParallelEmuMarket;
+import com.zhangwei.stock.strategy.BasicStrategy;
 import com.zhangwei.util.Format;
 
 public class EmuTodayGenerater implements DayGenerater{

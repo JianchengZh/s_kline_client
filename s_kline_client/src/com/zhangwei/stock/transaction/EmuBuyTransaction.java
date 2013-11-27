@@ -1,8 +1,9 @@
-package com.zhangwei.stock.emu;
+package com.zhangwei.stock.transaction;
 
 import com.zhangwei.stock.StockInfo;
-import com.zhangwei.stock.BS.BuyPoint;
-import com.zhangwei.stock.BS.IBuy;
+import com.zhangwei.stock.bs.BuyPoint;
+import com.zhangwei.stock.bs.IBuy;
+import com.zhangwei.stock.tradesystem.EmuTradeSystem;
 
 public class EmuBuyTransaction implements IBuy {
 	private BuyPoint buypoint;

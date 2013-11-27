@@ -18,7 +18,7 @@ import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.Stock;
 import com.zhangwei.stock.StockInfo;
 import com.zhangwei.stock.StockManager;
-import com.zhangwei.stock.BS.TradeUnit;
+import com.zhangwei.stock.bs.TradeUnit;
 
 public class KLinePanel extends JPanel implements KLineBtnListener{
     private DateRule columnView;

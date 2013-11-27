@@ -1,4 +1,4 @@
-package com.zhangwei.stock.BS;
+package com.zhangwei.stock.bs;
 
 import com.zhangwei.stock.StockInfo;
 

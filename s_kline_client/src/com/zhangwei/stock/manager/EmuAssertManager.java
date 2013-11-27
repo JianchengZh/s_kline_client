@@ -8,7 +8,7 @@ import java.util.Set;
 import com.zhangwei.stock.BS.HoldUnit;
 import com.zhangwei.util.StockHelper;
 
-public class EmuAssertManager implements AssertManagerMethods{
+public class EmuAssertManager implements IAssertManager{
 	private int money_left;
 	private int total_asset_init;
 	private HashMap<String, HoldUnit> holds;

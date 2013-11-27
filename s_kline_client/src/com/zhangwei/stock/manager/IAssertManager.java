@@ -7,7 +7,7 @@ import java.util.Set;
 import com.zhangwei.stock.BS.HoldUnit;
 
 
-public interface AssertManagerMethods {
+public interface IAssertManager {
 	public boolean canBuy(String stock_id, int market_type, int buy_price, int buy_vol);
 	
 	public void buyIn(String stock_id, int market_type, int date, int buy_price, int buy_vol);

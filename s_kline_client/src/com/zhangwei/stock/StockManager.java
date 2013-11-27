@@ -26,7 +26,7 @@ public class StockManager {
 	//
 	private StockManager(){		
 		cache = new ConcurrentLinkedHashMap.Builder<String, Stock>()
-				.maximumWeightedCapacity(100 * 1024 * 1024) // 100 MB, internal storage, not memory
+				.maximumWeightedCapacity(4* 1024 * 1024 * 1024) // 4GB
 			    .weigher(memoryUsageWeigher)
 			    .listener(listener)
 			    .build();

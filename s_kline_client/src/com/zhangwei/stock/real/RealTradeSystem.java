@@ -4,9 +4,9 @@ import com.zhangwei.stock.BS.BuyPoint;
 import com.zhangwei.stock.BS.IBuy;
 import com.zhangwei.stock.BS.ISell;
 import com.zhangwei.stock.BS.SellPoint;
-import com.zhangwei.stock.BS.TradeSystem;
+import com.zhangwei.stock.BS.TradeMethod;
 
-public class RealTradeSystem implements TradeSystem {
+public class RealTradeSystem implements TradeMethod {
 
 	@Override
 	public void submitBuyTransaction(IBuy buy, BuyPoint buypoint) {

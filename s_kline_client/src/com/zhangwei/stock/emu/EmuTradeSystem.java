@@ -15,12 +15,12 @@ import com.zhangwei.stock.BS.BuyPoint;
 import com.zhangwei.stock.BS.IBuy;
 import com.zhangwei.stock.BS.ISell;
 import com.zhangwei.stock.BS.SellPoint;
-import com.zhangwei.stock.BS.TradeSystem;
+import com.zhangwei.stock.BS.TradeMethod;
 import com.zhangwei.stock.BS.TradeUnit;
 import com.zhangwei.stock.gui.GuiManager;
 import com.zhangwei.util.Format;
 
-public class EmuTradeSystem implements TradeSystem{
+public class EmuTradeSystem implements TradeMethod{
 	private static final String TAG = "EmuTradeSystem";
 	EmuTradeRecorder records;
 	private static EmuTradeSystem ins;
@@ -109,12 +109,7 @@ public class EmuTradeSystem implements TradeSystem{
 		
 		return rlt;
 	}
-	
-	public void EmuReport(List<TradeUnit> rlt){
 		
-	}
-	
-	
 
 	public void Report(List<TradeUnit> rlt) {
 		// TODO Auto-generated method stub

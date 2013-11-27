@@ -1,7 +1,7 @@
 package com.zhangwei.stock.BS;
 
 
-public interface TradeSystem {
+public interface TradeMethod {
 	public void submitBuyTransaction(IBuy buy, BuyPoint buypoint);
 
 	public void completeBuyTransaction(BuyPoint buypoint);

@@ -150,16 +150,17 @@ public class StockManager {
 	
 	public static void main(String[] args){
 		StockManager sm = StockManager.getInstance();
+		ParallelManager pm = new ParallelManager();
 		ArrayList<StockInfo> stocks = sm.FetchStockInfo(false, null, -1);
 		for(StockInfo item : stocks){
 			//sm.getStock(item, false);
 			//sm.createTable(item);
-			ParallelManager.getInstance().submitTask(new StockUpdateTask(item));
+			pm.submitTask(new StockUpdateTask(item));
 		}
 		
-		ParallelManager.getInstance().startTask(null, 8);
+		pm.startTask(null, 8);
 		
-		ParallelManager.getInstance().join();
+		pm.join();
 		
 		Log.v(TAG, "join done 923819u983");
 	}

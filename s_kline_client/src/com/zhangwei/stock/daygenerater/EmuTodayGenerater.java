@@ -13,10 +13,15 @@ import com.zhangwei.util.Format;
 public class EmuTodayGenerater implements DayGenerater{
 	int index;
 	ArrayList<Integer> todays;
+	private String UID;
+	boolean status;
 	
-	public EmuTodayGenerater(BasicStrategy bs){
+	public EmuTodayGenerater(String UID, BasicStrategy bs){
 		index = -1;
 
+		this.UID = UID;
+		status = false;
+		
 		//select buy_date,avg(earn_percent) from bs_pem7287298140871 group by buy_date HAVING COUNT(buy_date) > 0
 		StringBuilder sb = new StringBuilder();
 		sb.append("select buy_date from "); 
@@ -30,12 +35,13 @@ public class EmuTodayGenerater implements DayGenerater{
 				todays = new ArrayList<Integer>();
 				QuerySQL(sb.toString());
 				index=0;
+				status = true;
 				break;
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				
-				PreEmuProcesser se = new PreEmuProcesser();
+				bs.init();
+				PreEmuProcesser se = new PreEmuProcesser(UID);
 				se.run(false);
 			}
 		}
@@ -55,6 +61,9 @@ public class EmuTodayGenerater implements DayGenerater{
 		}
 	}
 	
+	public boolean checkOK(){
+		return status;
+	}
 
 	@Override
 	public int getToday() {

@@ -23,10 +23,15 @@ import com.zhangwei.stock.tradesystem.EmuTradeSystem;
 public class PreEmuProcesser implements ParallelListener {
 	private static final String TAG = "PreEmuProcesser";
 	public  BasicStrategy bs;
-	public static final String UID = "PEM";
+	private String UID;
+	
 	
 	public final static String order_key = "buy_date"; //"earn_percent desc", null
 
+	public PreEmuProcesser(String UID){
+		this.UID = UID;
+	}
+	
 	public void run(boolean flag){
 		
 		//bs = new MyHighSellLowBuyStrategy();
@@ -41,7 +46,7 @@ public class PreEmuProcesser implements ParallelListener {
 			
 			StockManager sm = StockManager.getInstance();
 			ArrayList<StockInfo> stocks = sm.FetchStockInfo(false, null, -1);
-			ParallelManager pm = ParallelManager.getInstance();
+			ParallelManager pm = new ParallelManager();//ParallelManager.getInstance();
 			for(StockInfo item : stocks){
 				pm.submitTask(new StockParallelEmuTradeTask(item, bs));
 			}
@@ -54,7 +59,7 @@ public class PreEmuProcesser implements ParallelListener {
 	
 	public static void main(String[] args){
 
-		PreEmuProcesser se = new PreEmuProcesser();
+		PreEmuProcesser se = new PreEmuProcesser(ParallelEmuMarket.UID);
 		se.run(false);
 	}
 

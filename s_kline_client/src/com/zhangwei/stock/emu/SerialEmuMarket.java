@@ -42,7 +42,7 @@ public class SerialEmuMarket implements ParallelListener {
 			
 			StockManager sm = StockManager.getInstance();
 			ArrayList<StockInfo> stocks = sm.FetchStockInfo(false, null, -1);
-			ParallelManager pm = ParallelManager.getInstance();
+			ParallelManager pm = new ParallelManager();//ParallelManager.getInstance();
 			for(StockInfo item : stocks){
 				pm.submitTask(new StockSerialEmuTradeTask(item, se.bs));
 			}

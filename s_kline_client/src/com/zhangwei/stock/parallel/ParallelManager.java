@@ -14,18 +14,18 @@ public class ParallelManager  {
 	private LinkedBlockingQueue<StockTask> fifo;
 	private ParallelThread[] threads;
 	private ParallelListener pl;
-	private static ParallelManager ins;
-	private ParallelManager(){
+	//private static ParallelManager ins;
+	public ParallelManager(){
 		fifo = new LinkedBlockingQueue<StockTask>();
 
 	}
 	
-	public static ParallelManager getInstance(){
+/*	public static ParallelManager getInstance(){
 		if(ins==null){
 			ins = new ParallelManager();
 		}
 		return ins;
-	}
+	}*/
 	
 	
 	

@@ -401,6 +401,19 @@ public class Stock {
 		}
 	}
 	
+	/**
+	 * @param Nday 指定返回的list有几天
+	 * @param now (截至到指定日期) 
+	 * */
+	public List<KLineUnit> generateNDayKlineToNow(int NDay, int now) {
+		// TODO Auto-generated method stub
+		if(NDay<5){
+			NDay = 60;
+		}
+		
+		return line.generateNDayKlineToNow(NDay, now);
+	}
+	
 	public void nextPos(){
 		line.nextPos();
 	}

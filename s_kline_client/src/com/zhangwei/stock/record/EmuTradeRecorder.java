@@ -23,8 +23,8 @@ public class EmuTradeRecorder {
 			String bs_table = "BS_" + buypoint.BSID;
 			String sql_replace_bs = "REPLACE INTO " + bs_table 
 					+ "(stock_id, market_type, buy_date, sell_date, buy_price, sell_price, vol) values(" 
-					+ "'" + buypoint.info.stock_id + "'," 
-					+ buypoint.info.market_type + ","
+					+ "'" + buypoint.stock_id + "'," 
+					+ buypoint.market_type + ","
 					+ buypoint.date + "," 
 					+ "0," 
 					+ buypoint.price + ","
@@ -50,9 +50,9 @@ public class EmuTradeRecorder {
 			sql_replace_bs.append("REPLACE INTO ");
 			sql_replace_bs.append(bs_table);
 			sql_replace_bs.append("(stock_id, market_type, buy_date, sell_date, buy_price, sell_price, vol, earn_percent) values('");  
-			sql_replace_bs.append(buypoint.info.stock_id);
+			sql_replace_bs.append(buypoint.stock_id);
 			sql_replace_bs.append( "'," );
-			sql_replace_bs.append(buypoint.info.market_type); 
+			sql_replace_bs.append(buypoint.market_type); 
 			sql_replace_bs.append(",");
 			sql_replace_bs.append(buypoint.date);
 			sql_replace_bs.append(","); 

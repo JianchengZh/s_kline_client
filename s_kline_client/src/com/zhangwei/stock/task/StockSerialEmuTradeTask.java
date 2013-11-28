@@ -59,7 +59,7 @@ public class StockSerialEmuTradeTask implements StockTask {
 					boolean isUpBan = last.isUpBan(exRightKl.get(exRightKl.size()-2));
 					if(!isUpBan){
 						EmuBuyTransaction ebt = new EmuBuyTransaction();
-						lastBuyPoint = new BuyPoint(bs.getUID(), info, date, 0, price, 100, exRightKl.get(exRightKl.size()-2));
+						lastBuyPoint = new BuyPoint(bs.getUID(), info.stock_id, info.market_type, date, 0, price, 100, exRightKl.get(exRightKl.size()-2));
 						lastBuyDate = lastBuyPoint.date;
 						ebt.buy(info, lastBuyPoint);
 						status = 1;
@@ -78,7 +78,7 @@ public class StockSerialEmuTradeTask implements StockTask {
 					boolean isDownBan = last.isDownBan(exRightKl.get(exRightKl.size()-2));
 					if(!isDownBan){
 						EmuSellTransaction est = new EmuSellTransaction();
-						lastSellPoint = new SellPoint(bs.getUID(), lastBuyPoint.info, date, 0, price, lastBuyPoint.vol, exRightKl.get(exRightKl.size()-2));
+						lastSellPoint = new SellPoint(bs.getUID(), lastBuyPoint.stock_id, lastBuyPoint.market_type, date, 0, price, lastBuyPoint.vol, exRightKl.get(exRightKl.size()-2));
 						est.sell(info, lastBuyPoint, lastSellPoint);
 						
 						status = 0;

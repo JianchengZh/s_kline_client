@@ -209,5 +209,41 @@ public class Kline {
 	public void nextPos(){
 		pos++;
 	}
+
+	/**
+	 * 从now（指定日期开始，往前nDay记录， 不改变pos值
+	 * <br>若now非法或没有对应元素，返回null
+	 * <br>若不足nDay元素，有多少返回多少，
+	 * */
+	public List<KLineUnit> generateNDayKlineToNow(int nDay, int now) {
+		// TODO Auto-generated method stub
+		if(kline_list==null){
+			return null;
+		}
+		
+		if(nDay<5){
+			this.nDay = 60;
+		}else{
+			this.nDay = nDay;
+		}
+		
+		int index_buy = -1;
+
+		if(DateHelper.checkVaildDate(now)){
+			KLineUnit lastBP = StockHelper.binSearch(kline_list, now, 0);
+			index_buy = kline_list.indexOf(lastBP);
+			if(index_buy>0 && index_buy<kline_list.size()){
+				int indexTo = index_buy;
+				int indexFrom = Math.max(0, index_buy-nDay);
+
+				return kline_list.subList(indexFrom, indexTo);
+			}
+			
+
+		}
+		
+		return null;
+
+	}
 	
 }

@@ -54,7 +54,7 @@ public class StockParallelEmuTradeTask implements StockTask {
 				boolean isUpBan = last.isUpBan(exRightKl.get(exRightKl.size()-2));
 				if(!isUpBan){
 					EmuBuyTransaction ebt = new EmuBuyTransaction();
-					BuyPoint lastBuyPoint = new BuyPoint(bs.getUID(), info, date, 0, price, 100, exRightKl.get(exRightKl.size()-2));
+					BuyPoint lastBuyPoint = new BuyPoint(bs.getUID(), info.stock_id, info.market_type, date, 0, price, 100, exRightKl.get(exRightKl.size()-2));
 					ebt.buy(info, lastBuyPoint);
 					queue.addBuyPoint(lastBuyPoint);
 				}
@@ -77,7 +77,7 @@ public class StockParallelEmuTradeTask implements StockTask {
 						boolean isDownBan = last.isDownBan(exRightKl_sell.get(exRightKl_sell.size()-2));
 						if(!isDownBan){
 							EmuSellTransaction est = new EmuSellTransaction();
-							SellPoint lastSellPoint = new SellPoint(bs.getUID(), bp.info, date, 0, price, bp.vol, exRightKl.get(exRightKl.size()-2));
+							SellPoint lastSellPoint = new SellPoint(bs.getUID(), bp.stock_id, bp.market_type, date, 0, price, bp.vol, exRightKl.get(exRightKl.size()-2));
 							est.sell(info, bp, lastSellPoint);
 							
 							//queue.removeBuyPoint(bp);

@@ -1,7 +1,9 @@
 package com.zhangwei.stock.emu;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import android.util.Log;
 
@@ -10,6 +12,7 @@ import com.zhangwei.stock.StockManager;
 import com.zhangwei.stock.Stock;
 import com.zhangwei.stock.StockInfo;
 import com.zhangwei.stock.bs.BuyPoint;
+import com.zhangwei.stock.bs.HoldUnit;
 import com.zhangwei.stock.bs.SellPoint;
 import com.zhangwei.stock.bs.TradeUnit;
 import com.zhangwei.stock.daygenerater.DayGenerater;
@@ -23,6 +26,7 @@ import com.zhangwei.stock.strategy.MyHighSellLowBuyStrategy;
 import com.zhangwei.stock.strategy.MyWeakBuyStrategy;
 import com.zhangwei.stock.task.BuyCheckTask;
 import com.zhangwei.stock.task.ITaskSellResultCheck;
+import com.zhangwei.stock.task.SellCheckTask;
 import com.zhangwei.stock.task.StockParallelEmuTradeTask;
 import com.zhangwei.stock.task.StockSerialEmuTradeTask;
 import com.zhangwei.stock.task.StockUpdateTask;
@@ -41,6 +45,8 @@ public class ParallelEmuMarket implements ITaskBuyResultCheck, ITaskSellResultCh
 	private EmuTodayGenerater dayGen;
 	private EmuAssertManager assertManager;
 	private EmuTradeSystem tradeSystem;
+
+	private HashMap<String, HoldUnit> holds;
 	
 	public final static String order_key = "buy_date"; //"earn_percent desc", null
 
@@ -48,6 +54,8 @@ public class ParallelEmuMarket implements ITaskBuyResultCheck, ITaskSellResultCh
 		bs = new MyWeakBuyStrategy(UID);
 		dayGen = new EmuTodayGenerater(UID, bs);
 		tradeSystem = EmuTradeSystem.getInstance();
+		
+		holds = new HashMap<String, HoldUnit>();
 	}
 	
 	public void run(){
@@ -56,11 +64,19 @@ public class ParallelEmuMarket implements ITaskBuyResultCheck, ITaskSellResultCh
 			do{
 				day = dayGen.getToday();
 				
+				//check buy
 				StockManager sm = StockManager.getInstance();
 				ArrayList<StockInfo> stocks = sm.FetchStockInfo(false, null, -1);
 				ParallelManager pm = new ParallelManager();//ParallelManager.getInstance();
 				for(StockInfo item : stocks){
-					pm.submitTask(new BuyCheckTask(this, item, bs));
+					pm.submitTask(new BuyCheckTask(this, item, bs, day));
+				}
+				pm.startTask(null, 8);
+				pm.join();
+				
+				//check sell
+				for(Entry<String, HoldUnit> item : holds.entrySet()){
+					pm.submitTask(new SellCheckTask(this, item.getValue(), bs, day));
 				}
 				pm.startTask(null, 8);
 				pm.join();
@@ -85,7 +101,7 @@ public class ParallelEmuMarket implements ITaskBuyResultCheck, ITaskSellResultCh
 	}
 
 	@Override
-	public void check(SellPoint sp) {
+	public void check(HoldUnit sp) {
 		// TODO Auto-generated method stub
 		
 	}

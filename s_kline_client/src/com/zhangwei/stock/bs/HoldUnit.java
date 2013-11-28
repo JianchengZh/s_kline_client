@@ -6,21 +6,21 @@ import com.zhangwei.util.StockHelper;
  * 真实的价格和数量，不复权，TradeUnit的价格为复权后的价格
  * */
 public class HoldUnit {
-	private String stock_id;
-	private int market_type;
-	private int buy_date; 
-	private int buy_price;  //买入价 分
-	private int buy_vol;  //考虑复权因素，buy_vol可能和sell_vol不一样
-	private int buy_yongjin; //买入佣金,单位 分
+	public String stock_id;
+	public int market_type;
+	public int buy_date; 
+	public int buy_price;  //买入价 分
+	public int buy_vol;  //考虑复权因素，buy_vol可能和sell_vol不一样
+	public int buy_yongjin; //买入佣金,单位 分
 	
-	private boolean sold; //是否卖出
+	public boolean sold; //是否卖出
 	//public int hold_price; //当前的价格
 	//public int hold_vol;   //当前的数量
 	
-	private int sell_date;
-	private int sell_price;
-	private int sell_vol;
-	private int sell_yongjin; //买入佣金,单位 分
+	public int sell_date;
+	public int sell_price;
+	public int sell_vol;
+	public int sell_yongjin; //买入佣金,单位 分
 	
 	/**
 	 * 1. 实时买入时产生

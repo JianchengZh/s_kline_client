@@ -6,6 +6,10 @@ import com.zhangwei.stock.StockInfo;
 public class Point {
 	public String BSID;
 	
+	public String stock_id;
+	
+	public int market_type;
+	
 	public boolean buyFlag = true;
 	
 	/**
@@ -28,13 +32,15 @@ public class Point {
 	/**
 	 *  stock info 
 	 * */
-	public StockInfo info;
+	//public StockInfo info;
 	
 	public KLineUnit last;
 	
-	public Point(String BSID, StockInfo info, int date, int time, int price, int vol, boolean buyFlag, KLineUnit last){
+	public Point(String BSID, String stock_id, int market_type,/*StockInfo info,*/ int date, int time, int price, int vol, boolean buyFlag, KLineUnit last){
 		this.BSID = BSID;
-		this.info = info;
+		//this.info = info;
+		this.stock_id = stock_id;
+		this.market_type = market_type;
 		this.date = date;
 		this.price = price;
 		this.buyFlag = buyFlag;
@@ -51,9 +57,9 @@ public class Point {
 		return date;
 	}
 	
-	public StockInfo getStockInfo(){
+/*	public StockInfo getStockInfo(){
 		return info;
-	}
+	}*/
 
 	public boolean isBuy(){
 		return buyFlag;

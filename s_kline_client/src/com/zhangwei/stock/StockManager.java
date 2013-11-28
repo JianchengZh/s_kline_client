@@ -115,7 +115,14 @@ public class StockManager {
 	}
 	
 	public synchronized Stock getStock(StockInfo info, boolean force){
+		
+		if(info==null){
+			Log.v(TAG, "getStock - info is null");
+			return null;
+		}
+		
 		Log.v(TAG, "getStock - stock_id:" + info.stock_id + ", force:" + force);
+		
 		//先内存
 		Stock stock = cache.get(info.getKey());
 		
@@ -139,20 +146,16 @@ public class StockManager {
 	
 	public synchronized Stock getStock(String stock_id, int market_type) {
 		// TODO Auto-generated method stub
-		StockManager sm = StockManager.getInstance();
-		ArrayList<StockInfo> stocks = sm.FetchStockInfo(false, stock_id, market_type);
-		if(stocks!=null && stocks.size()==1){
-			return getStock(stocks.get(0), false);
-		}
-		
-		return null;
+		StockInfo info = StockInfoManager.getInstance().getStockInfo(stock_id, market_type);
+
+		return getStock(info, false);
 	}
 	
 	public static void main(String[] args){
 		StockManager sm = StockManager.getInstance();
 		ParallelManager pm = new ParallelManager();
-		ArrayList<StockInfo> stocks = sm.FetchStockInfo(false, null, -1);
-		for(StockInfo item : stocks){
+		ArrayList<StockInfo> infos = sm.FetchStockInfo(false, null, -1);
+		for(StockInfo item : infos){
 			//sm.getStock(item, false);
 			//sm.createTable(item);
 			pm.submitTask(new StockUpdateTask(item));

@@ -9,6 +9,8 @@ import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.StockManager;
 import com.zhangwei.stock.Stock;
 import com.zhangwei.stock.StockInfo;
+import com.zhangwei.stock.bs.BuyPoint;
+import com.zhangwei.stock.bs.SellPoint;
 import com.zhangwei.stock.bs.TradeUnit;
 import com.zhangwei.stock.daygenerater.DayGenerater;
 import com.zhangwei.stock.daygenerater.EmuTodayGenerater;
@@ -19,15 +21,18 @@ import com.zhangwei.stock.parallel.ParallelManager;
 import com.zhangwei.stock.strategy.BasicStrategy;
 import com.zhangwei.stock.strategy.MyHighSellLowBuyStrategy;
 import com.zhangwei.stock.strategy.MyWeakBuyStrategy;
+import com.zhangwei.stock.task.BuyCheckTask;
+import com.zhangwei.stock.task.ITaskSellResultCheck;
 import com.zhangwei.stock.task.StockParallelEmuTradeTask;
 import com.zhangwei.stock.task.StockSerialEmuTradeTask;
 import com.zhangwei.stock.task.StockUpdateTask;
+import com.zhangwei.stock.task.ITaskBuyResultCheck;
 import com.zhangwei.stock.tradesystem.EmuTradeSystem;
 import com.zhangwei.stock.tradesystem.ITradeSystem;
 import com.zhangwei.util.DateHelper;
 import com.zhangwei.util.StockHelper;
 
-public class ParallelEmuMarket implements ParallelListener {
+public class ParallelEmuMarket implements ITaskBuyResultCheck, ITaskSellResultCheck {
 	private static final String TAG = "ParallelEmuMarket";
 
 	public static final String UID = "ParallelEmuMarket";
@@ -55,9 +60,9 @@ public class ParallelEmuMarket implements ParallelListener {
 				ArrayList<StockInfo> stocks = sm.FetchStockInfo(false, null, -1);
 				ParallelManager pm = new ParallelManager();//ParallelManager.getInstance();
 				for(StockInfo item : stocks){
-					pm.submitTask(new StockParallelEmuTradeTask(item, bs));
+					pm.submitTask(new BuyCheckTask(this, item, bs));
 				}
-				pm.startTask(this, 8);
+				pm.startTask(null, 8);
 				pm.join();
 				
 			}while(DateHelper.checkVaildDate(day));
@@ -72,10 +77,17 @@ public class ParallelEmuMarket implements ParallelListener {
 		se.run();
 	}
 
+
 	@Override
-	public void onComplete() {
+	public void check(BuyPoint bp) {
 		// TODO Auto-generated method stub
-		Log.v(TAG, "onComplete ");
+		
+	}
+
+	@Override
+	public void check(SellPoint sp) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.zhangwei.stock.task;
 
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -17,15 +18,17 @@ import com.zhangwei.stock.transaction.EmuBuyTransaction;
 import com.zhangwei.stock.transaction.EmuSellTransaction;
 import com.zhangwei.util.StockHelper;
 
-public class StockParallelEmuTradeTask implements StockTask {
+public class BuyCheckTask implements StockTask {
 
 	private static final String TAG = "StockParallelEmuTradeTask";
 	private StockInfo info;
 	private BasicStrategy bs;
+	private ITaskBuyResultCheck taskResultCheck;
 
-	public StockParallelEmuTradeTask(StockInfo info, BasicStrategy bs){
+	public BuyCheckTask(ITaskBuyResultCheck taskResultCheck, StockInfo info, BasicStrategy bs){
 		this.info = info;
 		this.bs = bs;
+		this.taskResultCheck = taskResultCheck;
 	}
 	
 	@Override

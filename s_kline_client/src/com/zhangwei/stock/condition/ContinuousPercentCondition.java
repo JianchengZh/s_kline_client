@@ -15,6 +15,7 @@ import com.zhangwei.util.StockHelper;
 public class ContinuousPercentCondition implements ICondition {
 	private int nDay;
 	private int Percent;
+	private int value;
 
 	public ContinuousPercentCondition(int nDay, int Percent){
 		this.nDay = Math.abs(nDay);
@@ -37,6 +38,8 @@ public class ContinuousPercentCondition implements ICondition {
 		int index2 = kl.size() - 1;
 		
 		int fudu = kl.get(index2).close * 100 / kl.get(index1).close - 100;
+		
+		value = fudu;
 
 		if(Percent>0){
 			return fudu>Percent;
@@ -44,6 +47,12 @@ public class ContinuousPercentCondition implements ICondition {
 			return fudu<Percent;
 		}
 		
+	}
+
+	@Override
+	public int getValue() {
+		// TODO Auto-generated method stub
+		return value;
 	}
 
 }

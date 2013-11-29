@@ -10,6 +10,7 @@ import com.zhangwei.stock.Stock;
 import com.zhangwei.stock.StockInfo;
 import com.zhangwei.stock.StockManager;
 import com.zhangwei.stock.bs.BuyPoint;
+import com.zhangwei.stock.bs.HoldUnit;
 import com.zhangwei.stock.bs.Point;
 import com.zhangwei.stock.bs.SellPoint;
 import com.zhangwei.stock.strategy.BasicStrategy;
@@ -61,7 +62,7 @@ public class StockSerialEmuTradeTask implements StockTask {
 						EmuBuyTransaction ebt = new EmuBuyTransaction();
 						lastBuyPoint = new BuyPoint(bs.getUID(), info.stock_id, info.market_type, date, 0, price, 100, exRightKl.get(exRightKl.size()-2));
 						lastBuyDate = lastBuyPoint.date;
-						ebt.buy(info, lastBuyPoint);
+						ebt.buy(lastBuyPoint);
 						status = 1;
 					}
 
@@ -79,7 +80,8 @@ public class StockSerialEmuTradeTask implements StockTask {
 					if(!isDownBan){
 						EmuSellTransaction est = new EmuSellTransaction();
 						lastSellPoint = new SellPoint(bs.getUID(), lastBuyPoint.stock_id, lastBuyPoint.market_type, date, 0, price, lastBuyPoint.vol, exRightKl.get(exRightKl.size()-2));
-						est.sell(info, lastBuyPoint, lastSellPoint);
+						HoldUnit hu = new HoldUnit(lastBuyPoint.stock_id, lastBuyPoint.market_type, lastBuyPoint.date, lastBuyPoint.price, lastBuyPoint.vol);
+						est.sell(lastSellPoint, hu);
 						
 						status = 0;
 					}

@@ -47,4 +47,10 @@ public class LastNdayCondition implements ICondition {
 		}
 	}
 
+	@Override
+	public int getValue() {
+		// TODO Auto-generated method stub
+		return 1;
+	}
+
 }

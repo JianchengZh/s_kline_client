@@ -13,6 +13,8 @@ import com.zhangwei.stock.Stock;
 import com.zhangwei.stock.StockInfo;
 import com.zhangwei.stock.bs.BuyPoint;
 import com.zhangwei.stock.bs.HoldUnit;
+import com.zhangwei.stock.bs.IBuy;
+import com.zhangwei.stock.bs.ISell;
 import com.zhangwei.stock.bs.SellPoint;
 import com.zhangwei.stock.bs.TradeUnit;
 import com.zhangwei.stock.daygenerater.DayGenerater;
@@ -21,6 +23,8 @@ import com.zhangwei.stock.manager.EmuAssertManager;
 import com.zhangwei.stock.manager.IAssertManager;
 import com.zhangwei.stock.parallel.ParallelListener;
 import com.zhangwei.stock.parallel.ParallelManager;
+import com.zhangwei.stock.selector.ISelector;
+import com.zhangwei.stock.selector.SimpleSelector;
 import com.zhangwei.stock.strategy.BasicStrategy;
 import com.zhangwei.stock.strategy.MyHighSellLowBuyStrategy;
 import com.zhangwei.stock.strategy.MyWeakBuyStrategy;
@@ -33,10 +37,11 @@ import com.zhangwei.stock.task.StockUpdateTask;
 import com.zhangwei.stock.task.ITaskBuyResultCheck;
 import com.zhangwei.stock.tradesystem.EmuTradeSystem;
 import com.zhangwei.stock.tradesystem.ITradeSystem;
+import com.zhangwei.stock.transaction.EmuBuyTransaction;
 import com.zhangwei.util.DateHelper;
 import com.zhangwei.util.StockHelper;
 
-public class ParallelEmuMarket implements ITaskBuyResultCheck, ITaskSellResultCheck {
+public class ParallelEmuMarket implements ITaskBuyResultCheck, ITaskSellResultCheck, IBuy, ISell {
 	private static final String TAG = "ParallelEmuMarket";
 
 	public static final String UID = "ParallelEmuMarket";
@@ -48,6 +53,8 @@ public class ParallelEmuMarket implements ITaskBuyResultCheck, ITaskSellResultCh
 
 	private HashMap<String, HoldUnit> holds;
 	private HashMap<String, BuyPoint> candidateBuyPoints;
+
+	private ISelector selector;
 	
 	public final static String order_key = "buy_date"; //"earn_percent desc", null
 
@@ -58,6 +65,7 @@ public class ParallelEmuMarket implements ITaskBuyResultCheck, ITaskSellResultCh
 		
 		holds = new HashMap<String, HoldUnit>();
 		candidateBuyPoints = new HashMap<String, BuyPoint>();
+		selector = new SimpleSelector();
 	}
 	
 	public void run(){
@@ -77,8 +85,17 @@ public class ParallelEmuMarket implements ITaskBuyResultCheck, ITaskSellResultCh
 				pm.startTask(null, 8);
 				pm.join();
 				
-				//将candiates中的 去掉holds含有的元素
+				//将candiates中的 去掉holds含有的元素,并用selector挑选最合适的
 				StockHelper.removeHolds(candidateBuyPoints, holds);
+				ArrayList<BuyPoint> theBestBuy = selector.getBestBuyPoint(candidateBuyPoints, bs);
+				
+				//buy
+				if(theBestBuy!=null && theBestBuy.size()>0){
+					for(BuyPoint bp:theBestBuy){
+						EmuBuyTransaction buy = new EmuBuyTransaction();
+					}
+				}
+				
 				
 				//check sell
 				for(Entry<String, HoldUnit> item : holds.entrySet()){
@@ -114,6 +131,56 @@ public class ParallelEmuMarket implements ITaskBuyResultCheck, ITaskSellResultCh
 	public void check(HoldUnit sp) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public boolean sell(SellPoint sp, HoldUnit hu) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean sellCancel(SellPoint sp, HoldUnit hu) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean onSellSucess(SellPoint sp, HoldUnit hu) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean onSellCancel(SellPoint sp, HoldUnit hu) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean buy(BuyPoint buypoint) {
+		// TODO Auto-generated method stub
+		tradeSystem.submitBuyTransaction(this, buypoint);
+		return true;
+	}
+
+	@Override
+	public boolean buyCancel(BuyPoint buypoint) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean onBuySucess(BuyPoint buypoint) {
+		// TODO Auto-generated method stub
+		tradeSystem.completeBuyTransaction(buypoint);
+		return true;
+	}
+
+	@Override
+	public boolean onBuyCancel(BuyPoint buypoint) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

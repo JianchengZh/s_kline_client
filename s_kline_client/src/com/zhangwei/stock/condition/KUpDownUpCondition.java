@@ -17,6 +17,7 @@ public class KUpDownUpCondition implements ICondition {
 	int mainDownRange;
 	int subUpPercent;
 	int subUpRange;
+	private int value;
 	
 	public KUpDownUpCondition(int mainUpPercent, int mainUpRange, int mainDownPercent, int mainDownRange, int subUpPercent, int subUpRange){
 		this.mainUpPercent = Math.abs(mainUpPercent);
@@ -62,7 +63,15 @@ public class KUpDownUpCondition implements ICondition {
 			return false;
 		}
 		
+		value = sub_ktr.HIGH.close * 100 / sub_ktr.LOW.close;
+		
 		return true;
+	}
+
+	@Override
+	public int getValue() {
+		// TODO Auto-generated method stub
+		return value;
 	}
 
 }

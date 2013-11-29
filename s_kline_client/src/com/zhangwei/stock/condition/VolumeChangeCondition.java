@@ -13,6 +13,7 @@ public class VolumeChangeCondition implements ICondition {
 	private boolean direction;//true change bigger or false change smaller
 	private int nDay;
 	private int percent;
+	private int value;
 
 	public VolumeChangeCondition(int nDay, int percent){
 		this.nDay = nDay;
@@ -38,11 +39,19 @@ public class VolumeChangeCondition implements ICondition {
 		int averageVolOflastNDay = StockHelper.calcAverage(kl.subList(lastIndex-nDay, lastIndex+1), 3);
 		
 		if(direction){
+			value = (averageVolOflastNDay * 100 /averageVolOfRest) - 100;
 			return (averageVolOflastNDay * 100 /averageVolOfRest) > percent;
 		}else{
+			value = 100 - (averageVolOflastNDay * 100 /averageVolOfRest);
 			return (averageVolOflastNDay * 100 /averageVolOfRest) < percent;
 		}
 		
+	}
+
+	@Override
+	public int getValue() {
+		// TODO Auto-generated method stub
+		return value;
 	}
 
 }

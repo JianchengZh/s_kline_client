@@ -20,6 +20,7 @@ public class MyWeakBuyStrategy extends BasicStrategy {
 		// TODO Auto-generated constructor stub
 	}
 	
+	
 	public void init() {
 		// TODO Auto-generated method stub
 		super.init();

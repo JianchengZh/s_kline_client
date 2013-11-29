@@ -3,11 +3,11 @@ package com.zhangwei.stock.bs;
 import com.zhangwei.stock.StockInfo;
 
 public interface ISell {
-	public boolean sell(StockInfo stockinfo, BuyPoint buypoint, SellPoint sellpoint);
+	public boolean sell(SellPoint sellpoint, HoldUnit hu);
 	
-	public boolean cancel();
+	public boolean sellCancel(SellPoint sellpoint, HoldUnit hu);
 	
-	public boolean onSucess();
+	public boolean onSellSucess(SellPoint sellpoint, HoldUnit hu);
 	
-	public boolean onCancel();
+	public boolean onSellCancel(SellPoint sellpoint, HoldUnit hu);
 }

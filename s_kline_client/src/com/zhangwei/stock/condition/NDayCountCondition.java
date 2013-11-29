@@ -53,4 +53,10 @@ public class NDayCountCondition implements ICondition {
 		return count_t>=count;
 	}
 
+	@Override
+	public int getValue() {
+		// TODO Auto-generated method stub
+		return 1;
+	}
+
 }

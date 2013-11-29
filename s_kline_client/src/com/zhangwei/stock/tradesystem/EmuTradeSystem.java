@@ -12,6 +12,7 @@ import com.zhangwei.mysql.BaseDao;
 import com.zhangwei.stock.Constants;
 import com.zhangwei.stock.StockInfo;
 import com.zhangwei.stock.bs.BuyPoint;
+import com.zhangwei.stock.bs.HoldUnit;
 import com.zhangwei.stock.bs.IBuy;
 import com.zhangwei.stock.bs.ISell;
 import com.zhangwei.stock.bs.SellPoint;
@@ -38,7 +39,7 @@ public class EmuTradeSystem implements ITradeSystem{
 	
 	@Override
 	public void submitBuyTransaction(IBuy buy, BuyPoint buypoint){
-		buy.onSucess();
+		buy.onBuySucess(buypoint);
 	}
 
 	@Override
@@ -48,14 +49,14 @@ public class EmuTradeSystem implements ITradeSystem{
 	}
 	
 	@Override
-	public void submitSellTransaction(ISell sell, SellPoint sellpoint){
-		sell.onSucess();
+	public void submitSellTransaction(ISell sell, SellPoint sellpoint, HoldUnit hu){
+		sell.onSellSucess(sellpoint, hu);
 	}
 
 	@Override
-	public void completeSellTransaction(BuyPoint buypoint, SellPoint sellpoint) {
+	public void completeSellTransaction(SellPoint sellpoint, HoldUnit hu) {
 		// TODO Auto-generated method stub
-		records.addSell(buypoint, sellpoint);
+		records.addSell(sellpoint, hu);
 	}
 
 	public List<TradeUnit> getTradeInfo(String uid, int type, String order_key) {

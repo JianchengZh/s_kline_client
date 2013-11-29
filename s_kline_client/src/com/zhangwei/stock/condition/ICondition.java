@@ -10,5 +10,5 @@ import com.zhangwei.stock.kline.KLineTypeResult;
 
 public interface ICondition {
 	public boolean checkCondition(StockInfo info, KLineTypeResult rlt, List<KLineUnit> kl, Point lastPoint) throws StockException;
-
+	public int getValue();
 }

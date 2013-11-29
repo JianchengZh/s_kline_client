@@ -14,7 +14,7 @@ public class EmuBuyTransaction implements IBuy {
 	}*/
 
 	@Override
-	public boolean buy(StockInfo stockinfo, BuyPoint buypoint) {
+	public boolean buy(BuyPoint buypoint) {
 		// TODO Auto-generated method stub
 		this.buypoint = buypoint;/*new BuyPoint(stockinfo, date, 0, price, vol);*/
 		EmuTradeSystem.getInstance().submitBuyTransaction(this, buypoint);
@@ -22,20 +22,20 @@ public class EmuBuyTransaction implements IBuy {
 	}
 
 	@Override
-	public boolean cancel() {
+	public boolean buyCancel(BuyPoint buypoint) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean onSucess() {
+	public boolean onBuySucess(BuyPoint buypoint) {
 		// TODO Auto-generated method stub
 		EmuTradeSystem.getInstance().completeBuyTransaction(buypoint);
 		return true;
 	}
 
 	@Override
-	public boolean onCancel() {
+	public boolean onBuyCancel(BuyPoint buypoint) {
 		// TODO Auto-generated method stub
 		return false;
 	}

@@ -24,6 +24,8 @@ import com.zhangwei.util.StockHelper;
 public abstract class BasicStrategy {
 	
 	private static final String TAG = "BasicStrategy";
+	private static final int bigFactor = 100;
+	private static final int littleFactor = 1;
 	public ArrayList<ICondition> buyBigYesConditions;  //独享条件集合 
 	public ArrayList<ICondition> buyLittleYesConditions; //组合条件集合
 	
@@ -39,6 +41,7 @@ public abstract class BasicStrategy {
 	private long serialVersionUID;
 	private String MarketID;
 	private String BStable;
+	private int value;
 
 	public BasicStrategy(String MarketID, long serialversionuid){
 		this.MarketID = MarketID;
@@ -66,6 +69,7 @@ public abstract class BasicStrategy {
 	
 	public boolean checkBuy(StockInfo info, List<KLineUnit> kl, SellPoint lastPoint){
 		KLineTypeResult rlt = null;
+		value = 1;
 		try {
 			rlt = StockHelper.getKlineType(kl);
 		} catch (StockException e1) {
@@ -75,6 +79,7 @@ public abstract class BasicStrategy {
 		for(ICondition c : buyBigYesConditions){
 			try {
 				if(c.checkCondition(info, rlt, kl, lastPoint)){
+					value = c.getValue() * bigFactor;
 					return true;
 				}
 			} catch (StockException e) {
@@ -86,6 +91,7 @@ public abstract class BasicStrategy {
 		for(ICondition c : buyBigNoConditions){
 			try {
 				if(c.checkCondition(info, rlt, kl, lastPoint)){
+					value = c.getValue() * bigFactor;
 					return false;
 				}
 			} catch (StockException e) {
@@ -98,6 +104,7 @@ public abstract class BasicStrategy {
 			for(ICondition c : buyLittleYesConditions){
 				try {
 					if(!c.checkCondition(info, rlt, kl, lastPoint)){
+						value = c.getValue() * littleFactor;
 						return false;
 					}
 				} catch (StockException e) {
@@ -164,6 +171,7 @@ public abstract class BasicStrategy {
 
 	}
 	
+	
 	public boolean isEmpty(){
 		if(buyBigYesConditions.size()==0 && buyLittleYesConditions.size()==0 && buyBigNoConditions.size()==0){
 			return true;
@@ -209,6 +217,8 @@ public abstract class BasicStrategy {
 		sellLittleYesConditions.add(c);
 
 	}
+	
+	public int getValue(){ return value; };
 
 	public void init() {
 		// TODO Auto-generated method stub

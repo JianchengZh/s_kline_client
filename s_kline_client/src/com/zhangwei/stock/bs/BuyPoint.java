@@ -22,6 +22,9 @@ public class BuyPoint extends Point {
 	public String toString(){
 		return "买入：" + date + " " + stock_id /*+ info.stock_id + " " + info.name*/ + ", 价格(元)：" + price*1.0/100 + ", 数量（手）:" + vol/100;  
 	}
+
+
+
 	
 
 }

@@ -1,7 +1,9 @@
 package com.zhangwei.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import android.util.Log;
 
@@ -10,6 +12,8 @@ import com.zhangwei.stock.StockManager;
 import com.zhangwei.stock.Stock;
 import com.zhangwei.stock.StockInfo;
 import com.zhangwei.stock.basic.StockException;
+import com.zhangwei.stock.bs.BuyPoint;
+import com.zhangwei.stock.bs.HoldUnit;
 import com.zhangwei.stock.kline.KLineTypeResult;
 
 public class StockHelper {
@@ -344,6 +348,22 @@ public class StockHelper {
 	public static int calcCircaCost(int feiyong_fen, int fenzi, int fenmu){
 		//this.buy_yongjin = (150 * buy_price * buy_vol + 50000)/ 100000;
 		return (fenzi*feiyong_fen*10 + 5*fenmu) / (fenmu*10);
+	}
+
+	/**
+	 * 在candiates中,去掉holds含有的元素，直接在candiates上操作
+	 * */
+	public static void removeHolds(
+			HashMap<String, BuyPoint> candidates,
+			HashMap<String, HoldUnit> holds) {
+		// TODO Auto-generated method stub
+		if(holds!=null && holds.size()>0){
+			if(candidates!=null && candidates.size()>0){
+				for (Entry<String, HoldUnit> hu_entry : holds.entrySet()) {
+					candidates.remove(hu_entry.getKey());
+				}
+			}
+		}
 	}
 
 }

@@ -64,5 +64,14 @@ public class Point {
 	public boolean isBuy(){
 		return buyFlag;
 	}
+	
+	public String getKey() {
+		// TODO Auto-generated method stub
+		if(stock_id!=null && market_type>0){
+			return stock_id + "." + market_type;
+		}else{
+			return null;
+		}
+	}
 
 }

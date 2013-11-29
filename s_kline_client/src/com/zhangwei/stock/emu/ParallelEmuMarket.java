@@ -47,6 +47,7 @@ public class ParallelEmuMarket implements ITaskBuyResultCheck, ITaskSellResultCh
 	private EmuTradeSystem tradeSystem;
 
 	private HashMap<String, HoldUnit> holds;
+	private HashMap<String, BuyPoint> candidateBuyPoints;
 	
 	public final static String order_key = "buy_date"; //"earn_percent desc", null
 
@@ -56,6 +57,7 @@ public class ParallelEmuMarket implements ITaskBuyResultCheck, ITaskSellResultCh
 		tradeSystem = EmuTradeSystem.getInstance();
 		
 		holds = new HashMap<String, HoldUnit>();
+		candidateBuyPoints = new HashMap<String, BuyPoint>();
 	}
 	
 	public void run(){
@@ -65,6 +67,7 @@ public class ParallelEmuMarket implements ITaskBuyResultCheck, ITaskSellResultCh
 				day = dayGen.getToday();
 				
 				//check buy
+				candidateBuyPoints.clear();
 				StockManager sm = StockManager.getInstance();
 				ArrayList<StockInfo> stocks = sm.FetchStockInfo(false, null, -1);
 				ParallelManager pm = new ParallelManager();//ParallelManager.getInstance();
@@ -73,6 +76,9 @@ public class ParallelEmuMarket implements ITaskBuyResultCheck, ITaskSellResultCh
 				}
 				pm.startTask(null, 8);
 				pm.join();
+				
+				//将candiates中的 去掉holds含有的元素
+				StockHelper.removeHolds(candidateBuyPoints, holds);
 				
 				//check sell
 				for(Entry<String, HoldUnit> item : holds.entrySet()){
@@ -97,7 +103,11 @@ public class ParallelEmuMarket implements ITaskBuyResultCheck, ITaskSellResultCh
 	@Override
 	public void check(BuyPoint bp) {
 		// TODO Auto-generated method stub
-		
+		String key = bp.getKey();
+		if(key!=null){
+			candidateBuyPoints.put(key, bp);
+		}
+
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package com.zhangwei.stock.emu;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import android.util.Log;
@@ -41,7 +42,7 @@ import com.zhangwei.stock.transaction.EmuBuyTransaction;
 import com.zhangwei.util.DateHelper;
 import com.zhangwei.util.StockHelper;
 
-public class ParallelEmuMarket implements ITaskBuyResultCheck, ITaskSellResultCheck, IBuy, ISell {
+public class ParallelEmuMarket implements ITaskBuyResultCheck, ITaskSellResultCheck/*, IBuy, ISell*/ {
 	private static final String TAG = "ParallelEmuMarket";
 
 	public static final String UID = "ParallelEmuMarket";
@@ -49,9 +50,10 @@ public class ParallelEmuMarket implements ITaskBuyResultCheck, ITaskSellResultCh
 	private BasicStrategy bs;
 	private EmuTodayGenerater dayGen;
 	private EmuAssertManager assertManager;
-	private EmuTradeSystem tradeSystem;
+	//private EmuTradeSystem tradeSystem;
 
 	private HashMap<String, HoldUnit> holds;
+	private HashMap<String, HoldUnit> candidateSellHolds;
 	private HashMap<String, BuyPoint> candidateBuyPoints;
 
 	private ISelector selector;
@@ -61,50 +63,69 @@ public class ParallelEmuMarket implements ITaskBuyResultCheck, ITaskSellResultCh
 	public ParallelEmuMarket(){
 		bs = new MyWeakBuyStrategy(UID);
 		dayGen = new EmuTodayGenerater(UID, bs);
-		tradeSystem = EmuTradeSystem.getInstance();
+		//tradeSystem = EmuTradeSystem.getInstance();
 		
 		holds = new HashMap<String, HoldUnit>();
 		candidateBuyPoints = new HashMap<String, BuyPoint>();
+		candidateSellHolds = new HashMap<String, HoldUnit>();
 		selector = new SimpleSelector();
 	}
 	
 	public void run(){
 		if(dayGen.checkOK()){
 			int day = 0;
-			do{
-				day = dayGen.getToday();
-				
-				//check buy
+			
+			StockManager sm = StockManager.getInstance();
+			ArrayList<StockInfo> stocks = sm.FetchStockInfo(false, null, -1);
+			ParallelManager pm = new ParallelManager();//ParallelManager.getInstance();
+			
+			day = dayGen.getToday();
+			while(DateHelper.checkVaildDate(day)){
+
+				//0. init
 				candidateBuyPoints.clear();
-				StockManager sm = StockManager.getInstance();
-				ArrayList<StockInfo> stocks = sm.FetchStockInfo(false, null, -1);
-				ParallelManager pm = new ParallelManager();//ParallelManager.getInstance();
-				for(StockInfo item : stocks){
-					pm.submitTask(new BuyCheckTask(this, item, bs, day));
-				}
-				pm.startTask(null, 8);
-				pm.join();
+				candidateSellHolds.clear();
 				
-				//将candiates中的 去掉holds含有的元素,并用selector挑选最合适的
-				StockHelper.removeHolds(candidateBuyPoints, holds);
-				ArrayList<BuyPoint> theBestBuy = selector.getBestBuyPoint(candidateBuyPoints, bs);
-				
-				//buy
-				if(theBestBuy!=null && theBestBuy.size()>0){
-					for(BuyPoint bp:theBestBuy){
-						EmuBuyTransaction buy = new EmuBuyTransaction();
-					}
-				}
-				
-				
-				//check sell
+				//1. check sell,得到要卖的候选股票
 				for(Entry<String, HoldUnit> item : holds.entrySet()){
 					pm.submitTask(new SellCheckTask(this, item.getValue(), bs, day));
 				}
 				pm.startTask(null, 8);
 				pm.join();
+
 				
-			}while(DateHelper.checkVaildDate(day));
+				//2. check buy， ,得到要买的候选股票，不能再要卖的股票中，用selector进一步筛选
+				for(StockInfo item : stocks){
+					pm.submitTask(new BuyCheckTask(this, item, bs, day));
+				}
+				pm.startTask(null, 8);
+				pm.join();
+				//将candiates中的 去掉holds含有的元素,并用selector挑选最合适的
+				StockHelper.removeHolds(candidateBuyPoints, holds);
+				Map<String, BuyPoint> theBestBuy = selector.getBestBuyPoint(candidateBuyPoints, bs);
+				
+				//3. sell
+				
+				//4. buy
+/*				if(theBestBuy!=null && theBestBuy.size()>0){
+					ArrayList<BuyPoint> canBuys = assertManager.getCanBuys(theBestBuy);
+					for(BuyPoint bp:canBuys){
+						//tradeSystem.submitBuyTransaction(this, bp);
+					}
+				}*/
+				
+				assertManager.requestBuy(theBestBuy);
+				assertManager.requestSell(candidateSellHolds);
+				
+				
+				int tmpToday = dayGen.getToday();
+				if(tmpToday == day){
+					break;
+				}else{
+					day = tmpToday;
+				}
+				
+			}
 		}
 
 
@@ -117,6 +138,9 @@ public class ParallelEmuMarket implements ITaskBuyResultCheck, ITaskSellResultCh
 	}
 
 
+	/**
+	 * 回调，将符合Strategy的BuyPoint登记到candidateBuyPoints中
+	 * */
 	@Override
 	public void check(BuyPoint bp) {
 		// TODO Auto-generated method stub
@@ -127,60 +151,18 @@ public class ParallelEmuMarket implements ITaskBuyResultCheck, ITaskSellResultCh
 
 	}
 
+	/**
+	 * 回调，将符合Strategy的HoldUnit登记到candidateSellHolds中
+	 * */
 	@Override
-	public void check(HoldUnit sp) {
+	public void check(HoldUnit hu) {
 		// TODO Auto-generated method stub
-		
+		String key = hu.getKey();
+		if(key!=null){
+			candidateSellHolds.put(key, hu);
+		}
 	}
 
-	@Override
-	public boolean sell(SellPoint sp, HoldUnit hu) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
-	@Override
-	public boolean sellCancel(SellPoint sp, HoldUnit hu) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean onSellSucess(SellPoint sp, HoldUnit hu) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean onSellCancel(SellPoint sp, HoldUnit hu) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean buy(BuyPoint buypoint) {
-		// TODO Auto-generated method stub
-		tradeSystem.submitBuyTransaction(this, buypoint);
-		return true;
-	}
-
-	@Override
-	public boolean buyCancel(BuyPoint buypoint) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean onBuySucess(BuyPoint buypoint) {
-		// TODO Auto-generated method stub
-		tradeSystem.completeBuyTransaction(buypoint);
-		return true;
-	}
-
-	@Override
-	public boolean onBuyCancel(BuyPoint buypoint) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 }

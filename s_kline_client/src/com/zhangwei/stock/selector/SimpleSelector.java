@@ -2,6 +2,7 @@ package com.zhangwei.stock.selector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import com.zhangwei.stock.Constants;
@@ -15,9 +16,9 @@ import com.zhangwei.stock.strategy.BasicStrategy;
 public class SimpleSelector implements ISelector {
 
 	@Override
-	public ArrayList<BuyPoint> getBestBuyPoint(HashMap<String, BuyPoint> input, BasicStrategy bs) {
+	public Map<String, BuyPoint> getBestBuyPoint(Map<String, BuyPoint> input, BasicStrategy bs) {
 		// TODO Auto-generated method stub
-		ArrayList<BuyPoint> ret = new ArrayList<BuyPoint>();
+		Map<String, BuyPoint> ret = new HashMap<String, BuyPoint>();
 		int value_min = Integer.MAX_VALUE;
 		BuyPoint theOne = null;
 		for(Entry<String, BuyPoint> entry : input.entrySet()){
@@ -31,7 +32,7 @@ public class SimpleSelector implements ISelector {
 		}
 
 		
-		ret.add(theOne);
+		ret.put(theOne.getKey(), theOne);
 		return ret;
 	}
 

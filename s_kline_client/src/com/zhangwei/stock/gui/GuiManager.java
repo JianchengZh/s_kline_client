@@ -12,7 +12,9 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -28,6 +30,7 @@ import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.Stock;
 import com.zhangwei.stock.StockInfo;
 import com.zhangwei.stock.StockManager;
+import com.zhangwei.stock.bs.BuyPoint;
 import com.zhangwei.stock.bs.TradeUnit;
 
 
@@ -50,18 +53,7 @@ public class GuiManager {
 	}
 	
 	public void showResult(final List<TradeUnit> list_arg){
-/*		this.list = new ArrayList<>();
-		String stock_id = null;
-		int index_x = -1;
-		for(TradeUnit tu : list_arg){
-			if(!tu.stock_id.equals(stock_id)){
-				this.list.add(new ArrayList<TradeUnit>());
-				index_x++;
-			}
-			stock_id = tu.stock_id;
-			this.list.get(index_x).add(tu);
-			
-		}*/
+
 		this.list = list_arg;
 
 
@@ -117,6 +109,7 @@ public class GuiManager {
 		EventQueue.invokeLater(runner);
 	
 	}
+	
 	
 
 	private final Insets insets = new Insets(0, 0, 0, 0);

@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -18,6 +19,7 @@ import com.zhangwei.stock.KLineUnit;
 import com.zhangwei.stock.Stock;
 import com.zhangwei.stock.StockInfo;
 import com.zhangwei.stock.StockManager;
+import com.zhangwei.stock.bs.BuyPoint;
 import com.zhangwei.stock.bs.TradeUnit;
 
 public class KLinePanel extends JPanel implements KLineBtnListener{
@@ -34,6 +36,7 @@ public class KLinePanel extends JPanel implements KLineBtnListener{
 	private int h;
 	private CtrlPanel ctrlPanel;
 	private TradeInfoListener tradeInfoListener;
+	private Map<String, BuyPoint> map;
 
 	/**
 	 * 

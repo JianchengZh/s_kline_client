@@ -29,6 +29,8 @@ public class MyWeakBuyStrategy extends BasicStrategy {
 		addBuyLittleCondition(new ContinuousPercentCondition(5, -15));
 		addBuyLittleCondition(new VolumeChangeCondition(3, 50));
 		
+		/*addBuyLittleCondition(new ContinuousPercentCondition(5, -15));*/
+		
 		addSellBigCondition(new StopLossCondition(8), true);
 		addSellBigCondition(new LastNdayCondition(5), true);
 		addSellBigCondition(new StopEarnCondition(20), true);

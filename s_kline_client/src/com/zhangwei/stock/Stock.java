@@ -365,7 +365,7 @@ public class Stock {
 		}else{
 			indexFrom = 0;
 		}
-		if(sell_index+posfixNDay<line.kline_list.size()){
+		if(sell_index>=0 && sell_index+posfixNDay<line.kline_list.size()){
 			indexTo = sell_index+posfixNDay;
 		}else{
 			indexTo = line.kline_list.size();

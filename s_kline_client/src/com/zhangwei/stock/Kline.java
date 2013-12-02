@@ -236,7 +236,7 @@ public class Kline {
 				int indexTo = index_buy;
 				int indexFrom = Math.max(0, index_buy-nDay);
 
-				return kline_list.subList(indexFrom, indexTo);
+				return kline_list.subList(indexFrom, indexTo+1);
 			}
 			
 

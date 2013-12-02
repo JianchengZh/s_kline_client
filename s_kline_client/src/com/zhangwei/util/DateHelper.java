@@ -69,7 +69,6 @@ public class DateHelper {
 		Date d = new Date();
 		Calendar cal=Calendar.getInstance();
 		cal.setTime(d);
-		cal.add(Calendar.DATE, -1);
 		Date date = cal.getTime();
 
 		SimpleDateFormat df=new SimpleDateFormat("u");

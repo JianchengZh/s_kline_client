@@ -165,13 +165,13 @@ public class EmuAssertManager implements IAssertManager, IBuy, ISell{
 	}
 
 
-	public void requestBuy(Map<String, BuyPoint> theBestBuy) {
+	public void requestBuy(Map<String, BuyPoint> buys) {
 		// TODO Auto-generated method stub
 		
 	}
 
 
-	public void requestSell(Map<String, HoldUnit> candidateSellHolds) {
+	public void requestSell(Map<String, HoldUnit> holds) {
 		// TODO Auto-generated method stub
 		
 	}

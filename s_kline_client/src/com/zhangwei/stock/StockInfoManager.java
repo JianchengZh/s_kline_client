@@ -144,7 +144,13 @@ public class StockInfoManager {
 		//再sql
 		if(info==null){
 			StockInfoManager sm = StockInfoManager.getInstance();
-			ArrayList<StockInfo> infos = sm.FetchStockInfo(false, stock_id, market_type);
+			ArrayList<StockInfo> infos = null;
+			if(market_type==1 || market_type==2){
+				infos = sm.FetchStockInfo(false, stock_id, market_type);
+			}else{
+				infos = sm.FetchStockInfo(true, stock_id, market_type);
+			}
+			
 			if(infos!=null && infos.size()==1){
 				info = infos.get(0);
 				cache.put(info.getKey(), info);

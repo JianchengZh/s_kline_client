@@ -34,7 +34,7 @@ public class SerialEmuMarket implements ParallelListener {
 		EmuTradeSystem es = EmuTradeSystem.getInstance();
 		List<TradeUnit> rlt = es.getTradeInfo(se.bs.getUID(), 0, order_key);
 		//List<TradeUnit> rlt = es.getTradeInfo(se.bs.getUID(), 0, "earn_percent desc");
-		boolean flag = false;
+		boolean flag = true;
 		if(flag && rlt!=null && rlt.size()>0){
 			es.Report(rlt);
 		}else{

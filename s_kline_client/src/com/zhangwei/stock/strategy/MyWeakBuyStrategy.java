@@ -24,16 +24,13 @@ public class MyWeakBuyStrategy extends BasicStrategy {
 	public void init() {
 		// TODO Auto-generated method stub
 		super.init();
-		//addBuyBigCondition(new DetectBigChangeCondition(-7, 1, 150, false), false);
 		addBuyBigCondition(new DetectBigChangeCondition(-5, 1, -1, true), false);
 		addBuyLittleCondition(new ContinuousPercentCondition(5, -15));
 		addBuyLittleCondition(new VolumeChangeCondition(3, 50));
 		
-		/*addBuyLittleCondition(new ContinuousPercentCondition(5, -15));*/
-		
-		addSellBigCondition(new StopLossCondition(8), true);
+		//addSellBigCondition(new StopLossCondition(8), true);
 		addSellBigCondition(new LastNdayCondition(5), true);
-		addSellBigCondition(new StopEarnCondition(20), true);
+		//addSellBigCondition(new StopEarnCondition(20), true);
 	}
 
 }

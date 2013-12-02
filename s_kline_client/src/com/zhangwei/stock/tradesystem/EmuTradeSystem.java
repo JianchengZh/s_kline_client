@@ -10,7 +10,10 @@ import android.util.Log;
 
 import com.zhangwei.mysql.BaseDao;
 import com.zhangwei.stock.Constants;
+import com.zhangwei.stock.KLineUnit;
+import com.zhangwei.stock.Stock;
 import com.zhangwei.stock.StockInfo;
+import com.zhangwei.stock.StockManager;
 import com.zhangwei.stock.bs.BuyPoint;
 import com.zhangwei.stock.bs.HoldUnit;
 import com.zhangwei.stock.bs.IBuy;
@@ -20,6 +23,7 @@ import com.zhangwei.stock.bs.TradeUnit;
 import com.zhangwei.stock.gui.GuiManager;
 import com.zhangwei.stock.record.EmuTradeRecorder;
 import com.zhangwei.util.Format;
+import com.zhangwei.util.StockHelper;
 
 public class EmuTradeSystem implements ITradeSystem{
 	private static final String TAG = "EmuTradeSystem";
@@ -112,9 +116,15 @@ public class EmuTradeSystem implements ITradeSystem{
 	}
 		
 
+	/**
+	 * select buy_date,avg(earn_percent),count(*) from bs_7287298140871 group by buy_date;
+	 * */
 	public void Report(List<TradeUnit> rlt) {
 		// TODO Auto-generated method stub
 		Log.v(TAG, "Report rlt.size:" + rlt.size());
+		
+		Stock sh_index = StockManager.getInstance().getStock("000001", 3);
+		Stock sz_index = StockManager.getInstance().getStock("399001", 4);
 
 		
 		long totalNum = 0;
@@ -130,8 +140,24 @@ public class EmuTradeSystem implements ITradeSystem{
 		BigInteger minEarnPercentExpectProduct = new BigInteger("100");
 		int emptyCount = 0;
 		
-		for(TradeUnit elem : rlt){
-			int earnPercent = elem.getEarnPercent();
+
+		TradeUnit last = rlt.get(0);
+		int percent_sum = last.getEarnPercent();
+		int same_day_size = 1;
+		
+		rlt.add(new TradeUnit(null, -1, -1, -1, -1, -1, -1)); //add EOF
+		
+		for(int index=1; index<rlt.size(); index++){
+			TradeUnit elem = rlt.get(index);
+			if(last.buy_date==elem.buy_date){ //same day, add it
+				int earnPercent_t = elem.getEarnPercent();
+				percent_sum += earnPercent_t;
+				same_day_size++;
+				continue;
+			}
+						
+			int earnPercent = percent_sum/same_day_size;
+			
 			if(minEarnPercent>earnPercent){
 				minEarnPercent = earnPercent;
 			}
@@ -163,14 +189,26 @@ public class EmuTradeSystem implements ITradeSystem{
 				minEarnPercentExpectProduct=totalPercentExpectProduct;
 			}
 			
-			Log.v(null, "earnPercent:" + earnPercent + ", earnPercentExpectSum:" + earnPercentExpectSum/totalNum + ", totalPercentExpectProduct:" + totalPercentExpectProduct);
+			KLineUnit sh_kline_unit = StockHelper.binSearch(sh_index.line.kline_list, elem.buy_date, 0);
+			
+			if(sh_kline_unit!=null){
+				Log.v(null, "earnPercent:" + earnPercent + ", earnPercentExpectSum:" + earnPercentExpectSum/totalNum + ", totalPercentExpectProduct:" + totalPercentExpectProduct + " date:" + elem.buy_date + " 沪指：" + sh_kline_unit.toString());
+			}else{
+				Log.v(null, "earnPercent:" + earnPercent + ", earnPercentExpectSum:" + earnPercentExpectSum/totalNum + ", totalPercentExpectProduct:" + totalPercentExpectProduct + " date:" + elem.buy_date);
+			}
+			
 		
-			if(minEarnPercentExpectProduct.compareTo(new BigInteger("0"))<=0){
-				Log.v(null, "爆仓" + emptyCount + "次！重置minEarnPercentExpectProduct=100");
+			if(minEarnPercentExpectProduct.compareTo(new BigInteger("50"))<=0){
+				Log.v(null, "爆仓(低于50)" + emptyCount + "次！重置minEarnPercentExpectProduct=100");
 				emptyCount++;
 				minEarnPercentExpectProduct = new BigInteger("100");
 				totalPercentExpectProduct = new BigInteger("100");
 			}
+			
+			percent_sum = elem.getEarnPercent();
+			same_day_size = 1;
+			last = elem;
+
 		}
 		
 		double totalPercentExpectSum_double = (double)totalPercentExpectSum / totalNum;
@@ -179,7 +217,7 @@ public class EmuTradeSystem implements ITradeSystem{
 				
 		Log.v(null, "===================Report!=========================");
 		Log.v(null, "=== Total Trades:" + totalNum);
-		Log.v(null, "=== 爆仓:" + emptyCount);
+		Log.v(null, "=== 爆仓(低于50):" + emptyCount);
 		Log.v(null, "=== earnNum:" + earnNum + ", percent:" + earnNum * 100 / totalNum + ", 期望:" + earnPercentExpectSum_double);
 		Log.v(null, "=== lossNum:" + lossNum + ", percent:" + lossNum * 100 / totalNum + ", 期望:" + lossPercentExpectSum_double);
 		

@@ -119,6 +119,11 @@ public class EmuAssertManager implements IAssertManager, IBuy, ISell{
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	public void sell(SellPoint sellpoint) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
 	public boolean sellCancel(SellPoint sp, HoldUnit hu) {
@@ -175,5 +180,8 @@ public class EmuAssertManager implements IAssertManager, IBuy, ISell{
 		// TODO Auto-generated method stub
 		
 	}
+
+
+
 
 }

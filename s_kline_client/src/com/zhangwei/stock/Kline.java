@@ -246,5 +246,19 @@ public class Kline {
 
 	}
 
+	public int getDate(int index) {
+		// TODO Auto-generated method stub
+		if(kline_list==null || index<0 || index>=kline_list.size()){
+			return -1;
+		}
+
+		KLineUnit elem = kline_list.get(index);
+		if(elem==null){
+			return -1;
+		}
+		
+		return elem.date;
+	}
+
 	
 }

@@ -43,6 +43,7 @@ public class StockHelper {
 		
 		int highest_price = Integer.MIN_VALUE;
 		int lowest_price = Integer.MAX_VALUE;
+		int price_average = 0;
 		int vol_max = Integer.MIN_VALUE;
 		int vol_min = Integer.MAX_VALUE;
 		int vol_average = 0;
@@ -73,11 +74,13 @@ public class StockHelper {
 			}
 			
 			vol_average+=elem.vol;
+			price_average+=elem.close;
 		}
 		
 		vol_average = vol_average / kl.size();
+		price_average = price_average / kl.size();
 		
-		KLineTypeResult ret = new KLineTypeResult(kl.get(0), low, high, kl.get(kl.size()-1), highest_price, lowest_price, vol_max, vol_min, vol_average);
+		KLineTypeResult ret = new KLineTypeResult(kl.get(0), low, high, kl.get(kl.size()-1), highest_price, lowest_price, price_average, vol_max, vol_min, vol_average);
 		
 		return ret;
 	} 

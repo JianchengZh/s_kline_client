@@ -16,8 +16,9 @@ public class KLineTypeResult {
 	public int vol_max;
 	public int vol_min;
 	public int vol_average;
+	public int price_average;
 	
-	public KLineTypeResult(KLineUnit LEFT, KLineUnit LOW, KLineUnit HIGH, KLineUnit RIGHT, int highest_price, int lowest_price, int vol_max, int vol_min, int vol_average){
+	public KLineTypeResult(KLineUnit LEFT, KLineUnit LOW, KLineUnit HIGH, KLineUnit RIGHT, int highest_price, int lowest_price, int price_average, int vol_max, int vol_min, int vol_average){
 		if(LOW.date<HIGH.date){
 			if(LOW.date==LEFT.date){
 				if(HIGH.date==RIGHT.date){
@@ -56,6 +57,7 @@ public class KLineTypeResult {
 		
 		this.highest_price = highest_price;
 		this.lowest_price = lowest_price;
+		this.price_average = price_average;
 		this.vol_max = vol_max;
 		this.vol_min = vol_min;
 		this.vol_average = vol_average;

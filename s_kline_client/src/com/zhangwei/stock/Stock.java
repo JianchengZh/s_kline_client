@@ -418,6 +418,15 @@ public class Stock {
 		line.nextPos();
 	}
 
+	public int getDate(int index) {
+		// TODO Auto-generated method stub
+		if(line!=null){
+			return line.getDate(index);
+		}else{
+			return -1;
+		}
+	}
+
 
 
 }

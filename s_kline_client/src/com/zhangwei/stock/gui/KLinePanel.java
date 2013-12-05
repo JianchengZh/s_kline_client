@@ -205,6 +205,9 @@ public class KLinePanel extends JPanel implements KLineBtnListener{
     	}*/
         
         index--;
+        if(index<0){
+        	index = 0;
+        }
 
     	
 		this.tu = list.get(index);//.get(index_y);
@@ -242,6 +245,9 @@ public class KLinePanel extends JPanel implements KLineBtnListener{
     	}*/
 
         index++;
+        if(index>list.size()-1){
+        	index = list.size()-1;
+        }
 		this.tu = list.get(index);//.get(index_y);
         this.s = sm.getStock(tu.stock_id, tu.market_type);
 

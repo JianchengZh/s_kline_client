@@ -155,7 +155,14 @@ public class EmuTradeSystem implements ITradeSystem{
 				same_day_size++;
 				continue;
 			}
-						
+			
+			if(same_day_size==1){
+				percent_sum = elem.getEarnPercent();
+				same_day_size = 1;
+				last = elem;
+				continue;
+			}
+			
 			int earnPercent = percent_sum/same_day_size;
 			
 			if(minEarnPercent>earnPercent){
@@ -189,12 +196,12 @@ public class EmuTradeSystem implements ITradeSystem{
 				minEarnPercentExpectProduct=totalPercentExpectProduct;
 			}
 			
-			KLineUnit sh_kline_unit = StockHelper.binSearch(sh_index.line.kline_list, elem.buy_date, 0);
+			KLineUnit sh_kline_unit = StockHelper.binSearch(sh_index.line.kline_list, last.buy_date, 0);
 			
 			if(sh_kline_unit!=null){
-				Log.v(null, "earnPercent:" + earnPercent + ", earnPercentExpectSum:" + earnPercentExpectSum/totalNum + ", totalPercentExpectProduct:" + totalPercentExpectProduct + " date:" + elem.buy_date + " 沪指：" + sh_kline_unit.toString());
+				Log.v(null, "earnPercent(" + same_day_size + "):" + earnPercent + ", earnPercentExpectSum:" + earnPercentExpectSum/totalNum + ", totalPercentExpectProduct:" + totalPercentExpectProduct + " date:" + last.buy_date + " 沪指：" + sh_kline_unit.toString());
 			}else{
-				Log.v(null, "earnPercent:" + earnPercent + ", earnPercentExpectSum:" + earnPercentExpectSum/totalNum + ", totalPercentExpectProduct:" + totalPercentExpectProduct + " date:" + elem.buy_date);
+				Log.v(null, "earnPercent(" + same_day_size+ "):" + earnPercent + ", earnPercentExpectSum:" + earnPercentExpectSum/totalNum + ", totalPercentExpectProduct:" + totalPercentExpectProduct + " date:" + last.buy_date);
 			}
 			
 		
@@ -230,7 +237,7 @@ public class EmuTradeSystem implements ITradeSystem{
 		Log.v(null, "=== 单次最小盈利(percent):" + minEarnPercent);
 		Log.v(null, "=== 单次最大盈利(percent):" + maxEarnPercent);
 		Log.v(null, "===================Report!=========================");
-		
+		rlt.remove(rlt.size()-1);
 		GuiManager.getInstance().showResult(rlt);
 	}
 

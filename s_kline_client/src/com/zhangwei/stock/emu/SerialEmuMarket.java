@@ -31,6 +31,7 @@ public class SerialEmuMarket implements ParallelListener {
 		SerialEmuMarket se = new SerialEmuMarket();
 		//se.bs = new MyHighSellLowBuyStrategy();
 		se.bs = new MyWeakBuyStrategy(UID);
+		//se.bs = new MyHighSellLowBuyStrategy(UID);
 		EmuTradeSystem es = EmuTradeSystem.getInstance();
 		List<TradeUnit> rlt = es.getTradeInfo(se.bs.getUID(), 0, order_key);
 		//List<TradeUnit> rlt = es.getTradeInfo(se.bs.getUID(), 0, "earn_percent desc");

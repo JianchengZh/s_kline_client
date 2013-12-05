@@ -63,6 +63,16 @@ public class KUpDownUpCondition implements ICondition {
 			return false;
 		}
 		
+		//A: ktr.LOW  B:ktr.HIGH C:sub_ktr.LOW  D:ktr.RIGHT
+		List<KLineUnit> line_ab = StockHelper.getInterval(kl, ktr.LOW, ktr.HIGH);
+		if(!StockHelper.checkKlineVaild(line_ab) || line_ab.size()<kl.size()*2/3){
+			return false;
+		}
+		
+		if(sub_ktr.LOW.vol*2>ktr.vol_average){
+			return false;
+		}
+		
 		value = sub_ktr.HIGH.close * 100 / sub_ktr.LOW.close;
 		
 		return true;

@@ -9,7 +9,5 @@ public interface ISell {
 	
 	public boolean sellCancel(SellPoint sellpoint, HoldUnit hu);
 	
-	public boolean onSellSucess(SellPoint sellpoint, HoldUnit hu);
-	
-	public boolean onSellCancel(SellPoint sellpoint, HoldUnit hu);
+
 }

@@ -381,7 +381,8 @@ public class StockHelper {
 			int TR = 0; //Math.max(a, b);
 			int PDN = 0;
 			int N = 0;
-			for(KLineUnit elem : kl){
+			List<KLineUnit> exkl = getForwardExrightKLine(kl);
+			for(KLineUnit elem : exkl){
 				if(last!=null){
 					TR = Math.max(Math.max(elem.high - elem.low, elem.high-last.close), last.close-elem.low );
 				    N = (19*PDN+TR)/20;

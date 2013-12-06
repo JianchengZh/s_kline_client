@@ -10,6 +10,7 @@ import com.zhangwei.stock.bs.BuyPoint;
 import com.zhangwei.stock.bs.HoldUnit;
 import com.zhangwei.stock.bs.IBuy;
 import com.zhangwei.stock.bs.ISell;
+import com.zhangwei.stock.bs.ISellCallBack;
 import com.zhangwei.stock.bs.SellPoint;
 import com.zhangwei.stock.tradesystem.EmuTradeSystem;
 import com.zhangwei.stock.tradesystem.ITradeSystem;
@@ -21,6 +22,7 @@ public class EmuAssertManager implements IAssertManager, IBuy, ISell{
 	private HashMap<String, HoldUnit> holds;
 	private ArrayList<HoldUnit> sold_holds;
 	private ITradeSystem tradeSystem;
+	private ISellCallBack iSellCallBack;
 	
 	public EmuAssertManager(int money){
 		this.money_left = money;
@@ -131,17 +133,6 @@ public class EmuAssertManager implements IAssertManager, IBuy, ISell{
 		return false;
 	}
 
-	@Override
-	public boolean onSellSucess(SellPoint sp, HoldUnit hu) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean onSellCancel(SellPoint sp, HoldUnit hu) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 	@Override
 	public boolean buy(BuyPoint buypoint) {
@@ -185,6 +176,12 @@ public class EmuAssertManager implements IAssertManager, IBuy, ISell{
 	public boolean sell(HoldUnit elem) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+
+	public void setSellCallBackListener(ISellCallBack iSellCallBack) {
+		// TODO Auto-generated method stub
+		this.iSellCallBack = iSellCallBack;
 	}
 
 

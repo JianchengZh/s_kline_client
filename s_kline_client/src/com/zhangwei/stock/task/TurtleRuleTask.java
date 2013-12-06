@@ -9,6 +9,7 @@ import com.zhangwei.stock.Stock;
 import com.zhangwei.stock.StockManager;
 import com.zhangwei.stock.bs.BuyPoint;
 import com.zhangwei.stock.bs.HoldUnit;
+import com.zhangwei.stock.bs.ISellCallBack;
 import com.zhangwei.stock.bs.SellPoint;
 import com.zhangwei.stock.daygenerater.EmuStockDayGenerater;
 import com.zhangwei.stock.manager.EmuAssertManager;
@@ -18,7 +19,7 @@ import com.zhangwei.stock.strategy.TurtleRuleStrategy;
 import com.zhangwei.util.DateHelper;
 import com.zhangwei.util.StockHelper;
 
-public class TurtleRuleTask implements StockTask {
+public class TurtleRuleTask implements StockTask, ISellCallBack {
 	
 	private String stock_id;
 	private int market_type;
@@ -32,6 +33,7 @@ public class TurtleRuleTask implements StockTask {
 	private boolean out_market;
 	
 	public final static int InitMoney = 1000000;
+	public final static int lossPercentFactor = 1;
 
 	public TurtleRuleTask(String MarketID, String stock_id, int market_type){
 		this.stock_id = stock_id;
@@ -42,8 +44,10 @@ public class TurtleRuleTask implements StockTask {
 		this.status = AssertStatus.EMPTY;
 		this.stock = StockManager.getInstance().getStock(stock_id, market_type);
 		
-		to_buys = new ArrayList<>();
-		to_sells = new ArrayList<>();
+		assetManager.setSellCallBackListener(this);
+		
+		to_buys = new ArrayList<BuyPoint>();
+		to_sells = new ArrayList<HoldUnit>();
 		out_market = false;
 	}
 
@@ -56,12 +60,12 @@ public class TurtleRuleTask implements StockTask {
 			KLineUnit last = kl.get(kl.size()-1);
 			
 			//TR（实际范围）=max(H-L,H-PDC,PDC-L)
-
+            //calcN 采用前向复权方式
 			int N = StockHelper.calcN(kl);
 			
-			//最大单位=帐户的1%/(N×每点价值量)
+			//最大单位数=帐户的1%/(N×每点价值量)
 			int VolatilityValue = N * last.close; //单位元
-			int maxUnitNum = InitMoney /100 / VolatilityValue;
+			int maxUnitNum = InitMoney * lossPercentFactor / 100 / VolatilityValue;
 			
 			if(maxUnitNum<1){
 				maxUnitNum = 1;
@@ -108,6 +112,18 @@ public class TurtleRuleTask implements StockTask {
 			today = dayGen.getToday();
 		}
 		
+	}
+
+	@Override
+	public boolean onSellSucess(SellPoint sellpoint, HoldUnit hu) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean onSellCancel(SellPoint sellpoint, HoldUnit hu) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

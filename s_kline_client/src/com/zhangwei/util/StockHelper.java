@@ -369,4 +369,35 @@ public class StockHelper {
 		}
 	}
 
+	/**
+	 * 计算 TR（实际范围）=max(H-L,H-PDC,PDC-L)
+	 * 
+	 * N=(19×PDN+TR)/20
+	 * */
+	public static int calcN(List<KLineUnit> kl) {
+		// TODO Auto-generated method stub
+		KLineUnit last = null;
+		if(kl!=null && kl.size()>0){
+			int TR = 0; //Math.max(a, b);
+			int PDN = 0;
+			int N = 0;
+			for(KLineUnit elem : kl){
+				if(last!=null){
+					TR = Math.max(Math.max(elem.high - elem.low, elem.high-last.close), last.close-elem.low );
+				    N = (19*PDN+TR)/20;
+				    PDN = N;
+				}else{
+					TR = elem.high - elem.low;
+					PDN = TR;
+					N = TR;
+				}
+			}
+			
+			return N;
+		}else{
+			return -1;
+		}
+
+	}
+
 }

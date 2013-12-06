@@ -17,6 +17,8 @@ public class HoldUnit {
 	//public int hold_price; //当前的价格
 	//public int hold_vol;   //当前的数量
 	
+	public int to_sell_price;
+	
 	public int sell_date;
 	public int sell_price;
 	public int sell_vol;

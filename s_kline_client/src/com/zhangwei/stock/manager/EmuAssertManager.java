@@ -182,6 +182,12 @@ public class EmuAssertManager implements IAssertManager, IBuy, ISell{
 	}
 
 
+	public boolean sell(HoldUnit elem) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
 
 
 }

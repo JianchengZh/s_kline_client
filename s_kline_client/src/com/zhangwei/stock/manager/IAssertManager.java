@@ -23,5 +23,9 @@ public interface IAssertManager {
 	public int geteTotalAsset(int date);
 	
 	public Set<Entry<String, HoldUnit>> getHoldList();
+	
+	public void BuyDone(String stock_id, int market_type, int date, int buy_price, int buy_vol);
+	
+	public void SellDone(String stock_id, int market_type, int date, int sell_price, int sell_vol);
 
 }

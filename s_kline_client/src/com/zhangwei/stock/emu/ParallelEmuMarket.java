@@ -38,7 +38,6 @@ import com.zhangwei.stock.task.StockUpdateTask;
 import com.zhangwei.stock.task.ITaskBuyResultCheck;
 import com.zhangwei.stock.tradesystem.EmuTradeSystem;
 import com.zhangwei.stock.tradesystem.ITradeSystem;
-import com.zhangwei.stock.transaction.EmuBuyTransaction;
 import com.zhangwei.util.DateHelper;
 import com.zhangwei.util.StockHelper;
 

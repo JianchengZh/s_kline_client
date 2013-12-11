@@ -9,6 +9,7 @@ import com.zhangwei.stock.Stock;
 import com.zhangwei.stock.StockManager;
 import com.zhangwei.stock.bs.BuyPoint;
 import com.zhangwei.stock.bs.HoldUnit;
+import com.zhangwei.stock.bs.IBuyCallBack;
 import com.zhangwei.stock.bs.ISellCallBack;
 import com.zhangwei.stock.bs.SellPoint;
 import com.zhangwei.stock.daygenerater.EmuStockDayGenerater;
@@ -19,7 +20,7 @@ import com.zhangwei.stock.strategy.TurtleRuleStrategy;
 import com.zhangwei.util.DateHelper;
 import com.zhangwei.util.StockHelper;
 
-public class TurtleRuleTask implements StockTask, ISellCallBack {
+public class TurtleRuleTask implements StockTask, ISellCallBack, IBuyCallBack {
 	
 	private String stock_id;
 	private int market_type;
@@ -40,7 +41,7 @@ public class TurtleRuleTask implements StockTask, ISellCallBack {
 		this.market_type = market_type;
 		this.bs = new TurtleRuleStrategy(MarketID);
 		this.dayGen = new EmuStockDayGenerater(stock_id, market_type);
-		this.assetManager = new EmuAssertManager(InitMoney);
+		this.assetManager = new EmuAssertManager(InitMoney, bs.getBSTableName());
 		this.status = AssertStatus.EMPTY;
 		this.stock = StockManager.getInstance().getStock(stock_id, market_type);
 		
@@ -115,15 +116,32 @@ public class TurtleRuleTask implements StockTask, ISellCallBack {
 	}
 
 	@Override
-	public boolean onSellSucess(SellPoint sellpoint, HoldUnit hu) {
+	public boolean onBuySucess(String stock_id, int market_type, int date,
+			int buy_price, int buy_vol) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean onSellCancel(SellPoint sellpoint, HoldUnit hu) {
+	public boolean onBuyCancel(String stock_id, int market_type, int date,
+			int buy_price, int buy_vol) {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public boolean onSellSucess(String stock_id, int market_type, int date,
+			int sell_price, int sell_vol) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean onSellCancel(String stock_id, int market_type, int date,
+			int sell_price, int sell_vol) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 
 }

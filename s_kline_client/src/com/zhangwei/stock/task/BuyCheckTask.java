@@ -1,7 +1,7 @@
 package com.zhangwei.stock.task;
 
 
-import java.util.Iterator;
+
 import java.util.List;
 
 
@@ -11,11 +11,10 @@ import com.zhangwei.stock.Stock;
 import com.zhangwei.stock.StockInfo;
 import com.zhangwei.stock.StockManager;
 import com.zhangwei.stock.bs.BuyPoint;
-import com.zhangwei.stock.bs.SellPoint;
-import com.zhangwei.stock.emu.ParallelEmuMarket;
+
 import com.zhangwei.stock.strategy.BasicStrategy;
-import com.zhangwei.stock.transaction.EmuBuyTransaction;
-import com.zhangwei.stock.transaction.EmuSellTransaction;
+
+
 import com.zhangwei.util.StockHelper;
 
 public class BuyCheckTask implements StockTask {

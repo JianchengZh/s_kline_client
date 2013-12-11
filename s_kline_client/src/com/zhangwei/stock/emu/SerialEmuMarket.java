@@ -25,6 +25,8 @@ public class SerialEmuMarket implements ParallelListener {
 	public static final String UID = "SEM";
 	
 	public final static String order_key = "buy_date"; //"earn_percent desc", null
+	
+	EmuTradeSystem es;
 
 	public static void main(String[] args){
 		
@@ -32,12 +34,12 @@ public class SerialEmuMarket implements ParallelListener {
 		//se.bs = new MyHighSellLowBuyStrategy();
 		se.bs = new MyWeakBuyStrategy(UID);
 		//se.bs = new MyHighSellLowBuyStrategy(UID);
-		EmuTradeSystem es = EmuTradeSystem.getInstance();
-		List<TradeUnit> rlt = es.getTradeInfo(se.bs.getUID(), 0, order_key);
+		se.es = new EmuTradeSystem();
+		List<TradeUnit> rlt = se.es.getTradeInfo(se.bs.getUID(), 0, order_key);
 		//List<TradeUnit> rlt = es.getTradeInfo(se.bs.getUID(), 0, "earn_percent desc");
 		boolean flag = true;
 		if(flag && rlt!=null && rlt.size()>0){
-			es.Report(rlt);
+			se.es.Report(rlt);
 		}else{
 			se.bs.init();
 			
@@ -50,17 +52,12 @@ public class SerialEmuMarket implements ParallelListener {
 			pm.startTask(se, 8);
 		}
 		
-
-
-		
-		
 	}
 
 	@Override
 	public void onComplete() {
 		// TODO Auto-generated method stub
 		Log.v(TAG, "onComplete ");
-		EmuTradeSystem es = EmuTradeSystem.getInstance();
 		List<TradeUnit> ret = es.getTradeInfo(bs.getUID(), 0, order_key);
 		es.Report(ret);
 	}

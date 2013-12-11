@@ -21,6 +21,7 @@ import com.zhangwei.stock.bs.ISell;
 import com.zhangwei.stock.bs.SellPoint;
 import com.zhangwei.stock.bs.TradeUnit;
 import com.zhangwei.stock.gui.GuiManager;
+import com.zhangwei.stock.manager.IAssertManager;
 import com.zhangwei.stock.record.EmuTradeRecorder;
 import com.zhangwei.util.Format;
 import com.zhangwei.util.StockHelper;
@@ -28,40 +29,36 @@ import com.zhangwei.util.StockHelper;
 public class EmuTradeSystem implements ITradeSystem{
 	private static final String TAG = "EmuTradeSystem";
 	EmuTradeRecorder records;
-	private static EmuTradeSystem ins;
-	private EmuTradeSystem(){
-		records = new EmuTradeRecorder();
+	IAssertManager iam;
+	//private static EmuTradeSystem ins;
+	public EmuTradeSystem(IAssertManager iam, String bsTableName){
+		this.records = new EmuTradeRecorder(bsTableName);
+		this.iam = iam;
 	}
 	
-	public static EmuTradeSystem getInstance(){
+/*	public static EmuTradeSystem getInstance(){
 		if(ins==null){
 			ins = new EmuTradeSystem();
 		}
 		
 		return ins;
-	}
+	}*/
 	
-	@Override
-	public void submitBuyTransaction(IBuy buy, BuyPoint buypoint){
-		buy.onBuySucess(buypoint);
+	public EmuTradeSystem() {
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public void completeBuyTransaction(BuyPoint buypoint) {
-		// TODO Auto-generated method stub
-		records.addBuy(buypoint);
+	public void submitBuyTransaction(IBuy buy, BuyPoint buypoint){
+		//buy.onBuySucess(buypoint);
 	}
+
 	
 	@Override
 	public void submitSellTransaction(ISell sell, SellPoint sellpoint, HoldUnit hu){
-		sell.onSellSucess(sellpoint, hu);
+		//sell.onSellSucess(sellpoint, hu);
 	}
 
-	@Override
-	public void completeSellTransaction(SellPoint sellpoint, HoldUnit hu) {
-		// TODO Auto-generated method stub
-		records.addSell(sellpoint, hu);
-	}
 
 	public List<TradeUnit> getTradeInfo(String uid, int type, String order_key) {
 		// TODO Auto-generated method stub
@@ -239,6 +236,21 @@ public class EmuTradeSystem implements ITradeSystem{
 		Log.v(null, "===================Report!=========================");
 		rlt.remove(rlt.size()-1);
 		GuiManager.getInstance().showResult(rlt);
+	}
+
+	@Override
+	public void completeBuyTransaction(String stock_id, int market_type,
+			int date, int buy_price, int buy_vol) {
+		// TODO Auto-generated method stub
+		records.addBuy(stock_id, market_type, date, buy_price, buy_vol);
+		iam.BuyDone(stock_id, market_type, date, buy_price, buy_vol);
+	}
+
+	@Override
+	public void completeSellTransaction(String stock_id, int market_type,
+			int date, int sell_price, int sell_vol) {
+		// TODO Auto-generated method stub
+		records.addSell(stock_id, market_type, date, sell_price, sell_vol);
 	}
 
 }

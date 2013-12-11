@@ -9,6 +9,7 @@ import java.util.Set;
 import com.zhangwei.stock.bs.BuyPoint;
 import com.zhangwei.stock.bs.HoldUnit;
 import com.zhangwei.stock.bs.IBuy;
+import com.zhangwei.stock.bs.IBuyCallBack;
 import com.zhangwei.stock.bs.ISell;
 import com.zhangwei.stock.bs.ISellCallBack;
 import com.zhangwei.stock.bs.SellPoint;
@@ -23,13 +24,14 @@ public class EmuAssertManager implements IAssertManager, IBuy, ISell{
 	private ArrayList<HoldUnit> sold_holds;
 	private ITradeSystem tradeSystem;
 	private ISellCallBack iSellCallBack;
+	private IBuyCallBack iBuyCallBack;
 	
-	public EmuAssertManager(int money){
+	public EmuAssertManager(int money, String bsTableName){
 		this.money_left = money;
 		this.total_asset_init = money;
 		this.holds = new HashMap<String, HoldUnit>();
 		this.sold_holds = new ArrayList<HoldUnit>();
-		this.tradeSystem = EmuTradeSystem.getInstance();
+		this.tradeSystem = new EmuTradeSystem(this, bsTableName);
 		//updateAssetAndHoldsFromDZH();
 	}
 	
@@ -147,19 +149,6 @@ public class EmuAssertManager implements IAssertManager, IBuy, ISell{
 		return false;
 	}
 
-	@Override
-	public boolean onBuySucess(BuyPoint buypoint) {
-		// TODO Auto-generated method stub
-		tradeSystem.completeBuyTransaction(buypoint);
-		return true;
-	}
-
-	@Override
-	public boolean onBuyCancel(BuyPoint buypoint) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 
 	public void requestBuy(Map<String, BuyPoint> buys) {
 		// TODO Auto-generated method stub
@@ -184,6 +173,32 @@ public class EmuAssertManager implements IAssertManager, IBuy, ISell{
 		this.iSellCallBack = iSellCallBack;
 	}
 
+	public void setBuyCallBackListener(IBuyCallBack iBuyCallBack) {
+		// TODO Auto-generated method stub
+		this.iBuyCallBack = iBuyCallBack;
+	}
+
+
+	@Override
+	public void BuyDone(String stock_id, int market_type, int date,
+			int buy_price, int buy_vol) {
+		// TODO Auto-generated method stub
+		if(iBuyCallBack!=null){
+			iBuyCallBack.onBuySucess(stock_id, market_type, date, buy_price, buy_vol);
+		}
+		
+	}
+
+
+	@Override
+	public void SellDone(String stock_id, int market_type, int date,
+			int sell_price, int sell_vol) {
+		// TODO Auto-generated method stub
+		if(iSellCallBack!=null){
+			iSellCallBack.onSellSucess(stock_id, market_type, date, sell_price, sell_vol);
+		}
+		
+	}
 
 
 

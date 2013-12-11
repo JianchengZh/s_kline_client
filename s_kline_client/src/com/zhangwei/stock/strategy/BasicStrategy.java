@@ -223,7 +223,7 @@ public abstract class BasicStrategy {
 	public void init() {
 		// TODO Auto-generated method stub
 
-		cleanUp();
+/*		cleanUp();
 		BaseDao bd = BaseDao.getInstance();
 		BStable = "BS_" + getUID();
 		
@@ -232,17 +232,17 @@ public abstract class BasicStrategy {
 
 			String sql_create_table_bs = "CREATE TABLE IF NOT EXISTS " 
 			                  + BStable  
-			                  + "\n(stock_id VARCHAR(6) NOT NULL, market_type INT, buy_date INT NOT NULL, sell_date INT, buy_price INT, sell_price INT, vol INT, earn_percent INT, PRIMARY KEY  (stock_id, buy_date))ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+			                  + "\n(stock_id VARCHAR(6) NOT NULL, market_type INT, buy_total INT, sell_total INT, vol INT, PRIMARY KEY stock_id)ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
 			bd.exec(sql_create_table_bs);
 			
-			String sql_create_index_bs = "CREATE INDEX  buy_date ON " + BStable + " (buy_date);";
-			bd.exec(sql_create_index_bs);
+			//String sql_create_index_bs = "CREATE INDEX  buy_date ON " + BStable + " (buy_date);";
+			//bd.exec(sql_create_index_bs);
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 	}
 	
 	private void cleanUp(){

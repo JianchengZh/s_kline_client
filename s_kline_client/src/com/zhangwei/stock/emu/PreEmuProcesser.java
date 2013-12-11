@@ -36,7 +36,7 @@ public class PreEmuProcesser implements ParallelListener {
 		
 		//bs = new MyHighSellLowBuyStrategy();
 		bs = new MyWeakBuyStrategy(UID);
-		EmuTradeSystem es = EmuTradeSystem.getInstance();
+		EmuTradeSystem es = new EmuTradeSystem();
 		List<TradeUnit> rlt = es.getTradeInfo(bs.getUID(), 0, order_key);
 		//List<TradeUnit> rlt = es.getTradeInfo(se.bs.getUID(), 0, "earn_percent desc");
 		if(flag && rlt!=null && rlt.size()>0){

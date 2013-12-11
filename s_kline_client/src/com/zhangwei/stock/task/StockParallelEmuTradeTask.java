@@ -14,8 +14,6 @@ import com.zhangwei.stock.bs.HoldUnit;
 import com.zhangwei.stock.bs.SellPoint;
 import com.zhangwei.stock.emu.ParallelEmuMarket;
 import com.zhangwei.stock.strategy.BasicStrategy;
-import com.zhangwei.stock.transaction.EmuBuyTransaction;
-import com.zhangwei.stock.transaction.EmuSellTransaction;
 import com.zhangwei.util.StockHelper;
 
 public class StockParallelEmuTradeTask implements StockTask {
@@ -54,10 +52,10 @@ public class StockParallelEmuTradeTask implements StockTask {
 
 				boolean isUpBan = last.isUpBan(exRightKl.get(exRightKl.size()-2));
 				if(!isUpBan){
-					EmuBuyTransaction ebt = new EmuBuyTransaction();
+/*					EmuBuyTransaction ebt = new EmuBuyTransaction();
 					BuyPoint lastBuyPoint = new BuyPoint(bs.getUID(), info.stock_id, info.market_type, date, 0, price, 100, exRightKl.get(exRightKl.size()-2));
 					ebt.buy(lastBuyPoint);
-					queue.addBuyPoint(lastBuyPoint);
+					queue.addBuyPoint(lastBuyPoint);*/
 				}
 
 			}
@@ -77,10 +75,10 @@ public class StockParallelEmuTradeTask implements StockTask {
 						//Log.v(TAG, "SellPoint: stock:" + info.stock_id + ", date:" + date + ", price:" + price);
 						boolean isDownBan = last.isDownBan(exRightKl_sell.get(exRightKl_sell.size()-2));
 						if(!isDownBan){
-							EmuSellTransaction est = new EmuSellTransaction();
+/*							EmuSellTransaction est = new EmuSellTransaction();
 							SellPoint lastSellPoint = new SellPoint(bs.getUID(), bp.stock_id, bp.market_type, date, 0, price, bp.vol, exRightKl.get(exRightKl.size()-2));
 							HoldUnit hu = new HoldUnit(bp.stock_id, bp.market_type, bp.date, bp.price, bp.vol);
-							est.sell(lastSellPoint, hu);
+							est.sell(lastSellPoint, hu);*/
 							
 							//queue.removeBuyPoint(bp);
 							it.remove();

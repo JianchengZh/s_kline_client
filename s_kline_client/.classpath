@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="com/zhangwei/cache/MemoryMeter.java" kind="src" path="src"/>
+	<classpathentry excluding="com/zhangwei/cache/MemoryMeter.java|com/zhangwei/stock/transaction/EmuBuyTransaction.java|com/zhangwei/stock/transaction/EmuSellTransaction.java" kind="src" path="src"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry exported="true" kind="lib" path="libs/gson-2.2.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/jpush-java-libraryV2.jar"/>
@@ -8,5 +8,7 @@
 	<classpathentry exported="true" kind="lib" path="libs/mysql-connector-java-5.1.26-bin.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/concurrentlinkedhashmap-lru-1.3.2_.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/jamm-0.2.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/ormlite-core-4.47.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/ormlite-jdbc-4.47.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

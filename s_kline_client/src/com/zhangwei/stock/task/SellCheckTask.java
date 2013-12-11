@@ -16,8 +16,7 @@ import com.zhangwei.stock.bs.HoldUnit;
 import com.zhangwei.stock.bs.SellPoint;
 import com.zhangwei.stock.emu.ParallelEmuMarket;
 import com.zhangwei.stock.strategy.BasicStrategy;
-import com.zhangwei.stock.transaction.EmuBuyTransaction;
-import com.zhangwei.stock.transaction.EmuSellTransaction;
+
 import com.zhangwei.util.StockHelper;
 
 public class SellCheckTask implements StockTask {

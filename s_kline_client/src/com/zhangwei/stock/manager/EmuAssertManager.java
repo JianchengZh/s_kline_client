@@ -13,6 +13,7 @@ import com.zhangwei.stock.bs.IBuyCallBack;
 import com.zhangwei.stock.bs.ISell;
 import com.zhangwei.stock.bs.ISellCallBack;
 import com.zhangwei.stock.bs.SellPoint;
+import com.zhangwei.stock.record.EmuTradeRecorder;
 import com.zhangwei.stock.tradesystem.EmuTradeSystem;
 import com.zhangwei.stock.tradesystem.ITradeSystem;
 import com.zhangwei.util.StockHelper;
@@ -25,13 +26,15 @@ public class EmuAssertManager implements IAssertManager, IBuy, ISell{
 	private ITradeSystem tradeSystem;
 	private ISellCallBack iSellCallBack;
 	private IBuyCallBack iBuyCallBack;
+	private EmuTradeRecorder emuTR;
 	
 	public EmuAssertManager(int money, String bsTableName){
 		this.money_left = money;
 		this.total_asset_init = money;
 		this.holds = new HashMap<String, HoldUnit>();
 		this.sold_holds = new ArrayList<HoldUnit>();
-		this.tradeSystem = new EmuTradeSystem(this, bsTableName);
+		this.tradeSystem = new EmuTradeSystem(this);
+		this.emuTR = new EmuTradeRecorder(bsTableName);
 		//updateAssetAndHoldsFromDZH();
 	}
 	
@@ -183,6 +186,7 @@ public class EmuAssertManager implements IAssertManager, IBuy, ISell{
 	public void BuyDone(String stock_id, int market_type, int date,
 			int buy_price, int buy_vol) {
 		// TODO Auto-generated method stub
+		emuTR.addBuy(stock_id, market_type, date, buy_price, buy_vol);
 		if(iBuyCallBack!=null){
 			iBuyCallBack.onBuySucess(stock_id, market_type, date, buy_price, buy_vol);
 		}
@@ -194,6 +198,7 @@ public class EmuAssertManager implements IAssertManager, IBuy, ISell{
 	public void SellDone(String stock_id, int market_type, int date,
 			int sell_price, int sell_vol) {
 		// TODO Auto-generated method stub
+		emuTR.addSell(stock_id, market_type, date, sell_price, sell_vol);
 		if(iSellCallBack!=null){
 			iSellCallBack.onSellSucess(stock_id, market_type, date, sell_price, sell_vol);
 		}

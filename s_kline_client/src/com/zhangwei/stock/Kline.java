@@ -260,5 +260,10 @@ public class Kline {
 		return elem.date;
 	}
 
+	public KLineUnit getKlineUnit(int date) {
+		// TODO Auto-generated method stub
+		return StockHelper.binSearch(kline_list, date, 0);
+	}
+
 	
 }

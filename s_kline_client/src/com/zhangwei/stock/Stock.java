@@ -427,6 +427,32 @@ public class Stock {
 		}
 	}
 
+	public boolean canBuy(int date, int price) {
+		// TODO Auto-generated method stub
+		if(line!=null){
+			KLineUnit u = line.getKlineUnit(date);
+			if(u!=null){
+				return u.canBuy(price);
+			}
+		}
+
+		
+		return false;
+	}
+
+	public boolean canSell(int date, int price) {
+		// TODO Auto-generated method stub
+		if(line!=null){
+			KLineUnit u = line.getKlineUnit(date);
+			if(u!=null){
+				return u.canSell(price);
+			}
+		}
+
+		
+		return false;
+	}
+
 
 
 }

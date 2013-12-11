@@ -83,5 +83,23 @@ public class KLineUnit {
 		
 		return true;
 	}
+
+	public boolean canBuy(int price) {
+		// TODO Auto-generated method stub
+		if(low>0 && price>low && price<=high){
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean canSell(int price) {
+		// TODO Auto-generated method stub
+		if(low>0 && price>=low && price<high){
+			return true;
+		}
+		
+		return false;
+	}
 }
 

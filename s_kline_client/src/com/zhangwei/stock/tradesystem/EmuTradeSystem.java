@@ -28,22 +28,15 @@ import com.zhangwei.util.StockHelper;
 
 public class EmuTradeSystem implements ITradeSystem{
 	private static final String TAG = "EmuTradeSystem";
-	EmuTradeRecorder records;
+
 	IAssertManager iam;
-	//private static EmuTradeSystem ins;
-	public EmuTradeSystem(IAssertManager iam, String bsTableName){
-		this.records = new EmuTradeRecorder(bsTableName);
+
+	public EmuTradeSystem(IAssertManager iam){
+
 		this.iam = iam;
 	}
 	
-/*	public static EmuTradeSystem getInstance(){
-		if(ins==null){
-			ins = new EmuTradeSystem();
-		}
-		
-		return ins;
-	}*/
-	
+
 	public EmuTradeSystem() {
 		// TODO Auto-generated constructor stub
 	}
@@ -51,12 +44,22 @@ public class EmuTradeSystem implements ITradeSystem{
 	@Override
 	public void submitBuyTransaction(IBuy buy, BuyPoint buypoint){
 		//buy.onBuySucess(buypoint);
+		StockManager sm = StockManager.getInstance();
+		Stock s = sm.getStock(buypoint.stock_id, buypoint.market_type);
+		if(s.canBuy(buypoint.date, buypoint.price)){
+			completeBuyTransaction(buypoint.stock_id, buypoint.market_type, buypoint.date, buypoint.price, buypoint.vol);
+		}
 	}
 
 	
 	@Override
 	public void submitSellTransaction(ISell sell, SellPoint sellpoint, HoldUnit hu){
 		//sell.onSellSucess(sellpoint, hu);
+		StockManager sm = StockManager.getInstance();
+		Stock s = sm.getStock(hu.stock_id, hu.market_type);
+		if(s.canSell(sellpoint.date, sellpoint.price)){
+			completeSellTransaction(hu.stock_id, hu.market_type, sellpoint.date, sellpoint.price, hu.buy_vol);
+		}
 	}
 
 
@@ -242,7 +245,7 @@ public class EmuTradeSystem implements ITradeSystem{
 	public void completeBuyTransaction(String stock_id, int market_type,
 			int date, int buy_price, int buy_vol) {
 		// TODO Auto-generated method stub
-		records.addBuy(stock_id, market_type, date, buy_price, buy_vol);
+		//records.addBuy(stock_id, market_type, date, buy_price, buy_vol);
 		iam.BuyDone(stock_id, market_type, date, buy_price, buy_vol);
 	}
 
@@ -250,7 +253,8 @@ public class EmuTradeSystem implements ITradeSystem{
 	public void completeSellTransaction(String stock_id, int market_type,
 			int date, int sell_price, int sell_vol) {
 		// TODO Auto-generated method stub
-		records.addSell(stock_id, market_type, date, sell_price, sell_vol);
+		//records.addSell(stock_id, market_type, date, sell_price, sell_vol);
+		iam.SellDone(stock_id, market_type, date, sell_price, sell_vol);
 	}
 
 }

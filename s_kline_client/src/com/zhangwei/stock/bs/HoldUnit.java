@@ -16,6 +16,7 @@ public class HoldUnit {
 	public boolean sold; //是否卖出
 	//public int hold_price; //当前的价格
 	//public int hold_vol;   //当前的数量
+	public boolean force_sell; //是否要强制卖出，以现价
 	
 	public int to_sell_price;
 	
@@ -37,6 +38,7 @@ public class HoldUnit {
 		this.buy_yongjin = StockHelper.calcCircaCost(buy_price * buy_vol, 15, 10000);
 	
 		sold = false;
+		force_sell = false;
 	}
 	
 	/**
@@ -60,6 +62,7 @@ public class HoldUnit {
 			sell_yongjin = StockHelper.calcCircaCost(sell_value, 1, 1000) + StockHelper.calcCircaCost(sell_value, 15, 10000);
 		}
 
+		force_sell = false;
 	
 	}
 	

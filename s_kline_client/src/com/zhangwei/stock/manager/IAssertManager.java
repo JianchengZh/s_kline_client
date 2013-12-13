@@ -26,6 +26,6 @@ public interface IAssertManager {
 	
 	public void BuyDone(String stock_id, int market_type, int date, int buy_price, int buy_vol);
 	
-	public void SellDone(String stock_id, int market_type, int date, int sell_price, int sell_vol);
+	public void SellDone(String stock_id, int market_type, int buy_date, int sell_date, int buy_price, int sell_price, int sell_vol);
 
 }

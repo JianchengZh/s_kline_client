@@ -1,6 +1,7 @@
 package com.zhangwei.stock.task;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.zhangwei.stock.Constants;
@@ -15,6 +16,8 @@ import com.zhangwei.stock.bs.SellPoint;
 import com.zhangwei.stock.daygenerater.EmuStockDayGenerater;
 import com.zhangwei.stock.manager.EmuAssertManager;
 import com.zhangwei.stock.status.AssertStatus;
+import com.zhangwei.stock.status.TradeUnitStatus;
+import com.zhangwei.stock.status.TurtleRuleTaskStatus;
 import com.zhangwei.stock.strategy.BasicStrategy;
 import com.zhangwei.stock.strategy.TurtleRuleStrategy;
 import com.zhangwei.util.DateHelper;
@@ -27,7 +30,7 @@ public class TurtleRuleTask implements StockTask, ISellCallBack, IBuyCallBack {
 	private BasicStrategy bs;
 	private EmuStockDayGenerater dayGen;
 	private EmuAssertManager assetManager;
-	private AssertStatus status;
+	private TurtleRuleTaskStatus status;
 	private Stock stock;
 	private ArrayList<BuyPoint> to_buys;
 	private ArrayList<HoldUnit> to_sells;
@@ -35,6 +38,8 @@ public class TurtleRuleTask implements StockTask, ISellCallBack, IBuyCallBack {
 	
 	public final static int InitMoney = 1000000;
 	public final static int lossPercentFactor = 1;
+	
+	int today = 0;
 
 	public TurtleRuleTask(String MarketID, String stock_id, int market_type){
 		this.stock_id = stock_id;
@@ -42,7 +47,7 @@ public class TurtleRuleTask implements StockTask, ISellCallBack, IBuyCallBack {
 		this.bs = new TurtleRuleStrategy(MarketID);
 		this.dayGen = new EmuStockDayGenerater(stock_id, market_type);
 		this.assetManager = new EmuAssertManager(InitMoney, bs.getBSTableName());
-		this.status = AssertStatus.EMPTY;
+		this.status = TurtleRuleTaskStatus.EMPTY;
 		this.stock = StockManager.getInstance().getStock(stock_id, market_type);
 		
 		assetManager.setSellCallBackListener(this);
@@ -55,7 +60,7 @@ public class TurtleRuleTask implements StockTask, ISellCallBack, IBuyCallBack {
 	@Override
 	public void processTask() {
 		// TODO Auto-generated method stub
-		int today = dayGen.getToday();
+		today = dayGen.getToday();
 		while(DateHelper.checkVaildDate(today)){
 			List<KLineUnit> kl = stock.generateNDayKlineToNow(Constants.BUYPOINT_PREFIX_LEN, today);
 			KLineUnit last = kl.get(kl.size()-1);
@@ -72,43 +77,45 @@ public class TurtleRuleTask implements StockTask, ISellCallBack, IBuyCallBack {
 				maxUnitNum = 1;
 			}
 			
-			//to do the work left
-			if(to_buys.size()>0){
-				for(BuyPoint elem : to_buys){
-					assetManager.buy(elem);
-				}
-			}
-			
-			if(to_sells.size()>0){
-				for(HoldUnit elem : to_sells){
-					if(out_market){
-						elem.to_sell_price = last.open;
-					}
-					assetManager.sell(elem); //止损挂单 或 离市
-				}
-			}
-
-			if(status==AssertStatus.EMPTY || status==AssertStatus.PART){
+			if(status==TurtleRuleTaskStatus.EMPTY){
 				if(bs.checkBuy(stock.info, kl, null)){
 					BuyPoint buypoint = new BuyPoint(bs.getUID(), stock_id, today, today, 0, last.close, last.vol, last);
+					//将各个买进的点都挂单
 					to_buys.add(buypoint); // put it to tomorrow
+					
+					status = TurtleRuleTaskStatus.BUYING;
 				}
 				
 
-			}
+			}else if(status==TurtleRuleTaskStatus.BUYING){
+				//to do the work left
+				if(to_buys.size()>0){
+					for(BuyPoint elem : to_buys){
+						assetManager.buy(elem);
+					}
+				}
 				
-			
-			if(status==AssertStatus.FULL || status==AssertStatus.PART){
+				if(to_sells.size()>0){
+					for(HoldUnit elem : to_sells){
+						elem.sell_date = today;
+						assetManager.sell(elem); //止损挂单 或 离市
+					}
+				}
+				
 				if(bs.checkSell(stock.info, kl, null)){
-					out_market = true;
+					status = TurtleRuleTaskStatus.SELLING;
 				}
 				
-
+				
+			}else if(status==TurtleRuleTaskStatus.SELLING){
+				if(to_sells.size()>0){
+					for(HoldUnit elem : to_sells){
+						elem.sell_date = today;
+						elem.force_sell = true;
+						assetManager.sell(elem); //止损挂单 或 离市
+					}
+				}
 			}
-			
-
-
-		
 			
 			today = dayGen.getToday();
 		}
@@ -119,6 +126,21 @@ public class TurtleRuleTask implements StockTask, ISellCallBack, IBuyCallBack {
 	public boolean onBuySucess(String stock_id, int market_type, int date,
 			int buy_price, int buy_vol) {
 		// TODO Auto-generated method stub
+		Iterator<BuyPoint> iterator = to_buys.iterator();
+		while(iterator.hasNext()){
+			BuyPoint bp = iterator.next();
+			if(bp.price==buy_price){
+				iterator.remove();
+			}
+		}
+		
+		to_sells.add(new HoldUnit(stock_id, market_type, today, buy_price, buy_vol));
+		
+		if(status==TurtleRuleTaskStatus.EMPTY){
+			status = TurtleRuleTaskStatus.BUYING;
+		}
+
+		
 		return false;
 	}
 
@@ -130,9 +152,16 @@ public class TurtleRuleTask implements StockTask, ISellCallBack, IBuyCallBack {
 	}
 
 	@Override
-	public boolean onSellSucess(String stock_id, int market_type, int date,
-			int sell_price, int sell_vol) {
+	public boolean onSellSucess(String stock_id, int market_type, int buy_date, int sell_date,
+			int buy_price, int sell_price, int sell_vol) {
 		// TODO Auto-generated method stub
+		Iterator<HoldUnit> iterator = to_sells.iterator();
+		while(iterator.hasNext()){
+			HoldUnit hu = iterator.next();
+			if(hu.buy_date==buy_date && hu.buy_price==buy_price){
+				iterator.remove();
+			}
+		}
 		return false;
 	}
 

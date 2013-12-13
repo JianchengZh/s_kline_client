@@ -9,19 +9,10 @@ import com.zhangwei.stock.bs.SellPoint;
 public class RealTradeSystem implements ITradeSystem {
 
 	@Override
-	public void submitBuyTransaction(IBuy buy, BuyPoint buypoint) {
+	public void submitBuyTransaction(BuyPoint buypoint) {
 		// TODO Auto-generated method stub
-
+		
 	}
-
-
-
-	@Override
-	public void submitSellTransaction(ISell sell, SellPoint Sellpoint, HoldUnit hu) {
-		// TODO Auto-generated method stub
-
-	}
-
 
 	@Override
 	public void completeBuyTransaction(String stock_id, int market_type,
@@ -31,10 +22,23 @@ public class RealTradeSystem implements ITradeSystem {
 	}
 
 	@Override
-	public void completeSellTransaction(String stock_id, int market_type,
-			int date, int sell_price, int sell_vol) {
+	public void submitSellTransaction(HoldUnit hu) {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void completeSellTransaction(String stock_id, int market_type,
+			int buy_date, int sell_date, int buy_price, int sell_price,
+			int sell_vol) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+
+
+
 
 }

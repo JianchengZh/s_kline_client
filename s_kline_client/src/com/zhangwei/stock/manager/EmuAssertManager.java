@@ -121,16 +121,6 @@ public class EmuAssertManager implements IAssertManager, IBuy, ISell{
 		return null;
 	}
 	
-	@Override
-	public boolean sell(SellPoint sp, HoldUnit hu) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
-	public void sell(SellPoint sellpoint) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public boolean sellCancel(SellPoint sp, HoldUnit hu) {
@@ -142,7 +132,7 @@ public class EmuAssertManager implements IAssertManager, IBuy, ISell{
 	@Override
 	public boolean buy(BuyPoint buypoint) {
 		// TODO Auto-generated method stub
-		tradeSystem.submitBuyTransaction(this, buypoint);
+		tradeSystem.submitBuyTransaction(buypoint);
 		return true;
 	}
 
@@ -167,6 +157,7 @@ public class EmuAssertManager implements IAssertManager, IBuy, ISell{
 
 	public boolean sell(HoldUnit elem) {
 		// TODO Auto-generated method stub
+		tradeSystem.submitSellTransaction(elem);
 		return false;
 	}
 
@@ -195,12 +186,12 @@ public class EmuAssertManager implements IAssertManager, IBuy, ISell{
 
 
 	@Override
-	public void SellDone(String stock_id, int market_type, int date,
-			int sell_price, int sell_vol) {
+	public void SellDone(String stock_id, int market_type, int buy_date,
+			int sell_date, int buy_price, int sell_price, int sell_vol) {
 		// TODO Auto-generated method stub
-		emuTR.addSell(stock_id, market_type, date, sell_price, sell_vol);
+		emuTR.addSell(stock_id, market_type, sell_date, sell_price, sell_vol);
 		if(iSellCallBack!=null){
-			iSellCallBack.onSellSucess(stock_id, market_type, date, sell_price, sell_vol);
+			iSellCallBack.onSellSucess(stock_id, market_type, buy_date, sell_date, buy_price, sell_price, sell_vol);
 		}
 		
 	}

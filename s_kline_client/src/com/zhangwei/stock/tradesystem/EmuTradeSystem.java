@@ -42,7 +42,7 @@ public class EmuTradeSystem implements ITradeSystem{
 	}
 
 	@Override
-	public void submitBuyTransaction(IBuy buy, BuyPoint buypoint){
+	public void submitBuyTransaction(BuyPoint buypoint){
 		//buy.onBuySucess(buypoint);
 		StockManager sm = StockManager.getInstance();
 		Stock s = sm.getStock(buypoint.stock_id, buypoint.market_type);
@@ -53,12 +53,12 @@ public class EmuTradeSystem implements ITradeSystem{
 
 	
 	@Override
-	public void submitSellTransaction(ISell sell, SellPoint sellpoint, HoldUnit hu){
+	public void submitSellTransaction(HoldUnit hu){
 		//sell.onSellSucess(sellpoint, hu);
 		StockManager sm = StockManager.getInstance();
 		Stock s = sm.getStock(hu.stock_id, hu.market_type);
-		if(s.canSell(sellpoint.date, sellpoint.price)){
-			completeSellTransaction(hu.stock_id, hu.market_type, sellpoint.date, sellpoint.price, hu.buy_vol);
+		if(s.canSell(hu.sell_date, hu.sell_price)){
+			completeSellTransaction(hu.stock_id, hu.market_type, hu.buy_date, hu.sell_date, hu.buy_price, hu.sell_price, hu.buy_vol);
 		}
 	}
 
@@ -251,10 +251,10 @@ public class EmuTradeSystem implements ITradeSystem{
 
 	@Override
 	public void completeSellTransaction(String stock_id, int market_type,
-			int date, int sell_price, int sell_vol) {
+			int buy_date, int sell_date, int buy_price, int sell_price, int sell_vol) {
 		// TODO Auto-generated method stub
 		//records.addSell(stock_id, market_type, date, sell_price, sell_vol);
-		iam.SellDone(stock_id, market_type, date, sell_price, sell_vol);
+		iam.SellDone(stock_id, market_type, buy_date, sell_date, buy_price, sell_price, sell_vol);
 	}
 
 }

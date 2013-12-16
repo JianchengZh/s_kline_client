@@ -34,10 +34,10 @@ public class TurtleRuleTask implements StockTask, ISellCallBack, IBuyCallBack {
 	private Stock stock;
 	private ArrayList<BuyPoint> to_buys;
 	private ArrayList<HoldUnit> to_sells;
-	private boolean out_market;
 	
 	public final static int InitMoney = 1000000;
 	public final static int lossPercentFactor = 1;
+	public final static int maxUnitFactor = 4;
 	
 	int today = 0;
 
@@ -54,7 +54,6 @@ public class TurtleRuleTask implements StockTask, ISellCallBack, IBuyCallBack {
 		
 		to_buys = new ArrayList<BuyPoint>();
 		to_sells = new ArrayList<HoldUnit>();
-		out_market = false;
 	}
 
 	@Override
@@ -63,63 +62,80 @@ public class TurtleRuleTask implements StockTask, ISellCallBack, IBuyCallBack {
 		today = dayGen.getToday();
 		while(DateHelper.checkVaildDate(today)){
 			List<KLineUnit> kl = stock.generateNDayKlineToNow(Constants.BUYPOINT_PREFIX_LEN, today);
-			KLineUnit last = kl.get(kl.size()-1);
-			
-			//TR（实际范围）=max(H-L,H-PDC,PDC-L)
-            //calcN 采用前向复权方式
-			int N = StockHelper.calcN(kl);
-			
-			//最大单位数=帐户的1%/(N×每点价值量)
-			int VolatilityValue = N * last.close; //单位元
-			int maxUnitNum = InitMoney * lossPercentFactor / 100 / VolatilityValue;
-			
-			if(maxUnitNum<1){
-				maxUnitNum = 1;
-			}
-			
-			if(status==TurtleRuleTaskStatus.EMPTY){
-				if(bs.checkBuy(stock.info, kl, null)){
-					BuyPoint buypoint = new BuyPoint(bs.getUID(), stock_id, today, today, 0, last.close, last.vol, last);
-					//将各个买进的点都挂单
-					to_buys.add(buypoint); // put it to tomorrow
+			if(kl!=null && kl.size()>=Constants.BUYPOINT_PREFIX_LEN){
+				kl.remove(kl.size()-1);
+				KLineUnit last = kl.get(kl.size()-1);
+				
+				//TR（实际范围）=max(H-L,H-PDC,PDC-L)
+	            //calcN 采用前向复权方式
+				int N = StockHelper.calcN(kl); //单位分
+				
+				//最大单位数=帐户的1%/(N×每点价值量)
+				int VolatilityValue = N * last.close; //单位元
+				int maxUnitNum = InitMoney * lossPercentFactor / 100 / VolatilityValue;
+				
+				if(maxUnitNum<1){
+					maxUnitNum = 1;//每单位至少要1手
+				}
+				
+				if(status==TurtleRuleTaskStatus.EMPTY){
+					if(bs.checkBuy(stock.info, kl, null)){
+						ArrayList<BuyPoint> buys = getBuys(bs.getUID(), maxUnitFactor, maxUnitNum, N, last);
+						//将各个买进的点都挂单
+						to_buys.clear();
+						to_buys.addAll(buys); // put it to tomorrow
+						
+						status = TurtleRuleTaskStatus.BUYING;
+					}
 					
-					status = TurtleRuleTaskStatus.BUYING;
-				}
-				
 
-			}else if(status==TurtleRuleTaskStatus.BUYING){
-				//to do the work left
-				if(to_buys.size()>0){
-					for(BuyPoint elem : to_buys){
-						assetManager.buy(elem);
+				}else if(status==TurtleRuleTaskStatus.BUYING){
+					//to do the work left
+					if(to_buys.size()>0){
+						for(BuyPoint elem : to_buys){
+							assetManager.buy(elem);
+						}
 					}
-				}
-				
-				if(to_sells.size()>0){
-					for(HoldUnit elem : to_sells){
-						elem.sell_date = today;
-						assetManager.sell(elem); //止损挂单 或 离市
+					
+					if(to_sells.size()>0){
+						for(HoldUnit elem : to_sells){
+							elem.sell_date = today;
+							assetManager.sell(elem); //止损挂单
+						}
 					}
-				}
-				
-				if(bs.checkSell(stock.info, kl, null)){
-					status = TurtleRuleTaskStatus.SELLING;
-				}
-				
-				
-			}else if(status==TurtleRuleTaskStatus.SELLING){
-				if(to_sells.size()>0){
-					for(HoldUnit elem : to_sells){
-						elem.sell_date = today;
-						elem.force_sell = true;
-						assetManager.sell(elem); //止损挂单 或 离市
+					
+					if(bs.checkSell(stock.info, kl, null)){
+						status = TurtleRuleTaskStatus.SELLING;
+					}
+					
+					
+				}else if(status==TurtleRuleTaskStatus.SELLING){
+					to_buys.clear();
+					
+					if(to_sells.size()>0){
+						for(HoldUnit elem : to_sells){
+							elem.sell_date = today;
+							elem.force_sell = true;
+							assetManager.sell(elem); //离市
+						}
 					}
 				}
 			}
+			
+
 			
 			today = dayGen.getToday();
 		}
 		
+	}
+
+	private ArrayList<BuyPoint> getBuys(String BSID, int maxunitfactor, int maxUnitNum, int N, KLineUnit last) {
+		// TODO Auto-generated method stub
+		ArrayList<BuyPoint> rlt = new ArrayList<BuyPoint>();
+		for(int index=0; index<maxunitfactor; index++){
+			rlt.add(new BuyPoint(BSID, stock_id, market_type, last.date, 0, last.close + index*N/2, maxUnitNum*100, last));
+		}
+		return rlt;
 	}
 
 	@Override
@@ -131,6 +147,7 @@ public class TurtleRuleTask implements StockTask, ISellCallBack, IBuyCallBack {
 			BuyPoint bp = iterator.next();
 			if(bp.price==buy_price){
 				iterator.remove();
+				break;
 			}
 		}
 		
@@ -162,6 +179,12 @@ public class TurtleRuleTask implements StockTask, ISellCallBack, IBuyCallBack {
 				iterator.remove();
 			}
 		}
+		
+		if(to_sells.isEmpty()){
+			status = TurtleRuleTaskStatus.EMPTY;
+		}
+		
+		
 		return false;
 	}
 

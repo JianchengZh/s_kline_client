@@ -391,7 +391,10 @@ public class StockHelper {
 					TR = elem.high - elem.low;
 					PDN = TR;
 					N = TR;
+
 				}
+				
+				last = elem;
 			}
 			
 			return N;

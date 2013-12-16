@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 
+import android.util.Log;
+
 /**
  * 
  * 简单数据库操作接口
@@ -18,6 +20,7 @@ import java.util.UUID;
  * @version 1.0
  */
 public class BaseDao {
+	private static final String TAG = "BaseDao";
 	private static BaseDao baseDao = null;
 	private List<Connection> idle = new ArrayList<Connection>(0);
 	private Map<Thread, Connection> busy = new HashMap<Thread, Connection>(0);
@@ -120,6 +123,7 @@ public class BaseDao {
 	 * @param sql SQL语句 :"CREATE TABLE IF NOT EXISTS tableName;"
 	 */
 	public boolean exec(String sql) throws SQLException {
+		//Log.v(TAG, sql);
 		Connection conn = null;
 		PreparedStatement ps = null;
 

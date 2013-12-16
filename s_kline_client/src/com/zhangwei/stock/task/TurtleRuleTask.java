@@ -71,8 +71,9 @@ public class TurtleRuleTask implements StockTask, ISellCallBack, IBuyCallBack {
 				int N = StockHelper.calcN(kl); //单位分
 				
 				//最大单位数=帐户的1%/(N×每点价值量)
-				int VolatilityValue = N * last.close; //单位元
-				int maxUnitNum = InitMoney * lossPercentFactor / 100 / VolatilityValue;
+				int VolatilityValue = N * 100; //单位元
+				int N2 = StockHelper.calcN(kl); //单位分
+				int maxUnitNum = InitMoney * lossPercentFactor / VolatilityValue;
 				
 				if(maxUnitNum<1){
 					maxUnitNum = 1;//每单位至少要1手

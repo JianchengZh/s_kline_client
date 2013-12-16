@@ -46,6 +46,7 @@ public abstract class BasicStrategy {
 	public BasicStrategy(String MarketID, long serialversionuid){
 		this.MarketID = MarketID;
 		this.serialVersionUID = serialversionuid;
+		this.BStable = "BS_" + MarketID + String.valueOf(serialVersionUID);
 		buyBigYesConditions = new ArrayList<ICondition>();
 		buyLittleYesConditions = new ArrayList<ICondition>();
 		

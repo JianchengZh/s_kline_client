@@ -17,10 +17,15 @@ public class EmuTurtleRuleMarket {
 		StockManager sm = StockManager.getInstance();
 		ArrayList<StockInfo> stocks = sm.FetchStockInfo(false, null, -1);
 		ParallelManager pm = new ParallelManager();//ParallelManager.getInstance();
+		int count=1;
 		for(StockInfo item : stocks){
+			if(count==0){
+				break;
+			}
+			count--;
 			pm.submitTask(new TurtleRuleTask(UID, item.stock_id, item.market_type));
 		}
-		pm.startTask(null, 8);
+		pm.startTask(null, 1);
 		pm.join();
 		
 	}

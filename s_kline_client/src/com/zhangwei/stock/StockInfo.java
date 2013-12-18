@@ -14,7 +14,7 @@ public class StockInfo {
 	public String quick; //快捷键  STCY
 	
 	public int lastScanDayAndHour; //2010101314 包括小时
-	private int scan;
+	//public int scan;
 	
 	public StockInfo(String stock_id, int market, String quick, int start, int last, String name, int scan){
 		if(market==1 || market==2){
@@ -32,7 +32,7 @@ public class StockInfo {
 		this.name = name;
 		this.quick = quick;
 		
-		this.scan = scan;
+		this.lastScanDayAndHour = scan;
 		
 		
 	}
@@ -47,22 +47,22 @@ public class StockInfo {
 	}
 	
 	public int getScanDay(){
-		return scan/100;
+		return lastScanDayAndHour/100;
 	}
 	
 	public boolean outOfDate() {
 		// TODO Auto-generated method stub
-		if(scan>0){
-			if(DateHelper.checkVaildDate(scan/100)){
-				if(scan/100<DateHelper.Today()){
+		if(lastScanDayAndHour>0){
+			if(DateHelper.checkVaildDate(lastScanDayAndHour/100)){
+				if(lastScanDayAndHour/100<DateHelper.Today()){
 					return true;
 				}
 				
-				if(scan%100>=15){
+				if(lastScanDayAndHour%100>=15){
 					return false;
 				}
 				
-				if(scan>=DateHelper.Hour()){
+				if(lastScanDayAndHour>=DateHelper.Hour()){
 					return false;
 				}
 

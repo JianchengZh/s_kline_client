@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.zhangwei.stock.Stock;
 import com.zhangwei.stock.bs.BuyPoint;
 import com.zhangwei.stock.bs.HoldUnit;
 import com.zhangwei.stock.bs.IBuy;
@@ -44,13 +45,13 @@ public class EmuAssertManager implements IAssertManager, IBuy, ISell{
 //	}
 
 	@Override
-	public boolean canBuy(String stock_id, int market_type, int buy_price, int buy_vol) {
+	public boolean canBuy(Stock stock, int buy_price, int buy_vol) {
 		// TODO Auto-generated method stub
 		int stock_value = buy_price * buy_vol;
 		int need_value = stock_value + StockHelper.calcCircaCost(stock_value, 15, 10000);
 		
 		if(money_left>need_value){
-			HoldUnit elem = holds.get(stock_id);
+			HoldUnit elem = holds.get(stock.info.stock_id);
 			if(elem==null){
 				return true;
 			}else{
@@ -62,16 +63,16 @@ public class EmuAssertManager implements IAssertManager, IBuy, ISell{
 	}
 
 	@Override
-	public void buyIn(String stock_id, int market_type, int date,
+	public void buyIn(Stock stock, int date,
 			int buy_price, int buy_vol) {
 		// TODO Auto-generated method stub
-		holds.put(stock_id, new HoldUnit(stock_id, market_type, date, buy_price, buy_vol));
+		holds.put(stock.info.stock_id, new HoldUnit(stock.info.stock_id, stock.info.market_type, date, buy_price, buy_vol));
 	}
 
 	@Override
-	public boolean canSell(String stock_id, int market_type, int date) {
+	public boolean canSell(Stock stock, int date) {
 		// TODO Auto-generated method stub
-		HoldUnit elem = holds.get(stock_id);
+		HoldUnit elem = holds.get(stock.info.stock_id);
 		if(elem!=null && !elem.isSold() && elem.buyDate()<date){
 			return true;
 		}
@@ -80,12 +81,12 @@ public class EmuAssertManager implements IAssertManager, IBuy, ISell{
 	}
 
 	@Override
-	public void sellOut(String stock_id, int market_type, int date,
+	public void sellOut(Stock stock, int date,
 			int sell_price, int sell_vol) {
 		// TODO Auto-generated method stub
-		HoldUnit elem = holds.get(stock_id);
+		HoldUnit elem = holds.get(stock.info.stock_id);
 		if(elem!=null){
-			holds.remove(stock_id);
+			holds.remove(stock.info.stock_id);
 			elem.sell(date, sell_price, sell_vol);
 			sold_holds.add(elem);
 		}
@@ -130,9 +131,9 @@ public class EmuAssertManager implements IAssertManager, IBuy, ISell{
 
 
 	@Override
-	public boolean buy(BuyPoint buypoint) {
+	public boolean buy(Stock stock, BuyPoint buypoint) {
 		// TODO Auto-generated method stub
-		tradeSystem.submitBuyTransaction(buypoint);
+		tradeSystem.submitBuyTransaction(stock, buypoint);
 		return true;
 	}
 
@@ -155,9 +156,9 @@ public class EmuAssertManager implements IAssertManager, IBuy, ISell{
 	}
 
 
-	public boolean sell(HoldUnit elem) {
+	public boolean sell(Stock stock, HoldUnit elem) {
 		// TODO Auto-generated method stub
-		tradeSystem.submitSellTransaction(elem);
+		tradeSystem.submitSellTransaction(stock, elem);
 		return false;
 	}
 

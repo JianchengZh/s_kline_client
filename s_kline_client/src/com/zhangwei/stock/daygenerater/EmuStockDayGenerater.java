@@ -12,10 +12,10 @@ public class EmuStockDayGenerater implements DayGenerater{
 	boolean status;
 	private Stock stock;
 	
-	public EmuStockDayGenerater(String stock_id, int market_type){
+	public EmuStockDayGenerater(Stock s){
 		index = 0;
 
-		this.stock = StockManager.getInstance().getStock(stock_id, market_type);
+		this.stock = s;
 	
 	}
 	

@@ -1,5 +1,6 @@
 package com.zhangwei.stock.tradesystem;
 
+import com.zhangwei.stock.Stock;
 import com.zhangwei.stock.bs.BuyPoint;
 import com.zhangwei.stock.bs.HoldUnit;
 import com.zhangwei.stock.bs.IBuy;
@@ -9,7 +10,7 @@ import com.zhangwei.stock.bs.SellPoint;
 public class RealTradeSystem implements ITradeSystem {
 
 	@Override
-	public void submitBuyTransaction(BuyPoint buypoint) {
+	public void submitBuyTransaction(Stock stock, BuyPoint buypoint) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -22,7 +23,7 @@ public class RealTradeSystem implements ITradeSystem {
 	}
 
 	@Override
-	public void submitSellTransaction(HoldUnit hu) {
+	public void submitSellTransaction(Stock stock, HoldUnit hu) {
 		// TODO Auto-generated method stub
 		
 	}

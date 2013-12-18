@@ -54,6 +54,8 @@ public class Stock {
 			//fetchFromDZH(20131110, 0);
 		}
 		
+		info.lastScanDayAndHour = DateHelper.TodayHour();
+		
 	}
 	
 	

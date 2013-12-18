@@ -54,10 +54,11 @@ public class TurtleRuleTask implements StockTask, ISellCallBack, IBuyCallBack {
 		this.stock_id = stock_id;
 		this.market_type = market_type;
 		this.bs = new TurtleRuleStrategy(MarketID);
-		this.dayGen = new EmuStockDayGenerater(stock_id, market_type);
+
 		this.assetManager = new EmuAssertManager(InitMoney, bs.getBSTableName());
 		this.status = TurtleRuleTaskStatus.EMPTY;
 		this.stock = StockManager.getInstance().getStock(stock_id, market_type);
+		this.dayGen = new EmuStockDayGenerater(stock);
 		
 		this.bs.init();
 		assetManager.setSellCallBackListener(this);
@@ -85,8 +86,16 @@ public class TurtleRuleTask implements StockTask, ISellCallBack, IBuyCallBack {
 	            //calcN 采用前向复权方式
 				int N = StockHelper.calcN(kl_last); //单位分
 				
+				if(N<=0){
+					today = dayGen.getToday();
+					continue;
+				}
+				
 				//最大单位数=帐户的1%/(N×每点价值量)
 				int VolatilityValue = N * 100; //单位分
+				
+
+				
 				int maxUnitNum = InitMoney * lossPercentFactor / VolatilityValue;
 				
 				if(maxUnitNum<1){
@@ -143,7 +152,7 @@ public class TurtleRuleTask implements StockTask, ISellCallBack, IBuyCallBack {
 						Iterator<BuyPoint> iterator = to_buys.iterator();
 						while(iterator.hasNext()){
 							BuyPoint elem = iterator.next();
-							assetManager.buy(elem);
+							assetManager.buy(stock, elem);
 						}
 					}
 					
@@ -151,7 +160,7 @@ public class TurtleRuleTask implements StockTask, ISellCallBack, IBuyCallBack {
 						Iterator<HoldUnit> iterator = to_sells.iterator();
 						while(iterator.hasNext()){
 							HoldUnit elem = iterator.next();
-							assetManager.sell(elem);
+							assetManager.sell(stock, elem);
 						}
 					}
 					
@@ -167,7 +176,7 @@ public class TurtleRuleTask implements StockTask, ISellCallBack, IBuyCallBack {
 						for(HoldUnit elem : to_sells){
 							elem.sell_date = today;
 							elem.force_sell = true;
-							assetManager.sell(elem); //离市
+							assetManager.sell(stock, elem); //离市
 						}
 					}
 				}

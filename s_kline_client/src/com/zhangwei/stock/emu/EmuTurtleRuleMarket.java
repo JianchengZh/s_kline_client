@@ -15,10 +15,10 @@ public class EmuTurtleRuleMarket {
 
 	public void run(){
 		StockManager sm = StockManager.getInstance();
-		ArrayList<StockInfo> stocks = sm.FetchStockInfo(false, null, -1);
+		ArrayList<StockInfo> stockinfos = sm.FetchStockInfo(false, null, -1);
 		ParallelManager pm = new ParallelManager();//ParallelManager.getInstance();
-		int count=1;
-		for(StockInfo item : stocks){
+		int count=4;
+		for(StockInfo item : stockinfos){
 			if(count==0){
 				break;
 			}

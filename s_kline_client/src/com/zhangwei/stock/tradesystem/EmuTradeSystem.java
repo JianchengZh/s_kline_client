@@ -42,22 +42,18 @@ public class EmuTradeSystem implements ITradeSystem{
 	}
 
 	@Override
-	public void submitBuyTransaction(BuyPoint buypoint){
+	public void submitBuyTransaction(Stock stock, BuyPoint buypoint){
 		//buy.onBuySucess(buypoint);
-		StockManager sm = StockManager.getInstance();
-		Stock s = sm.getStock(buypoint.stock_id, buypoint.market_type);
-		if(s.canBuy(buypoint.date, buypoint.price)){
+		if(stock.canBuy(buypoint.date, buypoint.price)){
 			completeBuyTransaction(buypoint.stock_id, buypoint.market_type, buypoint.date, buypoint.price, buypoint.vol);
 		}
 	}
 
 	
 	@Override
-	public void submitSellTransaction(HoldUnit hu){
+	public void submitSellTransaction(Stock stock, HoldUnit hu){
 		//sell.onSellSucess(sellpoint, hu);
-		StockManager sm = StockManager.getInstance();
-		Stock s = sm.getStock(hu.stock_id, hu.market_type);
-		if(s.canSell(hu.sell_date, hu.sell_price)){
+		if(stock.canSell(hu.sell_date, hu.sell_price)){
 			completeSellTransaction(hu.stock_id, hu.market_type, hu.buy_date, hu.sell_date, hu.buy_price, hu.sell_price, hu.buy_vol);
 		}
 	}

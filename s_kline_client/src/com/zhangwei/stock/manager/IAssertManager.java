@@ -4,17 +4,18 @@ import java.util.ArrayList;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.zhangwei.stock.Stock;
 import com.zhangwei.stock.bs.HoldUnit;
 
 
 public interface IAssertManager {
-	public boolean canBuy(String stock_id, int market_type, int buy_price, int buy_vol);
+	public boolean canBuy(Stock stock, int buy_price, int buy_vol);
 	
-	public void buyIn(String stock_id, int market_type, int date, int buy_price, int buy_vol);
+	public void buyIn(Stock stock, int date, int buy_price, int buy_vol);
 	
-	public boolean canSell(String stock_id, int market_type, int date);
+	public boolean canSell(Stock stock, int date);
 	
-	public void sellOut(String stock_id, int market_type, int date, int sell_price, int sell_vol);
+	public void sellOut(Stock stock, int date, int sell_price, int sell_vol);
     
 	public int getLeftMoney();
     

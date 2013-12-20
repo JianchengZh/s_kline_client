@@ -9,19 +9,21 @@ import com.zhangwei.stock.bs.HoldUnit;
 
 
 public interface IAssertManager {
+	public long getReport(int date);
+	
 	public boolean canBuy(Stock stock, int buy_price, int buy_vol);
 	
-	public void buyIn(Stock stock, int date, int buy_price, int buy_vol);
+	//public void buyIn(Stock stock, int date, int buy_price, int buy_vol);
 	
 	public boolean canSell(Stock stock, int date);
 	
-	public void sellOut(Stock stock, int date, int sell_price, int sell_vol);
+	//public void sellOut(Stock stock, int date, int sell_price, int sell_vol);
     
-	public int getLeftMoney();
+	public long getLeftMoney();
     
-	public int getStockValue(int date);
+	public long getStockValue(int date);
 	
-	public int geteTotalAsset(int date);
+	public long geteTotalAsset(int date);
 	
 	public Set<Entry<String, HoldUnit>> getHoldList();
 	

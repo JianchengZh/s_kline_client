@@ -5,10 +5,10 @@ import com.zhangwei.util.StockHelper;
 public class TradeRecord {
 	public String stock_id;
 	public int market_type;
-	public int buy_total;
-	public int sell_total;
-	public int vol_total;
-	public int vol_cansell;
+	public long buy_total;
+	public long sell_total;
+	public long vol_total;
+	public long vol_cansell;
 	
 	/**
 	 * 从sql中加载时调用，恢复以前的数据到内存
@@ -44,12 +44,13 @@ public class TradeRecord {
 	/**
 	 * 返回买入的总花费（单位分），成本加佣金
 	 * */
-	public int buyIn(int buy_price, int buy_vol) {
+	public long buyIn(int buy_price, int buy_vol) {
 		// TODO Auto-generated method stub
-		int value = buy_price * buy_vol;
+		long value = buy_price * buy_vol;
 		value += StockHelper.calcCircaCost(value, 15, 10000);
 		this.buy_total += value;
 		this.vol_total += buy_vol;
+		this.vol_cansell += buy_vol;
 		
 		return value;
 	}
@@ -57,10 +58,10 @@ public class TradeRecord {
 	/**
 	 * 返回卖出的总收入（单位分），卖出资金减佣金
 	 * */
-	public int sellOut(int sell_price, int sell_vol) {
+	public long sellOut(int sell_price, int sell_vol) {
 		// TODO Auto-generated method stub
-		int value = sell_price * sell_vol;
-		int yongjin = StockHelper.calcCircaCost(value, 15, 10000) + StockHelper.calcCircaCost(value, 1, 1000);
+		long value = sell_price * sell_vol;
+		long yongjin = StockHelper.calcCircaCost(value, 15, 10000) + StockHelper.calcCircaCost(value, 1, 1000);
 		this.sell_total += value - yongjin;
 		this.vol_total -= sell_vol;
 		this.vol_cansell -= sell_vol;
@@ -70,7 +71,7 @@ public class TradeRecord {
 	/**
 	 * 返回可卖出的股票数量，单位股
 	 * */
-	public int canSell(){
+	public long canSell(){
 		return vol_cansell;
 	}
 	

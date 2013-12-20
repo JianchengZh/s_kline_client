@@ -30,7 +30,7 @@ public class EmuTradeRecorder {
 
 			String sql_create_table_bs = "CREATE TABLE IF NOT EXISTS " 
 			                  + BStable  
-			                  + "\n(stock_id VARCHAR(6) NOT NULL, market_type INT, buy_total INT, sell_total INT, vol INT, vol_cansell INT, PRIMARY KEY (stock_id))ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+			                  + "\n(stock_id VARCHAR(6) NOT NULL, market_type INT, buy_total BIGINT, sell_total BIGINT, vol INT, vol_cansell INT, PRIMARY KEY (stock_id))ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
 			bd.exec(sql_create_table_bs);
 			

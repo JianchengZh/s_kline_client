@@ -43,12 +43,13 @@ public class TurtleRuleTask implements StockTask, ISellCallBack, IBuyCallBack {
 	private Set<HoldUnit> tmp_add_sells;
 	private Set<HoldUnit> tmp_del_sells;
 	
-	public final static int InitMoney = 1000000;
+	public final static int InitMoney = 100000000; //单位分
 	public final static int lossPercentFactor = 1;
 	public final static int maxUnitFactor = 4;
 	private static final String TAG = "TurtleRuleTask";
 	
 	int today = 0;
+	private int N = 0;
 
 	public TurtleRuleTask(String MarketID, String stock_id, int market_type){
 		this.stock_id = stock_id;
@@ -75,8 +76,11 @@ public class TurtleRuleTask implements StockTask, ISellCallBack, IBuyCallBack {
 	@Override
 	public void processTask() {
 		// TODO Auto-generated method stub
+
 		today = dayGen.getToday();
+		int valid_today = today;
 		while(DateHelper.checkVaildDate(today)){
+			valid_today = today;
 			List<KLineUnit> kl = stock.generateNDayKlineToNow(Constants.BUYPOINT_PREFIX_LEN, today);
 			if(kl!=null && kl.size()>=Constants.BUYPOINT_PREFIX_LEN){
 				List<KLineUnit> kl_last = kl.subList(0, kl.size()-1);
@@ -84,7 +88,7 @@ public class TurtleRuleTask implements StockTask, ISellCallBack, IBuyCallBack {
 				
 				//TR（实际范围）=max(H-L,H-PDC,PDC-L)
 	            //calcN 采用前向复权方式
-				int N = StockHelper.calcN(kl_last); //单位分
+				N  = StockHelper.calcN(kl_last); //单位分
 				
 				if(N<=0){
 					today = dayGen.getToday();
@@ -96,7 +100,7 @@ public class TurtleRuleTask implements StockTask, ISellCallBack, IBuyCallBack {
 				
 
 				
-				int maxUnitNum = InitMoney * lossPercentFactor / VolatilityValue;
+				int maxUnitNum = InitMoney * lossPercentFactor / 100 / VolatilityValue;
 				
 				if(maxUnitNum<1){
 					maxUnitNum = 1;//每单位至少要1手
@@ -187,6 +191,10 @@ public class TurtleRuleTask implements StockTask, ISellCallBack, IBuyCallBack {
 			today = dayGen.getToday();
 		}
 		
+		
+		//tongji:
+		assetManager.getReport(valid_today);
+		
 	}
 
 	private ArrayList<BuyPoint> getBuys(String BSID, int maxunitfactor, int maxUnitNum, int N, KLineUnit last) {
@@ -212,7 +220,9 @@ public class TurtleRuleTask implements StockTask, ISellCallBack, IBuyCallBack {
 			}
 		}
 		
-		tmp_add_sells.add(new HoldUnit(stock_id, market_type, today, buy_price, buy_vol));
+		HoldUnit hu = new HoldUnit(stock_id, market_type, today, buy_price, buy_vol);
+		hu.to_sell_price = buy_price - (2 * N);
+		tmp_add_sells.add(hu);
 		//to_sells.add(new HoldUnit(stock_id, market_type, today, buy_price, buy_vol));
 		
 		return false;
@@ -229,12 +239,15 @@ public class TurtleRuleTask implements StockTask, ISellCallBack, IBuyCallBack {
 	public boolean onSellSucess(String stock_id, int market_type, int buy_date, int sell_date,
 			int buy_price, int sell_price, int sell_vol) {
 		// TODO Auto-generated method stub
-		Log.v(TAG, "onBuySucess - stock_id:" + stock_id + ", market_type:" + market_type + ", date:" + sell_date + ", sell_price:" + sell_price + ", vol" + sell_vol);
+		Log.v(TAG, "onSellSucess - stock_id:" + stock_id + ", market_type:" + market_type + ", date:" + sell_date + ", sell_price:" + sell_price + ", vol" + sell_vol);
 		Iterator<HoldUnit> iterator = to_sells.iterator();
 		while(iterator.hasNext()){
 			HoldUnit hu = iterator.next();
 			if(hu.buy_date==buy_date && hu.buy_price==buy_price){
 				//iterator.remove();
+				hu.sell_price = sell_price;
+				hu.sell_vol = sell_vol;
+				hu.sold = true;
 				tmp_del_sells.add(hu);
 				break;
 			}

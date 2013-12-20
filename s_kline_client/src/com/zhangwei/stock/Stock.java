@@ -442,17 +442,32 @@ public class Stock {
 		return false;
 	}
 
-	public boolean canSell(int date, int price) {
+	public boolean canSell(boolean force, int date, int price) {
 		// TODO Auto-generated method stub
 		if(line!=null){
+			
 			KLineUnit u = line.getKlineUnit(date);
 			if(u!=null){
-				return u.canSell(price);
+				if(!force){
+					return u.canSell(price);
+				}else{
+					if(u.low==u.high || u.low==u.open){
+						return false;
+					}else{
+						return true;
+					}
+				}
+				
 			}
 		}
 
 		
 		return false;
+	}
+
+	public KLineUnit getKlineUnit(int date) {
+		// TODO Auto-generated method stub
+		return line.getKlineUnit(date);
 	}
 
 

@@ -23,9 +23,14 @@ public class TurtleRuleStrategy extends BasicStrategy {
 	public void init() {
 		// TODO Auto-generated method stub
 		super.init();
-		addBuyBigCondition(new NewHigherORLowerNDayCondition(true, 55), true);
+/*   55日最高时买入  20日最低时卖出*/  
+/* 		addBuyBigCondition(new NewHigherORLowerNDayCondition(true, 55), true);
 		
-		addSellBigCondition(new NewHigherORLowerNDayCondition(false, 20), true);
+		addSellBigCondition(new NewHigherORLowerNDayCondition(false, 20), true);*/
+		
+		addBuyBigCondition(new NewHigherORLowerNDayCondition(false, 55), true);
+		
+		addSellBigCondition(new NewHigherORLowerNDayCondition(true, 20), true);
 	}
 
 }

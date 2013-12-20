@@ -53,8 +53,20 @@ public class EmuTradeSystem implements ITradeSystem{
 	@Override
 	public void submitSellTransaction(Stock stock, HoldUnit hu){
 		//sell.onSellSucess(sellpoint, hu);
-		if(stock.canSell(hu.sell_date, hu.sell_price)){
-			completeSellTransaction(hu.stock_id, hu.market_type, hu.buy_date, hu.sell_date, hu.buy_price, hu.sell_price, hu.buy_vol);
+		if(stock.canSell(hu.force_sell, hu.sell_date, hu.to_sell_price)){
+			int sell_price = -1;
+			if(hu.force_sell){
+				KLineUnit unit = stock.getKlineUnit(hu.sell_date);
+				sell_price = unit.open;
+			}else{
+				sell_price = hu.to_sell_price;
+			}
+
+			if(sell_price>0){
+				completeSellTransaction(hu.stock_id, hu.market_type, hu.buy_date, hu.sell_date, hu.buy_price, hu.to_sell_price, hu.buy_vol);
+			}
+			
+			
 		}
 	}
 

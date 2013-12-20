@@ -348,7 +348,7 @@ public class StockHelper {
 		return retKL;
 	}
 	
-	public static int calcCircaCost(int feiyong_fen, int fenzi, int fenmu){
+	public static long calcCircaCost(long feiyong_fen, int fenzi, int fenmu){
 		//this.buy_yongjin = (150 * buy_price * buy_vol + 50000)/ 100000;
 		return (fenzi*feiyong_fen*10 + 5*fenmu) / (fenmu*10);
 	}

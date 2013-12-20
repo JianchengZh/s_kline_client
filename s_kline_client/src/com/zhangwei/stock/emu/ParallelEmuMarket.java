@@ -113,8 +113,8 @@ public class ParallelEmuMarket implements ITaskBuyResultCheck, ITaskSellResultCh
 					}
 				}*/
 				
-				assertManager.requestBuy(theBestBuy);
-				assertManager.requestSell(candidateSellHolds);
+				//assertManager.requestBuy(theBestBuy);
+				//assertManager.requestSell(candidateSellHolds);
 				
 				
 				int tmpToday = dayGen.getToday();

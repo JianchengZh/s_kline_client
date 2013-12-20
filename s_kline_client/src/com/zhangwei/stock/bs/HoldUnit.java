@@ -11,19 +11,19 @@ public class HoldUnit {
 	public int buy_date; 
 	public int buy_price;  //买入价 分
 	public int buy_vol;  //考虑复权因素，buy_vol可能和sell_vol不一样
-	public int buy_yongjin; //买入佣金,单位 分
+	public long buy_yongjin; //买入佣金,单位 分
 	
 	public boolean sold; //是否卖出
 	//public int hold_price; //当前的价格
 	//public int hold_vol;   //当前的数量
 	public boolean force_sell; //是否要强制卖出，以现价
 	
-	public int to_sell_price;
+	public int to_sell_price; //止损价
 	
 	public int sell_date;
 	public int sell_price;
 	public int sell_vol;
-	public int sell_yongjin; //买入佣金,单位 分
+	public long sell_yongjin; //买入佣金,单位 分
 	
 	/**
 	 * 1. 实时买入时产生
@@ -85,7 +85,7 @@ public class HoldUnit {
 		//this.hold_price = 0;
 		//this.hold_vol = 0;
 		
-		int sell_value = sell_price*sell_vol;
+		long sell_value = sell_price*sell_vol;
 		sell_yongjin = StockHelper.calcCircaCost(sell_value, 1, 1000) + StockHelper.calcCircaCost(sell_value, 15, 10000);
 		sold = true;
 	}
@@ -94,14 +94,14 @@ public class HoldUnit {
 	 *  得到买入成本 ， 买入  印花税0 手续费0.0015
 	 *  买入佣金在买入时（构造函数），就计算出来
 	 * */
-	public int getBuyCost(){
+	public long getBuyCost(){
 		return buy_price * buy_vol + buy_yongjin;
 	}
 	
 	/**
 	 * 得到卖出的金额，卖出佣金在卖出时，计算出来
 	 * */
-	public int getSellAsset(){
+	public long getSellAsset(){
 		if(sold){
 			return sell_price*sell_vol - sell_yongjin;
 		}else{
@@ -114,9 +114,9 @@ public class HoldUnit {
 	 * */
 	public int getEarnPercent(){
 		if(sold){
-			int sold_value = getSellAsset();
-			int bought_value = getBuyCost();
-			return (sold_value-bought_value)*100/bought_value;
+			long sold_value = getSellAsset();
+			long bought_value = getBuyCost();
+			return (int)((sold_value-bought_value)*100/bought_value);
 		}else{
 			return -1;
 		}
@@ -125,10 +125,10 @@ public class HoldUnit {
 	/**
 	 * 获得盈利金额（单位：分），考虑交易佣金
 	 * */
-	public int getEarnMoney(){
+	public long getEarnMoney(){
 		if(sold){
-			int sold_value = getSellAsset();
-			int bought_value = getBuyCost();
+			long sold_value = getSellAsset();
+			long bought_value = getBuyCost();
 			return (sold_value-bought_value);
 		}else{
 			return -1;

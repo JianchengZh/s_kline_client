@@ -28,9 +28,9 @@ public class TurtleRuleStrategy extends BasicStrategy {
 		
 		addSellBigCondition(new NewHigherORLowerNDayCondition(false, 20), true);*/
 		
-		addBuyBigCondition(new NewHigherORLowerNDayCondition(false, 55), true);
+		addBuyBigCondition(new ContinuousPercentCondition(55, -30), true);
 		
-		addSellBigCondition(new NewHigherORLowerNDayCondition(true, 20), true);
+		addSellBigCondition(new NewHigherORLowerNDayCondition(false, 20), true);
 	}
 
 }
